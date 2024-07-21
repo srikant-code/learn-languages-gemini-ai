@@ -1,0 +1,112 @@
+import { Card, Popover, Progress } from "@nextui-org/react";
+import { useEffect, useRef, useState } from "react";
+import { WordHeader } from "../../pages/Dictionary";
+import { FaCross } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+import CustomButton from "../Button";
+
+interface CustomPopoverProps {}
+
+const CustomPopover: FunctionComponent<CustomPopoverProps> = () => {
+  return <div></div>;
+};
+
+export default CustomPopover;
+
+//I have this code now, I am wrapping the whole applicatiion(children) with popover. But still the popover is not working properly - it is not visible on screen and also the clicks are not logging the events.. Answer from the opened page documention -
+// https://nextui.org/docs/components/popover#popover-props
+
+export const TextSelectionPopover = ({ children }) => {
+  const progressReset = 100;
+  const [text, setText] = useState("");
+  const [progress, setProgress] = useState(progressReset); // Add this line
+  const popoverRef = useRef(null);
+  let interval = useRef(null); // Use a ref to store the interval id
+
+  const handleMouseUp = () => {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+    setText(selection.toString());
+  };
+
+  const handleMouseDown = () => {};
+  const totalTime = 10000;
+  const step = 100;
+
+  const clearTimer = () => {
+    clearInterval(interval.current);
+    setProgress(progressReset);
+  };
+
+  useEffect(() => {
+    if (text?.trim()) {
+      clearTimer();
+      interval.current = setInterval(() => {
+        setProgress((prevProgress) => {
+          //prevProgress
+          return prevProgress > 0
+            ? prevProgress - progressReset / (totalTime / step)
+            : 0;
+        }); // decrease progress by 5% every second
+      }, totalTime / (totalTime / step));
+    } else {
+      // If text is empty (popup is closed), clear the interval and reset the progress
+      clearTimer();
+    }
+  }, [text]);
+
+  useEffect(() => {
+    if (progress <= 0) {
+      setText("");
+      clearTimer();
+    }
+  }, [progress]);
+
+  return (
+    <div onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+      {children}
+      <Popover showArrow>
+        {
+          <div
+            ref={popoverRef}
+            className={`transition-all ease-in-out duration-500 ${
+              progress < 99 && progress > 4 ? "opacity-100" : "opacity-0"
+            } w-full flex items-end justify-center h-5`}
+            style={{
+              position: "fixed",
+              bottom: 30,
+            }}>
+            <div
+              className={`flex items-center justify-end py-4 px-6 border-3 shadow-xl dark:border-primary-300 absolute bg-white dark:bg-slate-950 rounded-3xl max-w-[80%] w-fit`}>
+              <CustomButton
+                isIconOnly
+                className="shadow-lg rounded-full absolute right-[-5px] top-[-1rem] border-3 border-red-300"
+                color="danger"
+                size="sm"
+                onClick={() => setText("")}>
+                <FaX />
+              </CustomButton>
+              <div className="text-small font-bold">
+                <WordHeader data={{ word: text }} />
+              </div>
+              {/* <div className="text-tiny">This is the popover content</div> */}
+              <Progress
+                size="sm"
+                radius="sm"
+                classNames={{
+                  base: "absolute bottom-[-3px] w-[92%] left-[4%]",
+                  track: "drop-shadow-md ",
+                  indicator: "bg-gradient-to-r from-pink-500 to-yellow-500",
+                  label: "tracking-wider font-medium text-default-600",
+                  value: "text-foreground/60",
+                }}
+                value={progress} // Use the progress state here
+                // showValueLabel={true}
+              />
+            </div>
+          </div>
+        }
+      </Popover>
+    </div>
+  );
+};

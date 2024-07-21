@@ -1,0 +1,145 @@
+
+Check on how to use AI in all the sections
+Home
+
+- User level - advanced
+  - Current course progress
+    - Last topic and continue where you left off
+  - Cards of vocabulary
+    - swipeable right there
+  - Games to play
+  - Daily Challenges
+    - Tip or new challenge if any
+  - Word of the day
+  - search full app
+    - Generate AI based content
+- Lessons
+  - Speaking, Listening, Reading etc
+  - Detailed course
+- GemAI
+  - Chats Tab
+  - Chat tab
+    - Picks up current context or last context
+  - Tools - All different types of tools
+- My Vocabulary
+  - Saved words cards stacked
+  - Other cards new to explore
+- Games
+  - Game launcher
+  - Game playable area
+- Challenges
+  - Todays tasks
+  - All time
+    - calendar
+- Leaderboard
+  - All
+  - Your profile
+    - onboarding
+  - settings
+- Dictionary
+  - Opens up the explanations, synonyms, audio etc
+
+Collections:
+
+- profiles
+- wordsDictionary
+- leaderBoard
+
+```
+{
+    profile: {
+        username: "email@gmail.com",
+        name: "John doe",
+        deviceDetails: {
+            ios | android | web
+        },
+        premiumUser: new Date(),
+        coins: 90290,
+        registeredOn: new Date(),
+        userLocation: "",
+        profileAvatar: "img",
+        tokens: if any
+    },
+    settings: {
+        theme: {
+            dark | light | system
+        },
+        userLanguage: {
+            english | odia | hindi
+            difficulty: "proficient"
+        },
+        wantsToLearn: {
+            spanish | italian | russian
+            difficulty: "new-bie"
+        },
+        reset: {
+            account | allData | lessonProgress | aiChats | settings | vocabulary
+        },
+    },
+    dictionary: {
+        source: "wiki.com",
+        includeAIResults: true,
+        searchTheInternet: false,
+    },
+    leaderBoard: {},
+    games: {},
+    vocabulary: {
+        words: [{
+            word: "",
+            addedOn: new Date(),
+            meaning: "",
+            synonym: "",
+        }]
+    },
+    ai: {
+        chats: [
+            {
+                message: "",
+                sender: "",
+                date: new Date()
+            }
+        ]
+    },
+    lessons: {
+        completed: 4,
+        total: 60,
+        gamesPlayed: 6,
+        lastTopic: 4,
+    },
+    challenges: {
+        daily: {
+            tasks: [
+                {
+                    title: "Task title",
+                    description: "Task description",
+                    dueDate: new Date(),
+                    completed: false
+                }
+            ]
+        },
+        weekly: {
+            tasks: [
+                {
+                    title: "Task title",
+                    description: "Task description",
+                    dueDate: new Date(),
+                    completed: false
+                }
+            ]
+        },
+        monthly: {
+            tasks: [
+                {
+                    title: "Task title",
+                    description: "Task description",
+                    dueDate: new Date(),
+                    completed: false
+                }
+            ]
+        },
+        calendar: {
+
+        }
+    }
+}
+```
