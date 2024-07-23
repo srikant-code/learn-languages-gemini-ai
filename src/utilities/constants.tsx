@@ -1,10 +1,21 @@
 import { BsAlphabet } from "react-icons/bs";
-import { FaBook, FaCog, FaGamepad, FaReadme, FaTrophy } from "react-icons/fa";
+import {
+  FaBook,
+  FaCog,
+  FaGamepad,
+  FaHome,
+  FaReadme,
+  FaTrophy,
+} from "react-icons/fa";
 import { FaMoon } from "react-icons/fa6";
 export const STRINGS = {
+  APP_NAME: "GemAI",
   CLASSES: {
     subHeading: "text-xl font-semibold mt-2 first-letter:uppercase",
     subText: "text-sm text-gray-500",
+    gradientPinkYellow: "bg-gradient-to-r from-pink-500 to-yellow-500",
+    gradientPinkRed: "bg-gradient-to-r from-pink-500 to-yellow-500",
+    basicTransitions: "transition-all ease-in-out duration-500",
   },
   MODELS: {
     FLASH_1_5: {
@@ -22,6 +33,15 @@ export const STRINGS = {
       value: "gemini-1.5-pro",
       description: "A fast, lightweight model for quick responses.",
     },
+  },
+  REGEX: {
+    DATE: /^(((0[1-9]|[12]\d|3[01])\-(0[13578]|1[02])\-((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\-(0[13456789]|1[012])\-((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\-02\-((19|[2-9]\d)\d{2}))|(29\-02\-((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|(([1][26]|[2468][048]|[3579][26])00))))$/,
+    EMAIL:
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  },
+  RESPONSE: {
+    SUCCESS: "success",
+    ERROR: "error",
   },
   STORAGE: {
     SETTINGS: "settings",
@@ -48,12 +68,19 @@ export const STRINGS = {
 };
 
 export const SlideIDs = {
+  login: {
+    route: "/login",
+    path: "login",
+    name: "login",
+    description: "Login description",
+    icon: <FaHome />,
+  },
   home: {
     route: "/",
     path: "",
     name: "Home",
     description: "Home description",
-    icon: <FaMoon />,
+    icon: <FaHome />,
   },
   lessons: {
     route: "/lessons",

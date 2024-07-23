@@ -120,10 +120,11 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
             <CustomInput
               placeholder="Ask me anything..."
               labelPlacement="outside"
+              isClearable={false}
               startContent={<FaMessage className="text-foreground-800 m-2" />}
               value={inputValue}
               variant="bordered"
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(val) => setInputValue(val)}
               onKeyDown={handleSend}
               width="80%"
               color="default"

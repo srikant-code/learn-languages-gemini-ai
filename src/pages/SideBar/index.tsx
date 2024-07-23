@@ -34,6 +34,7 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
       title: "Actions",
       showDivider: true,
       items: [
+        SlideIDs.home,
         SlideIDs.games,
         SlideIDs.challenges,
         SlideIDs.lessons,

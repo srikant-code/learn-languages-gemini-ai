@@ -25,8 +25,8 @@ const GenAIConfigurator = () => {
   const [apiKey, setApiKey] = useState("");
   const [selectedModel, setSelectedModel] = useState(Object.keys(MODELS)[0]);
 
-  const handleApiKeyChange = (e) => {
-    setApiKey(e.target.value);
+  const handleApiKeyChange = (val) => {
+    setApiKey(val);
   };
 
   const handleModelChange = (e) => {

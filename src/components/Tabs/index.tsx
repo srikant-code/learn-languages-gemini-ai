@@ -24,17 +24,19 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   className = "",
   tabClassName = "",
   centerTabs = false,
+  ...props
   // Spread any other custom props
 }) => (
   <Tabs
     classNames={{ base: centerTabs && "items-center flex justify-center" }}
     size={size}
     aria-label={ariaLabel}
-    className={className}>
-    {tabs.map((tab, index) => {
+    className={className}
+    {...props}>
+    {tabs.map((tab) => {
       const { title, content } = tab;
       return (
-        <Tab key={index} title={title} className={tabClassName}>
+        <Tab key={title} title={title} className={tabClassName}>
           {content}
         </Tab>
       );

@@ -29,10 +29,15 @@ export default {
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
+- [ ] `plugin:@typescript-eslint/
+- [x] https
 
 
-TODOs
-```markdown
+
+["asd", "ASd ", "adA"]
+
+## TODOs
+```md
 -- Search bar upgrade
   -- list items
   -- css fixes
@@ -44,7 +49,7 @@ TODOs
 - chat
   - list all
   - upload files
-  - markdown render
+  -- markdown render
   --- popover component
   --- input css
   -- options for top etc
@@ -103,14 +108,15 @@ TODOs
   - Your lessons progress - all languages
 - Feedback UI
   - AI feedback on current progress assesments
-- Login UI
-- Firebase integration
+-- Login UI and protection
+-- Firebase integration
+-- 404 page
 - Onboarding UI
 -X Leaderboard
 - translation
 - Settings finalization
 - Theme(AI feel), icons, font, logo and branding finalization
-- Github commits - deployment
+-- Github commits - deployment
 
 - Phone responsive
   - Capacitor and builds for mobile
@@ -118,3 +124,28 @@ TODOs
 - Video Editing
 - Submission
 ```
+
+
+## Calendar log
+
+### 22nd July 2024
+
+- Login and Signup UI + firebase link + redux save data
+
+### 23rd July 2024
+
+- Implement settings section and add profile + Integrate the search bar with settings
+- Fix left sidebar
+- Integrate Google AI Studio + system to call the apis and change 
+according to the settings(redux setup)
+- Signout functionality and chat auto-animation and markdown upgrade
+
+### 24th July 2024
+
+- Finalize the prompts and check with AI studio
+
+### Before submission checklist
+
+- Cleanup the unncessary commented code
+- check for keys
+- 

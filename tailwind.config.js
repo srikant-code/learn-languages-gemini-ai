@@ -64,23 +64,23 @@ export default {
         light: {
           extend: "light", // <- inherit default values from dark theme
           colors: {
-            background: "#ffffff",
+            background: "#fefefe",
             foreground: "#0D001A",
             primary: {
-              50: "#0B096C",
-              100: "#0B096C",
-              200: "#0B096C",
-              300: "#0B096C",
-              400: "#0B096C",
+              50: "#AB096C",
+              100: "#A20F83",
+              200: "#A318A2",
+              300: "#A823C2",
+              400: "#A031e2",
               500: "#AD62ED",
               600: "#A182F6",
               700: "#ACADF9",
               800: "#ADD5F9",
               900: "#AEECFE",
-              DEFAULT: "#0B096C",
+              DEFAULT: "#AD62ED",
               foreground: "#0D001A",
             },
-            focus: "#0B096C",
+            focus: "#A182F6",
           },
           // layout: {
           //   disabledOpacity: "0.3",

@@ -5,7 +5,7 @@ import CustomAutocomplete from "../../components/Autocomplete";
 import CustomInput from "../../components/Input";
 import { IconHeader } from "../../components/Paragraph";
 import CustomSwitch from "../../components/Switch";
-import { setSetting as setSettings } from "../../store/reducer";
+import { setSetting } from "../../store/reducer";
 import { SlideIDs, STRINGS } from "../../utilities/constants";
 
 interface SettingsProps {}
@@ -86,9 +86,9 @@ const Settings: FunctionComponent<SettingsProps> = () => {
 
   const handleInputChange = ({ setting, input, currentReduxValue }) => {
     console.log({ setting, input, currentReduxValue });
-    const inputValue = input.target.value;
+    const inputValue = input;
     dispatch(
-      setSettings({
+      setSetting({
         key: setting.key,
         value: setting?.transformValue
           ? setting.transformValue({

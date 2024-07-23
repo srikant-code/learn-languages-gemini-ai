@@ -4,6 +4,9 @@ import { WordHeader } from "../../pages/Dictionary";
 import { FaCross } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import CustomButton from "../Button";
+import { Sleep } from "../../utilities/utilities";
+import { SlideIDs, STRINGS } from "../../utilities/constants";
+import { useLocation } from "react-router-dom";
 
 interface CustomPopoverProps {}
 
@@ -23,10 +26,15 @@ export const TextSelectionPopover = ({ children }) => {
   const popoverRef = useRef(null);
   let interval = useRef(null); // Use a ref to store the interval id
 
+  const location = useLocation();
+
   const handleMouseUp = () => {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
-    setText(selection.toString());
+    // exclude in the login page
+    setText(
+      location.pathname === SlideIDs.login.route ? "" : selection.toString()
+    );
   };
 
   const handleMouseDown = () => {};
@@ -57,7 +65,9 @@ export const TextSelectionPopover = ({ children }) => {
 
   useEffect(() => {
     if (progress <= 0) {
-      setText("");
+      Sleep(500).then(() => {
+        setText("");
+      });
       clearTimer();
     }
   }, [progress]);
@@ -69,7 +79,7 @@ export const TextSelectionPopover = ({ children }) => {
         {
           <div
             ref={popoverRef}
-            className={`transition-all ease-in-out duration-500 ${
+            className={`${STRINGS.CLASSES.basicTransitions} ${
               progress < 99 && progress > 4 ? "opacity-100" : "opacity-0"
             } w-full flex items-end justify-center h-5`}
             style={{
@@ -83,7 +93,7 @@ export const TextSelectionPopover = ({ children }) => {
                 className="shadow-lg rounded-full absolute right-[-5px] top-[-1rem] border-3 border-red-300"
                 color="danger"
                 size="sm"
-                onClick={() => setText("")}>
+                onClick={() => setProgress(0)}>
                 <FaX />
               </CustomButton>
               <div className="text-small font-bold">
@@ -96,7 +106,7 @@ export const TextSelectionPopover = ({ children }) => {
                 classNames={{
                   base: "absolute bottom-[-3px] w-[92%] left-[4%]",
                   track: "drop-shadow-md ",
-                  indicator: "bg-gradient-to-r from-pink-500 to-yellow-500",
+                  indicator: STRINGS.CLASSES.gradientPinkYellow,
                   label: "tracking-wider font-medium text-default-600",
                   value: "text-foreground/60",
                 }}
