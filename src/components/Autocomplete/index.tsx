@@ -3,8 +3,11 @@ import {
   AutocompleteItem,
   AutocompleteSection,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import ParaGraph from "../Paragraph";
+import { Link } from "react-router-dom";
+import { SearchMatchHighlighter } from "../../utilities/utilities";
+import { STRINGS } from "../../utilities/constants";
 
 interface Item {
   label: string;
@@ -52,16 +55,38 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   //       </AutocompleteItem>
   //     );
   //   };
+
+  // const myFilter = (textValue: string, inputValue: string) => {
+  //   console.log({ textValue, inputValue });
+  //   if (inputValue.length === 0) {
+  //     return true;
+  //   }
+
+  //   // Normalize both strings so we can slice safely
+  //   // take into account the ignorePunctuation option as well...
+  //   // textValue = textValue.normalize("NFC").toLocaleLowerCase();
+  //   inputValue = inputValue.normalize("NFC").toLocaleLowerCase();
+
+  //   return inputValue;
+  //   // return textValue.slice(0, inputValue.length) === inputValue;
+  // };
+
+  const [itemsToDisplay, setItemsToDisplay] = useState(items);
+  const [inputValue, setInputValue] = useState("");
+
+  console.log({ itemsToDisplay });
+
   return (
     <Autocomplete
       // isRequired
       // defaultSelectedKey="cat"
-      defaultItems={items}
+      items={itemsToDisplay}
       // defaultItems={items.map((item) => {
       //   return { label: item.label, value: item.value };
       // })}
       placeholder={placeholder}
       labelPlacement="outside"
+      // defaultFilter={myFilter}
       inputProps={{
         classNames: {
           input: `ml-1 pl-3 ${inputClassName}`,
@@ -114,25 +139,71 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
       size="lg"
       className={`max-w-full ${className}`}
       onSelectionChange={(e) => onSelectionChange(e)}
+      onInputChange={(input) => {
+        console.log({ input });
+        // const input = e.target.value;
+        setInputValue(input);
+        if (input?.trim() === "") {
+          setItemsToDisplay(items);
+        } else {
+          setItemsToDisplay(
+            items?.filter((item) => {
+              console.log({
+                a: JSON.stringify(item)?.toLowerCase(),
+                d: input?.trim()?.toLowerCase(),
+              });
+
+              const matches = JSON.stringify(item)
+                ?.toLowerCase()
+                .includes(input?.trim()?.toLowerCase());
+              if (matches) {
+                return true;
+              }
+              return false;
+            })
+          );
+        }
+      }}
       {...props}>
-      {(item) => {
+      {itemsToDisplay.map((item) => {
         console.log({ item });
         return (
           <AutocompleteItem
             className={autoCompleteItemClassName}
             key={item.value}
-            textValue={item.label}>
-            <div>
-              <ParaGraph>{item.label}</ParaGraph>
-              {item?.description && (
-                <ParaGraph className="text-sm text-gray-500">
-                  {item.description}
-                </ParaGraph>
-              )}
+            as={item?.route ? Link : null}
+            to={item?.route ? item.route : null}
+            textValue={item.label}
+            tabIndex={"0"}
+            role="button">
+            <div className="flex flex-row justify-between items-center">
+              <div className="flex items-center gap-4">
+                <div>{item?.icon ? item.icon : null}</div>
+                <div className="flex flex-col">
+                  <ParaGraph>
+                    {SearchMatchHighlighter(item.label, inputValue)}
+                  </ParaGraph>
+                  {item?.description && (
+                    <ParaGraph className="text-sm text-gray-500 text-wrap">
+                      {SearchMatchHighlighter(item.description, inputValue)}
+                    </ParaGraph>
+                  )}
+                </div>
+              </div>
+              <ParaGraph className="uppercase text-tiny">
+                {SearchMatchHighlighter(
+                  item?.route
+                    ? item?.route
+                        ?.split("#")[0]
+                        ?.replaceAll("/", STRINGS.SEPARATOR.BULL)
+                    : "",
+                  inputValue
+                )}
+              </ParaGraph>
             </div>
           </AutocompleteItem>
         );
-      }}
+      })}
       {/* {(item) => {
         console.log({ item });
         return <RenderAItem key={item.value} item={item} />;

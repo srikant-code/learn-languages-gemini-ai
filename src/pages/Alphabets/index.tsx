@@ -31,15 +31,6 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
         <ParaGraph className="text-xl font-bold ml-4">
           English Alphabets
         </ParaGraph>
-        <ParaGraph>
-          <li>Sort by - alphabetical, Sort by vowels and consonants etc</li>
-          <li>Find analogy between selected languages</li>
-          <li>Start practicing from that letter</li>
-          <li>Animation of the letter</li>
-          <li>Start games from that letter</li>
-          <li>Dictionary of that letter</li>
-          <li>Save that letter to vocabulary</li>
-        </ParaGraph>
         <div className="flex flex-row">
           <div className="flex flex-wrap gap-4 p-4">
             {Object.keys(alphabetsObject).map((letter) => (

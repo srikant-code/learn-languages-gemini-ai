@@ -93,6 +93,7 @@ export const TextSelectionPopover = ({ children }) => {
                 className="shadow-lg rounded-full absolute right-[-5px] top-[-1rem] border-3 border-red-300"
                 color="danger"
                 size="sm"
+                variant="solid"
                 onClick={() => setProgress(0)}>
                 <FaX />
               </CustomButton>

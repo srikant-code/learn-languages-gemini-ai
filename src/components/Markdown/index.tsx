@@ -69,18 +69,18 @@ const components = {
     <ParaGraph style={{}} className={`text-md ${commonParaGraph}`} {...props} />
   ),
   ol: ({ node, ...props }) => (
-    <ol style={{}} className="list-decimal p-4" {...props} />
+    <ol style={{}} className="list-decimal p-6" {...props} />
   ),
   ul: ({ node, ...props }) => (
-    <ul style={{}} className="list-disc p-4" {...props} />
+    <ul style={{}} className="list-disc p-6" {...props} />
   ),
   li: ({ node, ...props }) => (
     <li style={{}} className="list-disc pb-2" {...props} />
   ),
   code: ({ node, ...props }) => (
-    <Code
+    <code
       style={{}}
-      //   className="p-1 m-1 rounded-md bg-slate-200 dark:bg-slate-700 "
+      className="p-1 m-1 rounded-md bg-slate-200 dark:bg-slate-700 "
       {...props}
     />
   ),

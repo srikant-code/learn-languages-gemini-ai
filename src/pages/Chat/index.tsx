@@ -5,6 +5,8 @@ import { FaArrowLeft, FaMessage, FaPlus } from "react-icons/fa6";
 import CustomButton from "../../components/Button";
 import CustomInput from "../../components/Input";
 import ParaGraph from "../../components/Paragraph";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ScrollToBottom } from "../../utilities/utilities";
 
 interface AIChatProps {}
 
@@ -12,6 +14,7 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [parent] = useAutoAnimate();
 
   const PERSONA = {
     USER: "You",
@@ -36,7 +39,9 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
         ]);
         setInputValue("");
         setIsLoading(false);
+        ScrollToBottom();
       }, 50);
+      ScrollToBottom();
     }
   };
 
@@ -71,41 +76,43 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
             style={{ maxHeight: "74vh" }}
             className="overflow-auto p-4">
             {messages.length > 0 ? (
-              messages.map((message, index) => {
-                const isUser = message.user === PERSONA.USER;
-                return (
-                  <div
-                    key={index}
-                    color={isUser ? "primary" : "secondary"}
-                    className="flex flex-col py-4">
+              <div ref={parent}>
+                {messages.map((message, index) => {
+                  const isUser = message.user === PERSONA.USER;
+                  return (
                     <div
-                      className={`flex flex-row${
-                        isUser ? `-reverse` : ""
-                      } items-center gap-4`}>
-                      {!isUser && (
-                        <Avatar
-                          src={
-                            isUser
-                              ? "https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                              : ""
-                          }
-                        />
-                      )}
-                      <p className="font-bold">{message.user}</p>
+                      key={index}
+                      color={isUser ? "primary" : "secondary"}
+                      className="flex flex-col py-4">
+                      <div
+                        className={`flex flex-row${
+                          isUser ? `-reverse` : ""
+                        } items-center gap-4`}>
+                        {!isUser && (
+                          <Avatar
+                            src={
+                              isUser
+                                ? "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                                : ""
+                            }
+                          />
+                        )}
+                        <p className="font-bold">{message.user}</p>
+                      </div>
+                      <p
+                        className={`ml-0 my-3 ${
+                          !isUser
+                            ? "dark:border-primary-400"
+                            : "dark:border-slate-400"
+                        } light:border-slate-100 border-1 rounded-2xl p-4 w-[180px] ${
+                          isUser ? `self-end` : ""
+                        }`}>
+                        {message.text}
+                      </p>
                     </div>
-                    <p
-                      className={`ml-0 my-3 ${
-                        !isUser
-                          ? "dark:border-primary-400"
-                          : "dark:border-slate-400"
-                      } light:border-slate-100 border-1 rounded-2xl p-4 w-[180px] ${
-                        isUser ? `self-end` : ""
-                      }`}>
-                      {message.text}
-                    </p>
-                  </div>
-                );
-              })
+                  );
+                })}
+              </div>
             ) : (
               <ParaGraph className="text-foreground-800">
                 Start a conversation! Here are some suggestions...

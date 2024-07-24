@@ -154,13 +154,7 @@ export const LogInSignupForm = ({ className }) => {
       <Card className="max-w-full w-[380px] h-fit p-2 pb-8 px-6 rounded-3xl">
         <CardBody className="overflow-hidden">
           <ImageAndAppLogo />
-          {error ? (
-            <Card className="bg-red-200 shadow-none p-4 mb-6">
-              <CardBody>{error}</CardBody>
-            </Card>
-          ) : (
-            <></>
-          )}
+          {error ? <ErrorCard error={error} /> : <></>}
           <CustomTabs
             fullWidth
             size="lg"
@@ -365,7 +359,7 @@ const EmailAndPasswordRender = ({
           fullWidth
           size="lg"
           // color="primary"
-          variant={isDisabled ? "bordered" : "flat"}
+          variant={isDisabled ? "bordered" : "solid"}
           disabled={isDisabled}
           color={isDisabled ? "default " : "primary"}
           onClick={() => {
@@ -392,6 +386,14 @@ const EmailAndPasswordRender = ({
         </ParaGraph>
       </CustomButton>
     </div>
+  );
+};
+
+export const ErrorCard = ({ error }) => {
+  return (
+    <Card className="bg-red-200 shadow-none p-4 mb-6">
+      <CardBody>{error}</CardBody>
+    </Card>
   );
 };
 

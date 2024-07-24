@@ -128,24 +128,78 @@ export default {
 
 ## Calendar log
 
+I worked previously as well, but didn't log them
+
 ### 22nd July 2024
 
 - Login and Signup UI + firebase link + redux save data
 
 ### 23rd July 2024
 
-- Implement settings section and add profile + Integrate the search bar with settings
-- Fix left sidebar
-- Integrate Google AI Studio + system to call the apis and change 
+-- Implement settings section and add profile + Integrate the search bar with settings
+-- Fix left sidebar
+-x Integrate Google AI Studio + system to call the apis and change 
 according to the settings(redux setup)
-- Signout functionality and chat auto-animation and markdown upgrade
+-- Signout functionality and chat auto-animation and markdown upgrade
+--+ Start with managing the country and language codes prepare data
+--+ animation of text rotation
 
 ### 24th July 2024
+- Create the home page and cards
 
+### 25th July 2024
+-X Integrate Google AI Studio + system to call the apis and change
+according to the settings(redux setup)
 - Finalize the prompts and check with AI studio
 
-### Before submission checklist
+### 26th July 2024
 
-- Cleanup the unncessary commented code
-- check for keys
-- 
+### 27th July 2024
+
+### 28th July 2024
+
+### 29th July 2024
+
+### 30th July 2024
+
+### 31st July 2024
+
+### 1st August 2024
+
+### 2nd August 2024
+
+### 3rd August 2024
+
+### 4th August 2024
+
+### 5th August 2024
+
+### 6th August 2024
+
+
+
+## Video Creation Start
+- Ideation
+- Exact script creation
+- Video shooting
+- collection of assets
+- Video editing 
+- Audio fixes and dailog
+
+### 7th August 2024
+
+### 8th August 2024
+
+### 9th August 2024
+
+### 10th August 2024
+
+### 11th August 2024
+
+### 12th August 2024
+
+
+### Before submission checklist
+- [ ] Cleanup the unncessary commented code
+- [ ] check for API keys
+- [ ]

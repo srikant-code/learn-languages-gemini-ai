@@ -17,6 +17,7 @@ export const STRINGS = {
     gradientPinkRed: "bg-gradient-to-r from-pink-500 to-yellow-500",
     basicTransitions: "transition-all ease-in-out duration-500",
   },
+  DUMMY: { PROFILE_IMAGE: "https://i.pravatar.cc/150?u=a042581f4e29026704d" },
   MODELS: {
     FLASH_1_5: {
       label: "Gemini 1.5 Flash",
@@ -43,6 +44,7 @@ export const STRINGS = {
     SUCCESS: "success",
     ERROR: "error",
   },
+  SEPARATOR: { BULL: " • " },
   STORAGE: {
     SETTINGS: "settings",
   },
@@ -64,6 +66,7 @@ export const STRINGS = {
     INPUT: "input",
     SELECT: "select",
     BOOLEAN: "boolean",
+    CUSTOM: "custom",
   },
 };
 

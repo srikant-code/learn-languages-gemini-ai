@@ -1,21 +1,17 @@
-import {
-  Avatar,
-  Chip,
-  Listbox,
-  ListboxItem,
-  ListboxSection,
-} from "@nextui-org/react";
+import { Avatar, Chip, Spacer } from "@nextui-org/react";
 import { FaMoon, FaSun } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { ListboxWrapper } from "../../components/ListBoxWrapper";
+import { CustomListbox } from "../../components/ListBoxWrapper";
+import ParaGraph from "../../components/Paragraph";
 import CustomSwitch from "../../components/Switch";
 import { setSetting } from "../../store/reducer";
 import { SlideIDs, STRINGS } from "../../utilities/constants";
+import { ImageAndAppLogo } from "../LoginAndSignup";
 interface LeftSideBarProps {}
 
 const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
   const theme = useSelector((state) => state.language.theme);
+  const userProfile = useSelector((state) => state.language.profile) ?? {};
   const dispatch = useDispatch();
   const toggleTheme = () => {
     dispatch(
@@ -31,7 +27,7 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
 
   const menuItems = [
     {
-      title: "Actions",
+      // title: "Actions",
       showDivider: true,
       items: [
         SlideIDs.home,
@@ -42,10 +38,21 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
         SlideIDs.alphabets,
       ],
     },
-
     {
+      items: [SlideIDs.settings],
+    },
+  ];
+  const otherItems = [
+    {
+      // title: "Actions",
+      // showDivider: true,
       items: [
-        SlideIDs.settings,
+        {
+          name: "Setup Gemini API Key",
+          route: SlideIDs.settings.route,
+          description: "Toggle theme",
+          icon: <FaSun />,
+        },
         {
           name: "Dark Mode",
           // route: "/Dark Mode",
@@ -54,10 +61,11 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
           onClick: toggleTheme,
           EndContent: (
             <CustomSwitch
-              onClick={toggleTheme}
+              onPress={toggleTheme}
               // defaultSelected={theme === STRINGS.THEMES.DARK}
               isSelected={theme === STRINGS.THEMES.DARK}
-              size="lg"
+              className=" mt-[-1rem]"
+              size="md"
               color="primary"
               startContent={<FaSun />}
               endContent={<FaMoon />}
@@ -71,71 +79,58 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
 
   return (
     <div className={className} style={{ height: "97vh" }}>
-      <div variant="light" bordered>
-        <div className="p-4 flex items-center gap-4 ">
-          <Avatar
-            isBordered
-            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-            radius="lg"
-            size="lg"
-          />
-          <div className="flex flex-col p-0">
-            <p className="headerText p-1">Hi, Srikant!</p>
-            <div className="flex gap-2 items-center p-1">
-              <Chip className="" color="success">
-                Novice
-              </Chip>
-              <Chip className="" color="warning">
-                23 coins
-              </Chip>
+      <div
+        variant="light"
+        bordered
+        className="flex flex-col justify-between h-full">
+        <div variant="light" bordered className="">
+          <ImageAndAppLogo />
+          <CustomListbox items={menuItems} />
+        </div>
+        <div>
+          <div className="p-6 flex flex-col items-center relative gap-4 rounded-3xl dark bg-slate-800 m-6">
+            <img
+              src={STRINGS.DUMMY.PROFILE_IMAGE}
+              style={{ borderRadius: 100 }}
+              className="w-24 border-4 absolute top-[-35px] border-slate-800"
+              alt="profile pic"
+            />
+            <Spacer y={8} />
+            <div className="flex flex-col p-0 items-center gap-2">
+              <ParaGraph className="headerText p-0 m-0 first-letter:uppercase overflow-ellipsis">
+                {userProfile?.displayName?.split(" ")[0]}
+              </ParaGraph>
+              <ParaGraph className="overflow-ellipsis text-small">
+                {userProfile?.email}
+              </ParaGraph>
+              <div className="flex gap-2 items-center ">
+                <Chip className="" color="success">
+                  Novice
+                </Chip>
+                <Chip className="" color="warning">
+                  23 coins
+                </Chip>
+              </div>
             </div>
           </div>
-        </div>
 
-        <ListboxWrapper>
-          <Listbox
-            aria-label="Listbox Variants"
-            // color={selectedColor}
-            // variant={selectedVariant}
-          >
-            {menuItems.map((section) => {
-              const { items, ...props } = section;
-              return (
-                <ListboxSection {...props}>
-                  {(items ?? []).map((item) => {
-                    const props = {
-                      key: item.name,
-                      description: item.description,
-                      startContent: <span className="px-4 ">{item.icon}</span>,
-                      endContent: (
-                        <span className="px-4">{item.EndContent}</span>
-                      ),
-                      className: `p-6 ${
-                        window.location.pathname === item.route ? "" : ""
-                      }`,
-                    };
-                    return (
-                      <ListboxItem
-                        {...props}
-                        as={item.route ? Link : undefined}
-                        to={item.route ? item.route : undefined}
-                        color="default"
-                        className={"text-foreground"}
-                        onClick={() => {
-                          item?.onClick ? item.onClick() : "";
-                        }}>
-                        {item.name ?? item?.children}
-                      </ListboxItem>
-                    );
-                  })}
-                </ListboxSection>
-              );
-            })}
-          </Listbox>
-        </ListboxWrapper>
+          <CustomListbox items={otherItems} />
+        </div>
       </div>
     </div>
   );
 };
 
 export default LeftSideBar;
+
+export const ProfilePic = ({ ...props }) => {
+  return (
+    <Avatar
+      // isBordered
+      src={STRINGS.DUMMY.PROFILE_IMAGE}
+      radius="lg"
+      size="lg"
+      {...props}
+    />
+  );
+};

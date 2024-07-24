@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const ValidateCustomRegex = (text, regex) => {
   try {
     return regex.test(String(text));
@@ -62,11 +64,9 @@ export const SearchMatchHighlighter = (text, matchWith, renderFunction) => {
           <span
             key={index}
             style={{
-              backgroundColor: "blue",
-              color: "white",
-              padding: "2px 5px",
-              borderRadius: "4px",
-            }}>
+              backgroundColor: "hsl(var(--nextui-primary-400)",
+            }}
+            className="rounded-lg py-0 px-1 text-white">
             {word}
           </span>
         ) : (
@@ -220,4 +220,63 @@ String.prototype.toProperCase = function () {
   return this.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
+};
+
+export const ConvertMillToMomentCalendar = (time) => {
+  return moment(parseInt(time)).calendar();
+};
+
+export const RandomFromArray = (myArray) => {
+  const randomIndex = Math.floor(Math.random() * myArray.length);
+  return myArray[randomIndex];
+};
+
+export const GetRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+export const GetContrastColor = (color) => {
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
+};
+
+export const GetGradient = (color) => {
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+
+  const gradient = [];
+  for (let i = 0; i <= 1; i += 0.2) {
+    const newR = Math.floor(r * i)
+      .toString(16)
+      .padStart(2, "0");
+    const newG = Math.floor(g * i)
+      .toString(16)
+      .padStart(2, "0");
+    const newB = Math.floor(b * i)
+      .toString(16)
+      .padStart(2, "0");
+    gradient.push("#" + newR + newG + newB);
+  }
+
+  return gradient;
+};
+
+export const GetColorContrastAndGradient = (color) => {
+  if (!color) color = GetRandomColor();
+  const contrast = GetContrastColor(color);
+  const gradient = GetGradient(color);
+  return {
+    color,
+    contrast,
+    gradient,
+  };
 };

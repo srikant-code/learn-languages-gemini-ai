@@ -4,26 +4,41 @@ import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
+  useLocation,
 } from "react-router-dom";
 import "./App.css";
+import { TextSelectionPopover } from "./components/Popover";
+import firebase from "./firebase/firebase";
 import useDarkPalette from "./hooks/useDarkPalette";
+import NotFoundPage from "./pages/404Page";
+import Alphabets from "./pages/Alphabets";
 import Challenges from "./pages/Challenges";
 import Dictionary from "./pages/Dictionary";
 import Games from "./pages/Games";
 import Home from "./pages/Home";
-import Lessons from "./pages/Lessons";
-import Settings from "./pages/Settings";
-import { SlideIDs, STRINGS } from "./utilities/constants";
-import Alphabets from "./pages/Alphabets";
-import { TextSelectionPopover } from "./components/Popover";
 import HomeContent from "./pages/Home/homeContent";
+import Lessons from "./pages/Lessons";
 import { LoginAndSignup } from "./pages/LoginAndSignup";
-import firebase from "./firebase/firebase";
-import NotFoundPage from "./pages/404Page";
+import Settings from "./pages/Settings";
 import { setSetting } from "./store/reducer";
+import { SlideIDs, STRINGS } from "./utilities/constants";
 
 // ProtectedRoute component
 const ProtectedRoute = ({ isSignedIn, children }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log({ location });
+    if (location.hash) {
+      const elem = document.getElementById(location.hash.slice(1));
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  }, [location]);
+
   if (isSignedIn !== undefined && !isSignedIn) {
     // Redirect to the login page if not signed in
     return <Navigate to={SlideIDs.login.path} replace />;
