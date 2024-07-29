@@ -61,7 +61,7 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
           onClick: toggleTheme,
           EndContent: (
             <CustomSwitch
-              onPress={toggleTheme}
+              onClick={toggleTheme}
               // defaultSelected={theme === STRINGS.THEMES.DARK}
               isSelected={theme === STRINGS.THEMES.DARK}
               className=" mt-[-1rem]"
@@ -79,11 +79,8 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
 
   return (
     <div className={className} style={{ height: "97vh" }}>
-      <div
-        variant="light"
-        bordered
-        className="flex flex-col justify-between h-full">
-        <div variant="light" bordered className="">
+      <div variant="light" className="flex flex-col justify-between h-full">
+        <div variant="light" className="">
           <ImageAndAppLogo />
           <CustomListbox items={menuItems} />
         </div>

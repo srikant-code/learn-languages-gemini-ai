@@ -1,10 +1,14 @@
 import { Button } from "@nextui-org/react";
+import { STRINGS } from "../../utilities/constants";
 
 interface CustomButtonProps {}
 
 const CustomButton: FunctionComponent<CustomButtonProps> = ({
   onClick,
   children,
+  color,
+  variant,
+  size,
   disabled = false,
   className,
   ...props
@@ -12,8 +16,12 @@ const CustomButton: FunctionComponent<CustomButtonProps> = ({
   return (
     <Button
       disabled={disabled}
-      className={`${disabled ? "cursor-not-allowed" : ""} ${className}`}
-      variant="bordered"
+      color={color}
+      size={size ?? "lg"}
+      className={`${disabled ? "cursor-not-allowed" : ""} ${
+        color === "primary" && variant === "solid" ? "text-white" : ""
+      } ${STRINGS.CLASSES.basicTransitions} ${className}`}
+      variant={variant ?? "bordered"}
       {...props}
       onClick={onClick}>
       {children}

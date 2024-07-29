@@ -30,11 +30,16 @@ const NotFoundPage = () => {
         auto
         size="lg"
         color="primary"
+        variant="solid"
         onClick={() => (window.location.href = "/")}>
         Back to Language Lessons
       </CustomButton>
       <Spacer y={2} />
-      <CustomButton auto size="md" onClick={() => window.history.back()}>
+      <CustomButton
+        auto
+        size="md"
+        variant="flat"
+        onClick={() => window.history.back()}>
         Return to Previous Page
       </CustomButton>
       <div className={"fixed flex items-center justify-center bottom-4"}>

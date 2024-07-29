@@ -1,4 +1,8 @@
+import { Card } from "@nextui-org/react";
 import React from "react";
+import ParaGraph from "../Paragraph";
+import { STRINGS } from "../../utilities/constants";
+import CustomButton from "../Button";
 
 const GradientBackground = ({
   gradientColors = [
@@ -25,3 +29,41 @@ const GradientBackground = ({
 };
 
 export default GradientBackground;
+
+export const CustomCard = ({
+  className,
+  border = true,
+  removeAllClasses = false,
+  ...props
+}) => {
+  return (
+    <Card
+      className={
+        removeAllClasses
+          ? className
+          : `shadow-none ${
+              border ? "border dark:border-slate-600" : ""
+            } rounded-3xl relative p-6 pb-8 min-w-fit ${className}`
+      }
+      {...props}
+    />
+  );
+};
+
+export const CustomCardHeaderChild = ({ header, child, rightContent }) => {
+  return (
+    <CustomCard
+      as={CustomButton}
+      className={
+        "flex flex-row p-4 px-6 justify-between items-center gap-4 min-w-fit"
+      }>
+      <div className="flex flex-col items-start">
+        <ParaGraph className={`${STRINGS.CLASSES.subText}`}>{header}</ParaGraph>
+        <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
+          {child}
+        </ParaGraph>
+      </div>
+      {rightContent && <div>{rightContent}</div>}
+    </CustomCard>
+  );
+};

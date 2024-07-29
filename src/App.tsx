@@ -22,6 +22,7 @@ import { LoginAndSignup } from "./pages/LoginAndSignup";
 import Settings from "./pages/Settings";
 import { setSetting } from "./store/reducer";
 import { SlideIDs, STRINGS } from "./utilities/constants";
+import Onboarding from "./pages/LoginAndSignup/onboarding";
 
 // ProtectedRoute component
 const ProtectedRoute = ({ isSignedIn, children }) => {
@@ -41,7 +42,7 @@ const ProtectedRoute = ({ isSignedIn, children }) => {
 
   if (isSignedIn !== undefined && !isSignedIn) {
     // Redirect to the login page if not signed in
-    return <Navigate to={SlideIDs.login.path} replace />;
+    return <Navigate to={SlideIDs.onboarding.path} replace />;
   }
 
   return children;
@@ -108,6 +109,10 @@ function App() {
       element: <LoginAndSignup />,
     },
     {
+      path: SlideIDs.onboarding.path,
+      element: <Onboarding />,
+    },
+    {
       path: "/*",
       element: <NotFoundPage />,
     },
@@ -144,7 +149,10 @@ function App() {
                 uid,
                 emailVerified,
                 isAnonymous,
-                metadata,
+                metadata: {
+                  createdAt: metadata.createdAt,
+                  lastLoginAt: metadata.lastLoginAt,
+                },
               },
             })
           );

@@ -20,9 +20,10 @@ const Home: FunctionComponent<HomeProps> = () => {
   // );
 
   return (
-    <div className="flex justify-between gap-4 p-4 ">
-      <LeftSideBar className="flex-1 min-w-[220px] border dark:border-primary-300 rounded-3xl" />
-      <div className="flex-col flex w-full p-6 max-h-[97vh] overflow-auto">
+    <div
+      className={`flex justify-between gap-4 p-4 ${STRINGS.CLASSES.gradientPinkPurpleDark}`}>
+      <LeftSideBar className=" min-w-[220px] border dark:border-primary-300 rounded-3xl" />
+      <div className="flex-col flex w-full p-6 max-w-[1200px] max-h-[97vh] overflow-auto">
         <ScrollShadow size={40} hideScrollBar visibility={"bottom"}>
           <CustomAutocomplete
             className="sticky top-0 z-[99] bg-white dark:bg-black"
@@ -58,13 +59,6 @@ const Home: FunctionComponent<HomeProps> = () => {
                 };
               }),
             ]}
-            startContent={
-              <FaSearch
-                className="mx-2 text-default-40"
-                strokeWidth={2}
-                size={14}
-              />
-            }
             placeholder="Quick access..."
           />
           <Outlet />

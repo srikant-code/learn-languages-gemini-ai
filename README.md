@@ -148,17 +148,30 @@ according to the settings(redux setup)
 - Create the home page and cards
 
 ### 25th July 2024
--X Integrate Google AI Studio + system to call the apis and change
-according to the settings(redux setup)
+- Didn't feel like working, took rest, but pushed some code changes to main
+
+### 26th July 2024 - Fri
+- Added basic UI for the Challenges, Games, Lessons
+- Made a bit of UX for the same in figma
+
+### 27th July 2024 - Sat
+-X Integrate Google AI Studio + system to call the apis and change according to the settings(redux setup)
 - Finalize the prompts and check with AI studio
-
-### 26th July 2024
-
-### 27th July 2024
+- Develop the UI very fast using dummy data and local storage and redux.
+- Integrate with firebase
+- Integrate the AI
+- Integrate the AI eveyrwhere
+- Check the theme related fixes and changes
 
 ### 28th July 2024
+ --- Onboarding user preference make + keep in settings(redux + LS)
+ - Use the details to create dictionary query and integrate with AI
 
 ### 29th July 2024
+- Do my vocabulary UI and functionality to store them
+- Alphabets, diacritics of a language query
+- Bring the search bar to the right? and the nav options to the top?
+- Collect course contents and agenda + cards content.
 
 ### 30th July 2024
 
@@ -200,6 +213,7 @@ according to the settings(redux setup)
 
 
 ### Before submission checklist
+- [ ] Fix the word rotator classname bug
 - [ ] Cleanup the unncessary commented code
 - [ ] check for API keys
-- [ ]
+- [ ] Change navbar and sidebar swap? if time permits

@@ -11,6 +11,7 @@ const AudioPlayer = ({
   showVoiceSelector,
   showPlaybackSpeed,
   showStop,
+  buttonProps = {},
   ...props
 }) => {
   const audioRef = useRef();
@@ -74,11 +75,11 @@ const AudioPlayer = ({
     <div className="flex flex-row gap-2 ">
       {showVoiceSelector && <VoiceSelector />}
       {src && <audio ref={audioRef} src={src} {...props} />}
-      <CustomButton isIconOnly onClick={togglePlayPause}>
+      <CustomButton isIconOnly onClick={togglePlayPause} {...buttonProps}>
         {playing ? <FaPause /> : <FaPlay />}
       </CustomButton>
       {showStop && (
-        <CustomButton isIconOnly onClick={stop}>
+        <CustomButton isIconOnly onClick={stop} {...buttonProps}>
           <FaStop />
         </CustomButton>
       )}

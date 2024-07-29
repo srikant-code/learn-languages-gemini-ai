@@ -13,13 +13,12 @@ export const CustomListbox = ({ items }) => {
         // color={selectedColor}
         // variant={selectedVariant}
       >
-        {items.map((section) => {
+        {items.map((section, index) => {
           const { items, ...props } = section;
           return (
-            <ListboxSection {...props}>
-              {(items ?? []).map((item) => {
+            <ListboxSection key={index} {...props}>
+              {(items ?? []).map((item, index) => {
                 const props = {
-                  key: item.name,
                   // description: item.description,
                   startContent: <span className="px-4">{item.icon}</span>,
                   endContent: (
@@ -39,6 +38,7 @@ export const CustomListbox = ({ items }) => {
                     role="button"
                     color="default"
                     tabIndex={"0"}
+                    key={item.name + index}
                     onClick={() => {
                       item?.onClick ? item.onClick() : "";
                     }}>

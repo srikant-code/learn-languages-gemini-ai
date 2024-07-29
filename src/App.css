@@ -1,6 +1,7 @@
 #root {
     /* max-width: 1280px; */
     margin: 0 auto;
+    overflow: hidden;
     /* padding: 2rem; */
     /* text-align: center; */
 }
@@ -73,4 +74,46 @@
         fill: hsl(var(--nextui-primary-500));
         fill-opacity: 1;
     }
+}
+
+
+/* Marquee Animation */
+
+@keyframes animate-marquee {
+    100%,
+    0% {
+        transform: translateX(25%);
+    }
+    50% {
+        transform: translateX(-25%);
+    }
+}
+
+.animate-marquee {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: animate-marquee 120s linear infinite;
+    animation-timing-function: linear;
+}
+
+
+/* Reverse Marquee Animation */
+
+@keyframes animate-marquee-reverse {
+    100%,
+    0% {
+        transform: translateX(-25%);
+    }
+    50% {
+        transform: translateX(25%);
+    }
+}
+
+.animate-marquee-reverse {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: animate-marquee-reverse 120s linear infinite;
+    animation-timing-function: linear;
 }

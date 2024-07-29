@@ -2,6 +2,7 @@ import { ScrollShadow } from "@nextui-org/react";
 import CustomTabs from "../../components/Tabs";
 import AIChat from "../Chat";
 import { DictionaryRender } from "../Dictionary";
+import Vocabulary from "../MyVocabulary";
 
 interface RightSideBarProps {}
 
@@ -19,7 +20,7 @@ const RightSideBar: FunctionComponent<RightSideBarProps> = ({ ...props }) => {
           { title: "Gem AI", content: <Wrapper children={<AIChat />} /> },
           {
             title: "My Vocabulary",
-            content: <Wrapper children={<DictionaryRender />} />,
+            content: <Wrapper children={<Vocabulary />} />,
           },
         ]}
       />

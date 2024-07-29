@@ -18,16 +18,18 @@ import { SlideIDs, STRINGS } from "../../utilities/constants";
 import { ValidateCustomRegex } from "../../utilities/utilities";
 import { useNavigate } from "react-router-dom";
 import CustomLink from "../../components/Link";
+import { CustomCard } from "../../components/Card";
+import MarqueeAnimation from "./marqueeAnimation";
 
 export const LoginAndSignup = () => {
   const [parent] = useAutoAnimate();
   return (
     <div className="flex w-full h-lvh" ref={parent}>
-      <BackgroundImageLogin />
-      <div className="flex-1 flex items-center justify-center">
-        Some things to display to give info to user
-      </div>
-      <div className="flex-1 flex items-center justify-center">
+      {/* <BackgroundImageLogin /> */}
+
+      <MarqueeAnimation className="opacity-30" />
+
+      <div className="flex-1 flex items-center justify-center z-10">
         <LogInSignupForm
           className={`items-center justify-center ${STRINGS.CLASSES.basicTransitions}`}
         />
@@ -113,7 +115,7 @@ const MIN_LENGTH = {
   NAME: 4,
 };
 
-export const LogInSignupForm = ({ className }) => {
+export const LogInSignupForm = ({ cardClassName, className }) => {
   const [selectedTab, setSelectedTab] = useState(TABS.LOGIN);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -151,7 +153,8 @@ export const LogInSignupForm = ({ className }) => {
 
   return (
     <div className={`flex flex-col w-full ${className}`}>
-      <Card className="max-w-full w-[380px] h-fit p-2 pb-8 px-6 rounded-3xl">
+      <CustomCard
+        className={`max-w-full w-[380px] h-fit p-2 pb-8 px-6 ${cardClassName}`}>
         <CardBody className="overflow-hidden">
           <ImageAndAppLogo />
           {error ? <ErrorCard error={error} /> : <></>}
@@ -251,7 +254,7 @@ export const LogInSignupForm = ({ className }) => {
             ]}
           />
         </CardBody>
-      </Card>
+      </CustomCard>
     </div>
   );
 };
@@ -391,9 +394,9 @@ const EmailAndPasswordRender = ({
 
 export const ErrorCard = ({ error }) => {
   return (
-    <Card className="bg-red-200 shadow-none p-4 mb-6">
+    <CustomCard className="bg-red-200 p-4 mb-6">
       <CardBody>{error}</CardBody>
-    </Card>
+    </CustomCard>
   );
 };
 

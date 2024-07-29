@@ -4,7 +4,9 @@ import CustomButton from "../../components/Button";
 import ParaGraph, { IconHeader } from "../../components/Paragraph";
 import CustomTabs from "../../components/Tabs";
 import { SlideIDs, STRINGS } from "../../utilities/constants";
-import { WordButtons, WordHeader } from "../Dictionary";
+import { CustomCard } from "../../components/Card";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { WordButtons, WordHeader } from "../Dictionary/wordHeader";
 
 interface AlphabetsProps {}
 
@@ -22,6 +24,7 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
   const subText = STRINGS.CLASSES.subText;
   const selectedLetterObj = alphabetsObject[selectedLetter];
   const selectedLetterDetail = selectedLetterObj?.details;
+  const [parent] = useAutoAnimate();
 
   return (
     <div>
@@ -31,7 +34,7 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
         <ParaGraph className="text-xl font-bold ml-4">
           English Alphabets
         </ParaGraph>
-        <div className="flex flex-row">
+        <div className="flex flex-row" ref={parent}>
           <div className="flex flex-wrap gap-4 p-4">
             {Object.keys(alphabetsObject).map((letter) => (
               <div key={letter}>
@@ -58,7 +61,7 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
             ))}
           </div>
           {selectedLetter && (
-            <Card className="min-w-[50%] rounded-3xl p-12" visible>
+            <CustomCard className="min-w-[50%] p-12" visible>
               <div className="flex gap-4 justify-center items-end">
                 <BoundingBox>
                   <ParaGraph
@@ -139,7 +142,7 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
                   ]}
                 />
               </div>
-            </Card>
+            </CustomCard>
           )}
         </div>
       </div>

@@ -1,12 +1,11 @@
-import { Card, Popover, Progress } from "@nextui-org/react";
+import { Popover, Progress } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
-import { WordHeader } from "../../pages/Dictionary";
-import { FaCross } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
-import CustomButton from "../Button";
-import { Sleep } from "../../utilities/utilities";
-import { SlideIDs, STRINGS } from "../../utilities/constants";
 import { useLocation } from "react-router-dom";
+import { SlideIDs, STRINGS } from "../../utilities/constants";
+import { Sleep } from "../../utilities/utilities";
+import CustomButton from "../Button";
+import { WordHeader } from "../../pages/Dictionary/wordHeader";
 
 interface CustomPopoverProps {}
 
@@ -38,7 +37,7 @@ export const TextSelectionPopover = ({ children }) => {
   };
 
   const handleMouseDown = () => {};
-  const totalTime = 10000;
+  const totalTime = 50000;
   const step = 100;
 
   const clearTimer = () => {
@@ -104,6 +103,7 @@ export const TextSelectionPopover = ({ children }) => {
               <Progress
                 size="sm"
                 radius="sm"
+                aria-label="progress"
                 classNames={{
                   base: "absolute bottom-[-3px] w-[92%] left-[4%]",
                   track: "drop-shadow-md ",

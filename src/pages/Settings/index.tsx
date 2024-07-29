@@ -24,6 +24,7 @@ import { ErrorCard } from "../LoginAndSignup";
 import { ProfilePic } from "../SideBar";
 import { BsAlphabet } from "react-icons/bs";
 import { FaPerson } from "react-icons/fa6";
+import { CustomCard } from "../../components/Card";
 
 interface SettingsProps {}
 
@@ -288,11 +289,10 @@ const Settings: FunctionComponent<SettingsProps> = () => {
       <div className="flex flex-col gap-2">
         {Object.keys(createSections).map((section, index) => {
           return (
-            <Card
+            <CustomCard
               key={index}
-              className="shadow-none border dark:border-slate-800 m-4 flex flex-col gap-10 px-8 pt-4 pb-10">
-              <ParaGraph
-                className={`border-b-2 dark:border-slate-700 pb-3 ${STRINGS.CLASSES.subHeading}`}>
+              className="m-4 flex flex-col gap-10 px-8 pt-4 pb-10">
+              <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
                 {SECTION[section].heading}
               </ParaGraph>
               {createSections[section].map((setting) => {
@@ -371,7 +371,7 @@ const Settings: FunctionComponent<SettingsProps> = () => {
                     return null;
                 }
               })}
-            </Card>
+            </CustomCard>
           );
         })}
       </div>

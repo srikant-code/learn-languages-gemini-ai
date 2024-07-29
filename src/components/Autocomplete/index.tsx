@@ -1,13 +1,10 @@
-import {
-  Autocomplete,
-  AutocompleteItem,
-  AutocompleteSection,
-} from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import React, { useState } from "react";
-import ParaGraph from "../Paragraph";
 import { Link } from "react-router-dom";
-import { SearchMatchHighlighter } from "../../utilities/utilities";
 import { STRINGS } from "../../utilities/constants";
+import { SearchMatchHighlighter } from "../../utilities/utilities";
+import ParaGraph from "../Paragraph";
+import { FaSearch } from "react-icons/fa";
 
 interface Item {
   label: string;
@@ -32,7 +29,9 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   //   sectionsEnable = false,
   className = "max-w-full",
   inputClassName = "",
+  label,
   autoCompleteItemClassName = "",
+  startContent,
   ...props
 }) => {
   //   const headingClasses =
@@ -84,7 +83,9 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
       // defaultItems={items.map((item) => {
       //   return { label: item.label, value: item.value };
       // })}
+      aria-label={label ?? placeholder ?? "autocomplete"}
       placeholder={placeholder}
+      label={label}
       labelPlacement="outside"
       // defaultFilter={myFilter}
       inputProps={{
@@ -148,12 +149,8 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
         } else {
           setItemsToDisplay(
             items?.filter((item) => {
-              console.log({
-                a: JSON.stringify(item)?.toLowerCase(),
-                d: input?.trim()?.toLowerCase(),
-              });
-
-              const matches = JSON.stringify(item)
+              const { icon, ...others } = item;
+              const matches = JSON.stringify(others)
                 ?.toLowerCase()
                 .includes(input?.trim()?.toLowerCase());
               if (matches) {
@@ -164,9 +161,17 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
           );
         }
       }}
+      startContent={
+        startContent || (
+          <FaSearch
+            className="mx-2 text-default-40"
+            strokeWidth={2}
+            size={14}
+          />
+        )
+      }
       {...props}>
       {itemsToDisplay.map((item) => {
-        console.log({ item });
         return (
           <AutocompleteItem
             className={autoCompleteItemClassName}

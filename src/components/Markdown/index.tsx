@@ -35,7 +35,7 @@ const Pre = ({ node, children, ...props }) => {
   );
 };
 
-const commonParaGraph = `font-bold border-b-2 light:border-slate-100 dark:border-slate-700 pb-2 my-4 pt-2`;
+const commonParaGraph = `font-bold block border-b-2 light:border-slate-100 dark:border-slate-700 pb-2 my-4 pt-2`;
 
 const components = {
   h1: ({ node, ...props }) => (

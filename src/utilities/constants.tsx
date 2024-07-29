@@ -7,17 +7,26 @@ import {
   FaReadme,
   FaTrophy,
 } from "react-icons/fa";
-import { FaMoon } from "react-icons/fa6";
+import { FaMoon, FaPersonSnowboarding } from "react-icons/fa6";
 export const STRINGS = {
   APP_NAME: "GemAI",
   CLASSES: {
-    subHeading: "text-xl font-semibold mt-2 first-letter:uppercase",
+    bigButton: "p-5 px-8 h-16 font-medium text-xl rounded-3xl",
+    borderedHeading:
+      "border-b-2 dark:border-slate-700 pb-3 text-xl font-semibold first-letter:uppercase",
+    heading: "text-2xl font-semibold first-letter:uppercase",
+    subHeading: "text-xl font-semibold first-letter:uppercase",
     subText: "text-sm text-gray-500",
     gradientPinkYellow: "bg-gradient-to-r from-pink-500 to-yellow-500",
     gradientPinkRed: "bg-gradient-to-r from-pink-500 to-yellow-500",
+    gradientPinkPurpleDark:
+      "bg-gradient-to-tr from-slate-800 via-pink-950 to-violet-950 light:from-slate-200 light:via-pink-200 light:to-violet-200",
     basicTransitions: "transition-all ease-in-out duration-500",
   },
-  DUMMY: { PROFILE_IMAGE: "https://i.pravatar.cc/150?u=a042581f4e29026704d" },
+  DUMMY: {
+    PROFILE_IMAGE: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+    BACKGROUND_IMAGE: "https://nextui.org/images/card-example-6.jpeg",
+  },
   MODELS: {
     FLASH_1_5: {
       label: "Gemini 1.5 Flash",
@@ -71,6 +80,13 @@ export const STRINGS = {
 };
 
 export const SlideIDs = {
+  onboarding: {
+    route: "/onboarding",
+    path: "onboarding",
+    name: "onboarding",
+    description: "Onboarding description",
+    icon: <FaPersonSnowboarding />,
+  },
   login: {
     route: "/login",
     path: "login",

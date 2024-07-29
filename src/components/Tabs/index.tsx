@@ -34,9 +34,13 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
     className={className}
     {...props}>
     {tabs.map((tab) => {
-      const { title, content } = tab;
+      const { title, content, textValue } = tab;
       return (
-        <Tab key={title} title={title} className={tabClassName}>
+        <Tab
+          key={title}
+          title={title}
+          textValue={textValue}
+          className={tabClassName}>
           {content}
         </Tab>
       );
