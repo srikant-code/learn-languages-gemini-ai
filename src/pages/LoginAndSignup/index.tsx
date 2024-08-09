@@ -15,7 +15,7 @@ import firebase, {
   firebaseSignUp,
 } from "../../firebase/firebase";
 import { SlideIDs, STRINGS } from "../../utilities/constants";
-import { ValidateCustomRegex } from "../../utilities/utilities";
+import { Sleep, ValidateCustomRegex } from "../../utilities/utilities";
 import { useNavigate } from "react-router-dom";
 import CustomLink from "../../components/Link";
 import { CustomCard } from "../../components/Card";
@@ -54,13 +54,28 @@ export const BackgroundImageLogin = () => {
   );
 };
 
-export const ImageAndAppLogo = () => {
+export const AppIconAndText = ({
+  onlyLogo = false,
+  className,
+  classNames,
+  removeAllClasses,
+}) => {
+  const [parent] = useAutoAnimate();
   return (
-    <div className="flex items-center justify-center p-6">
-      <img src={viteLogo} className="logo m-[-1rem]" alt="Vite logo" />
-      <ParaGraph className={STRINGS.CLASSES.subHeading}>
-        {STRINGS.APP_NAME}
-      </ParaGraph>
+    <div
+      className={`flex items-center justify-center  ${
+        removeAllClasses ? "" : onlyLogo ? "p-1 pt-5" : "p-6"
+      } ${classNames?.parent} ${className} `}>
+      <img
+        src={viteLogo}
+        className={`logo m-[-1rem] ${classNames?.icon}`}
+        alt="Vite logo"
+      />
+      {!onlyLogo && (
+        <ParaGraph className={STRINGS.CLASSES.subHeading}>
+          {STRINGS.APP_NAME}
+        </ParaGraph>
+      )}
     </div>
   );
 };
@@ -131,12 +146,17 @@ export const LogInSignupForm = ({ cardClassName, className }) => {
 
   const handleFireBaseResponse = (res, doLoginAfterSuccess) => {
     setLoading(false);
-    if (res?.error && res?.message) setError(res?.message);
-    else {
-      if (doLoginAfterSuccess) handleEmailLogin();
-      else {
+    if (res?.error && res?.message) {
+      setError(res?.message);
+      console.log("setting error");
+    } else {
+      if (doLoginAfterSuccess) {
+        console.log("handle login after success");
+        handleEmailLogin();
+      } else {
         // navigate to homepage
-        navigate(SlideIDs.home.route);
+        console.log("navigate to homepage");
+        window.location.href = SlideIDs.dashboard.route;
       }
     }
   };
@@ -156,7 +176,7 @@ export const LogInSignupForm = ({ cardClassName, className }) => {
       <CustomCard
         className={`max-w-full w-[380px] h-fit p-2 pb-8 px-6 ${cardClassName}`}>
         <CardBody className="overflow-hidden">
-          <ImageAndAppLogo />
+          <AppIconAndText />
           {error ? <ErrorCard error={error} /> : <></>}
           <CustomTabs
             fullWidth

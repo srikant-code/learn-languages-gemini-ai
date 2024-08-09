@@ -3,6 +3,7 @@ import CustomTabs from "../../components/Tabs";
 import AIChat from "../Chat";
 import { DictionaryRender } from "../Dictionary";
 import Vocabulary from "../MyVocabulary";
+import { STRINGS } from "../../utilities/constants";
 
 interface RightSideBarProps {}
 
@@ -15,12 +16,15 @@ const RightSideBar: FunctionComponent<RightSideBarProps> = ({ ...props }) => {
         tabs={[
           {
             title: "Dictionary",
-            content: <Wrapper children={<DictionaryRender />} />,
+            content: <ScrollWrapper children={<DictionaryRender />} />,
           },
-          { title: "Gem AI", content: <Wrapper children={<AIChat />} /> },
+          {
+            title: STRINGS.APP_NAME,
+            content: <ScrollWrapper children={<AIChat />} />,
+          },
           {
             title: "My Vocabulary",
-            content: <Wrapper children={<Vocabulary />} />,
+            content: <ScrollWrapper children={<Vocabulary />} />,
           },
         ]}
       />
@@ -30,8 +34,14 @@ const RightSideBar: FunctionComponent<RightSideBarProps> = ({ ...props }) => {
 
 export default RightSideBar;
 
-const Wrapper = ({ children }) => {
+export const ScrollWrapper = ({ className, children }) => {
   return (
-    <ScrollShadow className="h-[88vh] overflow-auto">{children}</ScrollShadow>
+    <ScrollShadow
+      className={`h-[88vh] overflow-auto ${className}`}
+      visibility="bottom"
+      // hideScrollBar
+    >
+      {children}
+    </ScrollShadow>
   );
 };

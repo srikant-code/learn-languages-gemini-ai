@@ -89,7 +89,7 @@ const WordRotator = ({
             key={i}
             ref={wordRefs.current[i]}
             style={{ ...(word?.colorHex ? { color: word?.colorHex } : {}) }}
-            className={`word font-noto ${word.color} ${STRINGS.CLASSES.basicTransitions}`}>
+            className={`word ${word.color} ${STRINGS.CLASSES.basicTransitions} overflow-hidden`}>
             {word.text}
           </span>
         ))}

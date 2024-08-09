@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/react";
 import { STRINGS } from "../../utilities/constants";
+import { Link } from "react-router-dom";
 
 interface CustomButtonProps {}
 
@@ -30,3 +31,16 @@ const CustomButton: FunctionComponent<CustomButtonProps> = ({
 };
 
 export default CustomButton;
+
+export const CustomLinkButton = ({ ...props }) => {
+  return <CustomButton as={Link} {...props} />;
+};
+
+export const CustomNoWrapButton = ({ className, ...props }) => {
+  return (
+    <CustomButton
+      className={`whitespace-break-spaces text-left overflow-hidden text-ellipsis ${className}`}
+      {...props}
+    />
+  );
+};

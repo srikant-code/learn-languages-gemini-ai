@@ -108,6 +108,42 @@ export default {
         //   5: "32px",
         //   6: "48px",
         // },
+
+        contrast: {
+          extend: "dark", // <- inherit default values from dark theme
+          colors: {
+            background: "#5D001A",
+            foreground: "#ffffff",
+            primary: {
+              50: "#3D001A",
+              100: "#4D001A",
+              200: "#5D001A",
+              300: "#9D001A",
+              400: "#8D001A",
+              500: "#9D001A",
+              600: "#7D001A",
+              700: "#6D001A",
+              800: "#FDD5F9",
+              900: "#FEECFE",
+              DEFAULT: "#0D001A",
+              foreground: "#ffffff",
+            },
+            focus: "#F182F6",
+          },
+          // layout: {
+          //   disabledOpacity: "0.3",
+          //   radius: {
+          //     small: "4px",
+          //     medium: "6px",
+          //     large: "8px",
+          //   },
+          //   borderWidth: {
+          //     small: "1px",
+          //     medium: "2px",
+          //     large: "3px",
+          //   },
+          // },
+        },
       },
     }),
   ],

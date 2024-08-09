@@ -5,7 +5,7 @@ export const ListboxWrapper = ({ children }) => (
   <div className="w-full px-2 py-2 rounded-small">{children}</div> // min-w-[260px]
 );
 
-export const CustomListbox = ({ items }) => {
+export const CustomListbox = ({ items, isIconOnly = false }) => {
   return (
     <ListboxWrapper>
       <Listbox
@@ -21,7 +21,9 @@ export const CustomListbox = ({ items }) => {
                 const props = {
                   // description: item.description,
                   startContent: <span className="px-4">{item.icon}</span>,
-                  endContent: (
+                  endContent: isIconOnly ? (
+                    false
+                  ) : (
                     <span className="px-2 py-0 h-0 mt-[-1rem]">
                       {item.EndContent}
                     </span>

@@ -43,7 +43,7 @@ export const CustomCard = ({
           ? className
           : `shadow-none ${
               border ? "border dark:border-slate-600" : ""
-            } rounded-3xl relative p-6 pb-8 min-w-fit ${className}`
+            } rounded-3xl relative p-6 pb-8 min-w-fit dark:bg-gradient-to-tr dark:from-slate-900  dark:to-slate-800 ${className}`
       }
       {...props}
     />

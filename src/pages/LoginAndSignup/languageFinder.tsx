@@ -26,18 +26,35 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
   messageForConfirmation = "So you know these languages right?",
   messageForNoSuchLanguageExists = "Hey! We don't think any such language exists. Try something else.",
 }) => {
-  const [langInput, setlangInput] = useState("");
-  const filteredLangs = allLangs.filter((lang) => {
-    return JSON.stringify({
-      name: lang.languageName,
-      code: lang.languageCode,
-      country: lang?.usedIn[0]?.displayName,
-    })
-      ?.toLowerCase()
-      .includes(langInput?.toLowerCase());
-  });
+  const selectedLanguages = RemoveNullValuesFromArray(
+    Object.keys(selectedLangs),
+    (k) => selectedLangs[k]
+  );
 
-  console.log({ selectedLangs });
+  const updatedSelectedLangsObj = selectedLanguages.map((lang) => {
+    return GetAllLanguages[lang];
+  });
+  const [langInput, setlangInput] = useState("");
+  const filteredLangs = [
+    ...updatedSelectedLangsObj,
+    ...allLangs
+      .filter((lang) => {
+        return !updatedSelectedLangsObj.find(
+          (sLang) => sLang.languageCode === lang.languageCode
+        );
+      })
+      .filter((lang) => {
+        return JSON.stringify({
+          name: lang.languageName,
+          code: lang.languageCode,
+          country: lang?.usedIn[0]?.displayName,
+        })
+          ?.toLowerCase()
+          .includes(langInput?.toLowerCase());
+      }),
+  ];
+
+  console.log({ selectedLangs, filteredLangs, selectedLanguages });
 
   const addOrDeleteLang = (lang) => {
     // console.log({ abc: lang });
@@ -57,10 +74,6 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
       });
   };
 
-  const selectedLanguages = RemoveNullValuesFromArray(
-    Object.keys(selectedLangs),
-    (k) => selectedLangs[k]
-  );
   const [parent] = useAutoAnimate();
   const [parent2] = useAutoAnimate();
   const [parent3] = useAutoAnimate();
@@ -88,7 +101,7 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
                 <CustomCard
                   as={CustomButton}
                   key={index}
-                  className={`flex-1 bg-transparent min-w-[200px] max-w-[300px] h-fit p-0`}>
+                  className={`flex-1 bg-transparent min-w-[235px] max-w-[300px] h-fit p-0`}>
                   <div
                     className="flex flex-row gap-4 justify-start w-full items-center p-6"
                     onClick={() => addOrDeleteLang(lang)}>
@@ -97,7 +110,10 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
                       <ParaGraph className={"font-bold "}>
                         {SearchMatchHighlighter(lang?.languageName, langInput)}
                       </ParaGraph>
-                      <ParaGraph className={"text-small"}>
+                      <ParaGraph
+                        className={
+                          "text-small whitespace-break-spaces text-left"
+                        }>
                         Used in{" "}
                         {SearchMatchHighlighter(
                           lang?.usedIn[0].displayName,
@@ -146,8 +162,11 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
   );
 };
 
-export const CheckRightTop = () => (
-  <FaCheckCircle className="text-green-500 text-2xl absolute top-3 right-3" />
+export const CheckRightTop = ({ className, style = {} }) => (
+  <FaCheckCircle
+    style={style}
+    className={`text-green-500 text-2xl absolute top-3 right-3 ${className}`}
+  />
 );
 
 export default LanguageFinder;

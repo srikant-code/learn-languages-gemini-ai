@@ -49,10 +49,10 @@ export const SettingsObject = [
     section: SECTION.PROFILE.id,
     valueExtractor: ({ setting }) => {
       return [
-        `Name: ${setting.displayName ?? ""}`,
-        `Email: ${setting.email ?? ""}`,
+        `Name: ${setting?.displayName ?? ""}`,
+        `Email: ${setting?.email ?? ""}`,
         `${
-          setting.emailVerified ? "Email is verified" : "Email is not verified"
+          setting?.emailVerified ? "Email is verified" : "Email is not verified"
         }`,
       ].join(STRINGS.SEPARATOR.BULL);
     },
@@ -179,10 +179,10 @@ export const SettingsObject = [
     valueExtractor: ({ setting }) => {
       return [
         `Joined ${
-          ConvertMillToMomentCalendar(setting.metadata.createdAt) ?? ""
+          ConvertMillToMomentCalendar(setting?.metadata?.createdAt) ?? ""
         }`,
         `Last logged in ${
-          ConvertMillToMomentCalendar(setting.metadata.lastLoginAt) ?? ""
+          ConvertMillToMomentCalendar(setting?.metadata?.lastLoginAt) ?? ""
         }`,
       ].join(STRINGS.SEPARATOR.BULL);
     },
@@ -195,11 +195,11 @@ export const SettingsObject = [
           <Spacer y={1} />
           <ParaGraph>
             Last logged in{" "}
-            {ConvertMillToMomentCalendar(setting.metadata.lastLoginAt)}
+            {ConvertMillToMomentCalendar(setting?.metadata?.lastLoginAt) ?? ""}
           </ParaGraph>
           <ParaGraph>
             Account created on{" "}
-            {ConvertMillToMomentCalendar(setting.metadata.createdAt)}
+            {ConvertMillToMomentCalendar(setting?.metadata?.createdAt) ?? ""}
           </ParaGraph>
         </div>
       );
@@ -285,7 +285,6 @@ const Settings: FunctionComponent<SettingsProps> = () => {
 
   return (
     <div>
-      <IconHeader icon={SlideIDs.settings.icon}>Settings</IconHeader>
       <div className="flex flex-col gap-2">
         {Object.keys(createSections).map((section, index) => {
           return (

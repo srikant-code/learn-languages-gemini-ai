@@ -6,12 +6,16 @@ import ParaGraph from "../../components/Paragraph";
 import CustomSwitch from "../../components/Switch";
 import { setSetting } from "../../store/reducer";
 import { SlideIDs, STRINGS } from "../../utilities/constants";
-import { ImageAndAppLogo } from "../LoginAndSignup";
+import { AppIconAndText } from "../LoginAndSignup";
+import CustomAutocomplete from "../../components/Autocomplete";
+import { SettingsObject } from "../Settings";
+import { FaAngleDoubleLeft, FaAngleDoubleRight, FaKey } from "react-icons/fa";
+import { useState } from "react";
+import CustomButton from "../../components/Button";
 interface LeftSideBarProps {}
 
 const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
   const theme = useSelector((state) => state.language.theme);
-  const userProfile = useSelector((state) => state.language.profile) ?? {};
   const dispatch = useDispatch();
   const toggleTheme = () => {
     dispatch(
@@ -24,24 +28,10 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
       })
     );
   };
+  const settingsFromRedux = useSelector((state) => state.language) ?? {};
+  const [sideBarCollapsed, setSideBarCollapsed] = useState(false);
+  const [hoverState, setHoverState] = useState(false);
 
-  const menuItems = [
-    {
-      // title: "Actions",
-      showDivider: true,
-      items: [
-        SlideIDs.home,
-        SlideIDs.games,
-        SlideIDs.challenges,
-        SlideIDs.lessons,
-        SlideIDs.dictionary,
-        SlideIDs.alphabets,
-      ],
-    },
-    {
-      items: [SlideIDs.settings],
-    },
-  ];
   const otherItems = [
     {
       // title: "Actions",
@@ -50,8 +40,8 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
         {
           name: "Setup Gemini API Key",
           route: SlideIDs.settings.route,
-          description: "Toggle theme",
-          icon: <FaSun />,
+          description: "Setup Gemini Key",
+          icon: <FaKey />,
         },
         {
           name: "Dark Mode",
@@ -78,40 +68,80 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
   ];
 
   return (
-    <div className={className} style={{ height: "97vh" }}>
-      <div variant="light" className="flex flex-col justify-between h-full">
+    <div
+      className={`hover:w-[290px] relative ${className}`}
+      style={{
+        height: "97vh",
+        width: sideBarCollapsed ? (hoverState ? 290 : 80) : 290,
+      }}
+      onMouseEnter={() => {
+        if (sideBarCollapsed) {
+          setHoverState(true);
+        }
+      }}
+      onMouseLeave={() => {
+        if (sideBarCollapsed) {
+          setHoverState(false);
+        }
+      }}>
+      <CustomButton
+        isIconOnly
+        className="absolute right-[-12px] top-8 rounded-full p-0"
+        color="primary"
+        size={"md"}
+        variant="solid"
+        onClick={() => setSideBarCollapsed(!sideBarCollapsed)}>
+        {sideBarCollapsed ? (
+          <FaAngleDoubleRight className="text-2xl" />
+        ) : (
+          <FaAngleDoubleLeft className="text-2xl" />
+        )}
+      </CustomButton>
+      <div
+        variant="light"
+        className="flex flex-col justify-between h-full"
+        style={{ width: "inherit" }}>
         <div variant="light" className="">
-          <ImageAndAppLogo />
-          <CustomListbox items={menuItems} />
+          <AppIconAndText onlyLogo={!hoverState && sideBarCollapsed} />
+          <CustomAutocomplete
+            className="p-4 z-[99]"
+            items={[
+              ...Object.values(SlideIDs).map((slide) => {
+                return {
+                  label: slide.name,
+                  route: slide.route,
+                  description: slide.description,
+                  value: slide.name,
+                  icon: slide.icon,
+                };
+              }),
+              ...SettingsObject.map((setting) => {
+                console.log({ setting, settingsFromRedux });
+                const settingTypeCustom = setting.type === STRINGS.TYPES.CUSTOM;
+                return {
+                  label: setting.componentProps?.label,
+                  route: setting?.route ?? undefined,
+                  description:
+                    settingsFromRedux[setting.key]?.label ??
+                    (settingTypeCustom
+                      ? setting.valueExtractor({
+                          setting: settingsFromRedux[setting.key],
+                        })
+                      : settingsFromRedux[setting.key]),
+                  value: settingTypeCustom
+                    ? setting.valueExtractor({
+                        setting: settingsFromRedux[setting.key],
+                      })
+                    : setting.key,
+                  icon: setting?.icon,
+                };
+              }),
+            ]}
+            placeholder="Quick access..."
+          />
         </div>
         <div>
-          <div className="p-6 flex flex-col items-center relative gap-4 rounded-3xl dark bg-slate-800 m-6">
-            <img
-              src={STRINGS.DUMMY.PROFILE_IMAGE}
-              style={{ borderRadius: 100 }}
-              className="w-24 border-4 absolute top-[-35px] border-slate-800"
-              alt="profile pic"
-            />
-            <Spacer y={8} />
-            <div className="flex flex-col p-0 items-center gap-2">
-              <ParaGraph className="headerText p-0 m-0 first-letter:uppercase overflow-ellipsis">
-                {userProfile?.displayName?.split(" ")[0]}
-              </ParaGraph>
-              <ParaGraph className="overflow-ellipsis text-small">
-                {userProfile?.email}
-              </ParaGraph>
-              <div className="flex gap-2 items-center ">
-                <Chip className="" color="success">
-                  Novice
-                </Chip>
-                <Chip className="" color="warning">
-                  23 coins
-                </Chip>
-              </div>
-            </div>
-          </div>
-
-          <CustomListbox items={otherItems} />
+          <CustomListbox items={otherItems} isIconOnly={sideBarCollapsed} />
         </div>
       </div>
     </div>
@@ -129,5 +159,36 @@ export const ProfilePic = ({ ...props }) => {
       size="lg"
       {...props}
     />
+  );
+};
+
+const UserProfileLegacy = () => {
+  const userProfile = useSelector((state) => state.language.profile) ?? {};
+  return (
+    <div className="p-6 flex flex-col items-center relative gap-4 rounded-3xl dark bg-slate-800 m-6">
+      <img
+        src={STRINGS.DUMMY.PROFILE_IMAGE}
+        style={{ borderRadius: 100 }}
+        className="w-24 border-4 absolute top-[-35px] border-slate-800"
+        alt="profile pic"
+      />
+      <Spacer y={8} />
+      <div className="flex flex-col p-0 items-center gap-2">
+        <ParaGraph className="headerText p-0 m-0 first-letter:uppercase overflow-ellipsis">
+          {userProfile?.displayName?.split(" ")[0]}
+        </ParaGraph>
+        <ParaGraph className="overflow-ellipsis text-small">
+          {userProfile?.email}
+        </ParaGraph>
+        <div className="flex gap-2 items-center ">
+          <Chip className="" color="success">
+            Novice
+          </Chip>
+          <Chip className="" color="warning">
+            23 coins
+          </Chip>
+        </div>
+      </div>
+    </div>
   );
 };

@@ -1,36 +1,21 @@
-import { useState } from "react";
-import { FaCheck, FaClipboard } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { CopyToClipboard, Sleep } from "../../utilities/utilities";
-import CustomButton from "../Button";
-import ParaGraph from "../Paragraph";
+import { CustomCopyButton } from "../../pages/Chat";
 import { STRINGS } from "../../utilities/constants";
-import { Code } from "@nextui-org/react";
+import ParaGraph from "../Paragraph";
 
 const Pre = ({ node, children, ...props }) => {
   //   console.log({ props, node });
-  const [copied, setCopied] = useState(null);
 
   return (
     <div
       style={{}}
-      className={`py-4 px-6 mb-6 rounded-2xl ${STRINGS.CLASSES.gradientPinkRed} bg-slate-200 dark:bg-slate-700 relative`}
+      className={`py-4 px-6 mb-6 rounded-2xl bg-gradient-to-tr from-slate-50 to-slate-200  dark:from-slate-800 dark:to-slate-900 relative`}
       {...props}>
       <div className="absolute right-3 top-3">
-        <CustomButton
-          isIconOnly
-          onClick={() => {
-            setCopied(CopyToClipboard(node?.children[0]?.children[0]?.value));
-            Sleep(2000).then(() => setCopied(null));
-          }}
-          color={copied === false ? "danger" : copied ? "success" : "default"}
-          className="">
-          {copied === false ? <FaX /> : copied ? <FaCheck /> : <FaClipboard />}
-        </CustomButton>
+        <CustomCopyButton text={node?.children[0]?.children[0]?.value} />
       </div>
-      <pre className="font-medium text-white overflow-auto">{children}</pre>
+      <pre className="font-medium overflow-auto">{children}</pre>
     </div>
   );
 };
@@ -78,11 +63,7 @@ const components = {
     <li style={{}} className="list-disc pb-2" {...props} />
   ),
   code: ({ node, ...props }) => (
-    <code
-      style={{}}
-      className="p-1 m-1 rounded-md bg-slate-200 dark:bg-slate-700 "
-      {...props}
-    />
+    <code style={{}} className="p-1 m-1 rounded-md  " {...props} />
   ),
   pre: Pre,
   p: ({ node, ...props }) => {

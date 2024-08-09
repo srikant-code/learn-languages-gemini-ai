@@ -8,21 +8,29 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import { TextSelectionPopover } from "./components/Popover";
-import firebase from "./firebase/firebase";
+import firebase, { loadState, saveStateInFireStore } from "./firebase/firebase";
 import useDarkPalette from "./hooks/useDarkPalette";
 import NotFoundPage from "./pages/404Page";
 import Alphabets from "./pages/Alphabets";
 import Challenges from "./pages/Challenges";
 import Dictionary from "./pages/Dictionary";
-import Games from "./pages/Games";
+import Games, { GamesContent } from "./pages/Games";
 import Home from "./pages/Home";
 import HomeContent from "./pages/Home/homeContent";
-import Lessons from "./pages/Lessons";
+import Courses, { CoursesHome } from "./pages/Courses";
 import { LoginAndSignup } from "./pages/LoginAndSignup";
 import Settings from "./pages/Settings";
 import { setSetting } from "./store/reducer";
 import { SlideIDs, STRINGS } from "./utilities/constants";
 import Onboarding from "./pages/LoginAndSignup/onboarding";
+import { Sleep } from "./utilities/utilities";
+import ChaptersAndLessons, {
+  ChaptersAndLessonsHome,
+} from "./pages/Courses/chaptersHome";
+import Lessons, { LessonsHome } from "./pages/Courses/lesson/lessons";
+import Lesson from "./pages/Courses/lesson/lesson";
+import GamePlay from "./pages/Games/GameLogic";
+import CustomButton from "./components/Button";
 
 // ProtectedRoute component
 const ProtectedRoute = ({ isSignedIn, children }) => {
@@ -62,26 +70,71 @@ function App() {
         <ProtectedRoute isSignedIn={isSignedIn}>
           <TextSelectionPopover>
             <Home />
+            {/* {isSignedIn ? (
+            ) : (
+              <Navigate to={SlideIDs.dashboard.route} replace />
+            )} */}
           </TextSelectionPopover>
         </ProtectedRoute>
       ),
       // loader: rootLoader,
       children: [
         {
-          path: SlideIDs.home.path,
+          path: SlideIDs.dashboard.path,
           element: <HomeContent />,
         },
         {
           path: SlideIDs.games.path,
           element: <Games />,
+          children: [
+            {
+              path: "",
+              element: <GamesContent />,
+            },
+            {
+              path: ":gameId",
+              element: <GamePlay />,
+            },
+          ],
         },
         {
           path: SlideIDs.challenges.path,
           element: <Challenges />,
         },
         {
-          path: SlideIDs.lessons.path,
-          element: <Lessons />,
+          path: SlideIDs.courses.path,
+          element: <Courses />,
+          children: [
+            {
+              path: "",
+              element: <CoursesHome />,
+            },
+            {
+              path: SlideIDs.course.path,
+              element: <ChaptersAndLessons />,
+              children: [
+                {
+                  path: "",
+                  element: <ChaptersAndLessonsHome />,
+                },
+                {
+                  path: SlideIDs.lesson.path,
+                  element: <Lesson />,
+                },
+                // {
+                //   path: SlideIDs.chapter.path,
+                //   element: <Lessons />,
+                //   children: [
+                //     {
+                //       path: "",
+                //       element: <LessonsHome />,
+                //     },
+
+                //   ],
+                // },
+              ],
+            },
+          ],
         },
         {
           path: SlideIDs.dictionary.path,
@@ -129,7 +182,7 @@ function App() {
         console.log({ user });
         if (user) {
           const {
-            accessToken,
+            // accessToken,
             displayName,
             email,
             photoURL,
@@ -142,7 +195,7 @@ function App() {
             setSetting({
               key: "profile",
               value: {
-                accessToken,
+                // accessToken,
                 displayName,
                 email,
                 photoURL,
@@ -161,8 +214,22 @@ function App() {
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
+  // const profileData = useSelector((state) => state.language.profile) ?? {};
+  // useEffect(() => {
+  //   if (profileData.uid) {
+  //     loadState(profileData.uid);
+  //   }
+  // }, [profileData.uid]);
+
   return (
     <>
+      {/* <CustomButton
+        onClick={() => {
+          console.log("Clicking firestore button");
+          saveStateInFireStore()();
+        }}>
+        Upload Data to Firebase
+      </CustomButton> */}
       <ThemeHandler>
         <RouterProvider router={router} />
       </ThemeHandler>
@@ -184,9 +251,13 @@ const ThemeHandler = ({ children }) => {
     if (theme === STRINGS.THEMES.DARK) {
       root.classList.add(STRINGS.THEMES.DARK);
       root.classList.remove(STRINGS.THEMES.LIGHT);
-    } else {
+    } else if (theme === STRINGS.THEMES.LIGHT) {
       root.classList.add(STRINGS.THEMES.LIGHT);
       root.classList.remove(STRINGS.THEMES.DARK);
+    } else {
+      root.classList.remove(STRINGS.THEMES.LIGHT);
+      root.classList.remove(STRINGS.THEMES.DARK);
+      root.classList.add(theme);
     }
   }, [theme]);
 

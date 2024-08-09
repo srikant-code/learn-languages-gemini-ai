@@ -62,7 +62,7 @@ const UserDailyGoal: FunctionComponent<UserDailyGoalProps> = ({
                 {goal.icon}
               </ParaGraph>
               <ParaGraph className="text-left text-lg font-semibold min-w-40 max-w-[160px] w-[75%] whitespace-break-spaces">
-                {goal.label} words
+                {goal.label} minutes
               </ParaGraph>
               {/* <ParaGraph className="text-left text-small min-w-48 max-w-[160px] w-[75%] whitespace-break-spaces">
                 {goal.description}

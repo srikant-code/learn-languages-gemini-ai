@@ -1,41 +1,33 @@
-import { CardBody, CardHeader, Progress, Spacer } from "@nextui-org/react";
-import { CustomCard } from "../../components/Card";
-import ParaGraph, { IconHeader } from "../../components/Paragraph";
-import { SlideIDs, STRINGS } from "../../utilities/constants";
-import CustomButton from "../../components/Button";
-import { useEffect, useState } from "react";
-import CustomTabs from "../../components/Tabs";
+import { Spacer } from "@nextui-org/react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, Outlet } from "react-router-dom";
 import CustomAutocomplete from "../../components/Autocomplete";
-import { GetAllLanguages } from "../../utilities/countryIcons";
+import CustomButton from "../../components/Button";
+import { CustomCard } from "../../components/Card";
 import Flag from "../../components/Flag";
+import CustomImage, { AllImages } from "../../components/Image";
+import ParaGraph from "../../components/Paragraph";
+import { CustomProgress } from "../../components/Progress";
+import CustomTabs from "../../components/Tabs";
+import { STRINGS } from "../../utilities/constants";
+import { GetAllLanguages } from "../../utilities/countryIcons";
+import { AppCurrencyWithText } from "../Home/homeContent";
+import { LanguageFinderToLearn } from "../LoginAndSignup/onboarding";
 
-interface LessonsProps {}
+interface CoursesProps {}
 
-const Lessons: FunctionComponent<LessonsProps> = () => {
+const Courses: FunctionComponent<CoursesProps> = () => {
   return (
     <div>
-      <IconHeader icon={SlideIDs.lessons.icon}>Lessons</IconHeader>
       <SearchBarForCourses />
       <Spacer y={6} />
-      <CustomTabs
-        ariaLabel="Courses"
-        tabs={[
-          {
-            title: "My Courses (2)",
-            content: <CoursesContent userId={"hello"} />,
-            textValue: "textValue",
-          },
-          {
-            title: "Explore New Languages",
-            content: <ExploreLanguages userId={"hello"} />,
-          },
-        ]}
-      />
+      <Outlet />
     </div>
   );
 };
 
-export default Lessons;
+export default Courses;
 
 // Another requirement, The app needs to have a lessons/courses tab UI, using firebase
 // it should pull the users selected language courses and its progress on topics using
@@ -131,10 +123,31 @@ export default Lessons;
 // #### Courses Component
 
 // ```javascript
+
+export const CoursesHome = () => {
+  return (
+    <CustomTabs
+      ariaLabel="Courses"
+      tabs={[
+        {
+          title: "My Courses",
+          content: <CoursesContent />,
+          textValue: "textValue",
+        },
+        {
+          title: "Explore New Languages",
+          content: <ExploreLanguages />,
+        },
+      ]}
+    />
+  );
+};
+
 const MyCoursesData = [
   {
     id: "1",
     name: "English",
+    id: "en",
     progress: 30,
     lastTopic: "The most widely spoken language in the world.",
     challenges: ["Challenge 1, Challenge 2"],
@@ -142,31 +155,19 @@ const MyCoursesData = [
   {
     id: "2",
     name: "Hindi",
-    progress: 30,
+    id: "hi",
+    progress: 70,
     lastTopic: "The most widely spoken language in the India.",
     challenges: ["Challenge 1, Challenge 2"],
   },
 ];
 
-const CoursesContent = ({ userId }) => {
+const CoursesContent = ({}) => {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      const userCourses = await fetchUserCourses(userId);
-      const courseDetails = await Promise.all(
-        userCourses.map((courseId) => fetchCourseDetails(courseId))
-      );
-      setCourses(courseDetails);
-    };
-
-    fetchCourses();
-  }, [userId]);
-
-  const handleSelectCourse = async (courseId) => {
-    const course = await fetchCourseDetails(courseId);
-    setSelectedCourse(course);
+  const handleSelectCourse = (courseId) => {
+    setSelectedCourse(courses);
   };
 
   return (
@@ -174,23 +175,13 @@ const CoursesContent = ({ userId }) => {
       <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
         My Courses
       </ParaGraph>
-      <div className="flex gap-4 ">
+      <div className="flex gap-8 flex-col">
         {MyCoursesData.map((course) => (
           <div className="" key={course.id}>
-            <CustomCard>
-              <CardHeader>
-                <ParaGraph className={`${STRINGS.CLASSES.heading}`}>
-                  {course.name}
-                </ParaGraph>
-              </CardHeader>
-              <CardBody>
-                <ParaGraph>Progress: {course.progress}%</ParaGraph>
-                <Progress value={course.progress} color="primary" />
-                <CustomButton onClick={() => handleSelectCourse(course.id)}>
-                  Continue Course
-                </CustomButton>
-              </CardBody>
-            </CustomCard>
+            <CourseCard
+              course={course}
+              onClick={() => handleSelectCourse(course.id)}
+            />
           </div>
         ))}
       </div>
@@ -205,7 +196,72 @@ const CoursesContent = ({ userId }) => {
           </ParaGraph>
         </div>
       )}
+      <CustomImage src={AllImages.book} />
     </div>
+  );
+};
+
+const CourseCard = ({ course, onClick }) => {
+  return (
+    <CustomCard
+      bg-gradient-to-tr
+      from-green-500
+      to-yellow-500
+      className="flex p-0 flex-row">
+      <div
+        className="flex flex-col gap-4 bg-gradient-to-tr 
+      from-pink-400 to-purple-400 px-10 pr-12 py-8 flex-1 justify-between">
+        <div className="flex flex-col justify-between items-start gap-2">
+          <ParaGraph className="text-sm font-bold uppercase text-white">
+            course
+          </ParaGraph>
+          <div className="flex flex-row flex-wrap gap-2">
+            <ParaGraph className={`${STRINGS.CLASSES.heading} text-white`}>
+              {course.name} Fundamentals
+            </ParaGraph>
+            <Flag
+              flag={GetAllLanguages[course.id]?.usedIn[0]?.content}
+              className="w-[5rem]"
+            />
+          </div>
+        </div>
+        <CustomButton
+          as={Link}
+          to={course.id}
+          className="self-start"
+          variant="faded"
+          color="primary">
+          View all chapters
+        </CustomButton>
+      </div>
+      <div
+        className="py-8 px-10 flex flex-col justify-between"
+        style={{ flex: 3 }}>
+        <div className="flex flex-col gap-2">
+          <ParaGraph className="text-sm font-bold uppercase">
+            Chapter 5
+          </ParaGraph>
+          <ParaGraph className={`${STRINGS.CLASSES.heading} `}>
+            Types Of Arrays & Strings
+          </ParaGraph>
+        </div>
+        <Spacer y={8} />
+        <div className="flex flex-col gap-4">
+          <CustomProgress value={course.progress} />
+          <ParaGraph className="">{course.progress}/16 Challenges</ParaGraph>
+          <div>
+            <AppCurrencyWithText text={30} />
+          </div>
+        </div>
+        <CustomButton
+          onClick={() => onClick(course.id)}
+          className="self-end"
+          color={"primary"}
+          variant="solid">
+          Continue
+        </CustomButton>
+      </div>
+    </CustomCard>
   );
 };
 
@@ -238,72 +294,24 @@ console.log({ GetAllLanguages });
 //   },
 // ];
 
-const ExploreLanguages = ({ userId }) => {
-  const [languages, setLanguages] = useState([]);
-
-  useEffect(() => {
-    const fetchLanguages = async () => {
-      const languagesSnapshot = await getDocs(collection(db, "courses"));
-      const languagesList = languagesSnapshot.docs.map((doc) => doc.data());
-      setLanguages(languagesList);
-    };
-
-    fetchLanguages();
-  }, []);
-
-  const handleAddCourse = async (courseId) => {
-    await addUserCourse(userId, courseId);
-  };
+const ExploreLanguages = ({}) => {
+  const settings = useSelector((state) => state.language) ?? {};
+  const [languages2, setLanguages2] = useState(
+    settings[STRINGS.STORAGE.languagesUserWantsToKnow] ?? []
+  );
 
   return (
     <div className="flex flex-col gap-4 p-2">
       <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
         Explore Languages ({MyLanguagesData?.length})
       </ParaGraph>
-      <div className="flex flex-wrap gap-6">
-        {MyLanguagesData.map((language) => (
-          <div className="max-w-[45%]" key={language.id}>
-            <CustomCard className={"p-2"}>
-              <CardHeader className="flex justify-between">
-                <ParaGraph className={`${STRINGS.CLASSES.heading}`}>
-                  {language.name}
-                </ParaGraph>
-                <Flag flag={language.usedIn[0]?.content} className="w-[40px]" />
-              </CardHeader>
-              <CardBody className="gap-4">
-                <ParaGraph>{language.description}</ParaGraph>
-                <CustomButton onClick={() => handleAddCourse(language.id)}>
-                  Start Course
-                </CustomButton>
-              </CardBody>
-            </CustomCard>
-          </div>
-        ))}
-      </div>
+      <LanguageFinderToLearn
+        langsUserWantsToKnow={languages2}
+        setLangsUserWantsKnow={setLanguages2}
+      />
     </div>
   );
 };
-
-// ```
-
-// ### Home Page Component
-
-// ```javascript
-// import React from 'react';
-// import Courses from './Courses';
-// import ExploreLanguages from './ExploreLanguages';
-
-// const HomePage = ({ userId }) => {
-//   return (
-//     <div>
-//       <Courses userId={userId} />
-//       <ExploreLanguages userId={userId} />
-//     </div>
-//   );
-// };
-
-// export default HomePage;
-// ```
 
 // ### Additional Ideas for the Homepage
 

@@ -1,11 +1,11 @@
-import { Card, Spacer } from "@nextui-org/react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Spacer } from "@nextui-org/react";
 import { useState } from "react";
 import CustomButton from "../../components/Button";
-import ParaGraph, { IconHeader } from "../../components/Paragraph";
-import CustomTabs from "../../components/Tabs";
-import { SlideIDs, STRINGS } from "../../utilities/constants";
 import { CustomCard } from "../../components/Card";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import ParaGraph from "../../components/Paragraph";
+import CustomTabs from "../../components/Tabs";
+import { STRINGS } from "../../utilities/constants";
 import { WordButtons, WordHeader } from "../Dictionary/wordHeader";
 
 interface AlphabetsProps {}
@@ -28,7 +28,6 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
 
   return (
     <div>
-      <IconHeader icon={SlideIDs.alphabets.icon}>Alphabets</IconHeader>
       {/* <CustomAutocomplete></CustomAutocomplete> */}
       <div>
         <ParaGraph className="text-xl font-bold ml-4">

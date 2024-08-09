@@ -8,6 +8,13 @@ import { CustomCard } from "../../components/Card";
 import { CardBody, CardHeader, Spacer } from "@nextui-org/react";
 import { STRINGS } from "../../utilities/constants";
 import { WordButtons, WordHeader } from "../Dictionary/wordHeader";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { FaPlus, FaSort } from "react-icons/fa6";
+import { FaSearch, FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
+import SortButton from "../../components/Button/sortButton";
+import { useDispatch, useSelector } from "react-redux";
+import { setSetting } from "../../store/reducer";
+import moment from "moment";
 
 // In firebase there should be a collection of words.
 // It will store details like the synonyms, meanings, antonyms, and other realted things.
@@ -107,110 +114,82 @@ const Vocabulary: FunctionComponent<VocabularyProps> = () => {
 
 export default Vocabulary;
 
-const MyVocabData = [
-  {
-    id: "Battle",
-    synonyms: ["example synonym"],
-    meanings: ["example meaning"],
-    antonyms: ["example antonym"],
-  },
-  {
-    id: "Kid",
-    synonyms: ["example synonym"],
-    meanings: ["example meaning"],
-    antonyms: ["example antonym"],
-  },
-];
 const VocabularyContent = ({ userId }) => {
-  const [vocabulary, setVocabulary] = useState(MyVocabData ?? []);
-  const [newWord, setNewWord] = useState("");
-  const [wordDetails, setWordDetails] = useState({});
+  const myVocabularyFromStore =
+    useSelector((state) => state.language[STRINGS.STORAGE.MY_VOCABULARY]) ?? {};
+  const myVocabularyFromRedux = Object.values(myVocabularyFromStore);
+  const dispatch = useDispatch();
+  const [searchWordInput, setSearchWordInput] = useState("");
+  const [renderVocabData, setRenderVocabData] = useState(myVocabularyFromRedux);
+
+  const filteredVocab = renderVocabData.filter((v) => {
+    return JSON.stringify(v)
+      ?.toLowerCase()
+      .includes(searchWordInput?.toLowerCase());
+  });
 
   useEffect(() => {
-    const fetchVocabulary = async () => {
-      const userVocabulary = await fetchUserVocabulary(userId);
-      const words = await Promise.all(
-        userVocabulary.map((wordId) => fetchWordDetails(wordId))
-      );
-      setVocabulary(words);
-    };
-
-    fetchVocabulary();
-  }, [userId]);
-
-  const handleAddWord = async () => {
-    const wordId = newWord.toLowerCase();
-    const existingWord = await fetchWordDetails(wordId);
-
-    if (!existingWord) {
-      const word = {
-        id: wordId,
-        synonyms: ["example synonym"],
-        meanings: ["example meaning"],
-        antonyms: ["example antonym"],
-      };
-      await addWordToGlobalCollection(word);
-    }
-
-    await addUserWord(userId, wordId);
-    setVocabulary([...vocabulary, existingWord || wordDetails]);
-    setNewWord("");
-  };
+    setRenderVocabData(myVocabularyFromRedux);
+  }, [myVocabularyFromStore]);
 
   return (
     <div className="p-8">
-      <ParaGraph className={STRINGS.CLASSES.heading}>
-        My Vocabulary ({vocabulary.length})
-      </ParaGraph>
-      <Spacer y={4} />
-      <div>
-        Searchbar filter, <br />
-        sort by date,
-        <br />
-        alphabetical, <br />
-        language
+      <div className="flex gap-4 items-center justify-between">
+        <ParaGraph className={STRINGS.CLASSES.heading}>
+          My Vocabulary ({renderVocabData.length})
+        </ParaGraph>
+        <div className="flex gap-4">
+          <SortButton
+            data={renderVocabData}
+            setData={setRenderVocabData}
+            sortProperty={"savedOn"}
+            date
+          />
+          <SortButton
+            data={renderVocabData}
+            setData={setRenderVocabData}
+            sortProperty={"word"}
+          />
+        </div>
       </div>
+
       <Spacer y={4} />
-      <div>
-        Unsave feature, <br />
-        start something using AI, <br />
-        more details on the word -&gt; go to dictionary
-      </div>
-      <Spacer y={4} />
-      <div className="flex flex-col justify-center gap-4">
-        {vocabulary.map((word) => (
-          <div className="" key={word.id}>
-            <CustomCard as={CustomButton}>
-              <div className="w-full text-justify">
-                <WordHeader data={{ word: word.id, phonetic: word.id }} />
-              </div>
-              <CardBody className="flex flex-col gap-4">
-                <ParaGraph>
-                  Meanings: <WordButtons data={word.meanings} />
-                </ParaGraph>
-                <ParaGraph>
-                  Synonyms: <WordButtons data={word.synonyms} />
-                </ParaGraph>
-                <ParaGraph>
-                  Antonyms: <WordButtons data={word.antonyms} />
-                </ParaGraph>
-              </CardBody>
-            </CustomCard>
-          </div>
-        ))}
-      </div>
-      <Spacer y={6} />
+
       <div className="flex flex-col gap-4">
         <CustomInput
-          isClearable
-          placeholder="Add a new word"
-          value={newWord}
-          onChange={(e) => setNewWord(e.target.value)}
+          placeholder="Add a new word or Search an existing one..."
+          value={searchWordInput}
+          onChange={(e) => setSearchWordInput(e)}
+          endContent={
+            <div className="flex gap-4">
+              <CustomButton isIconOnly onClick={undefined}>
+                <FaSearch />
+              </CustomButton>
+            </div>
+          }
         />
-        <CustomButton size="lg" onClick={handleAddWord}>
-          Add Word
-        </CustomButton>
       </div>
+      <Spacer y={4} />
+
+      <ParaGraph>
+        {/* Searchbar filter, <br />
+        alphabetical, <br /> */}
+        {/* sort by date, */}
+        <br />
+        language
+      </ParaGraph>
+      <Spacer y={4} />
+      <ParaGraph>
+        {/* Unsave feature, <br /> */}
+        start something using AI, <br />
+        more details on the word -&gt; go to dictionary
+      </ParaGraph>
+      <Spacer y={4} />
+      <RenderVocabularyCards vocabulary={filteredVocab} />
+      {filteredVocab?.length ? null : (
+        <NoVocabWordFound word={searchWordInput} />
+      )}
+      <Spacer y={6} />
     </div>
   );
 };
@@ -245,3 +224,65 @@ const VocabularyContent = ({ userId }) => {
 // ```
 
 // This setup will allow users to manage their vocabulary, add new words, and fetch word details from Firebase. You can further customize the UI and functionality as needed. Let me know if you need any more help!
+
+const RenderVocabularyCards = ({ vocabulary }) => {
+  const [parent] = useAutoAnimate();
+  return (
+    <div
+      className={`flex flex-row flex-wrap justify-center gap-4 ${STRINGS.CLASSES.basicTransitions}`}
+      ref={parent}>
+      {vocabulary.map((word) => (
+        <CustomCard key={word.word} as={CustomButton} className={"flex-1"}>
+          <div className="w-full text-justify">
+            <WordHeader
+              data={{ word: word.word, phonetic: word?.phonetic ?? word.word }}
+            />
+          </div>
+          <CardBody className="flex flex-col gap-4 p-0 pt-4">
+            {word.meanings && (
+              <ParaGraph>
+                Meanings: <WordButtons data={word.meanings} />
+              </ParaGraph>
+            )}
+            {word.synonyms && (
+              <ParaGraph>
+                Synonyms: <WordButtons data={word.synonyms} />
+              </ParaGraph>
+            )}
+            {word.antonyms && (
+              <ParaGraph>
+                Antonyms: <WordButtons data={word.antonyms} />
+              </ParaGraph>
+            )}
+            <ParaGraph className="text-sm italic">
+              {moment(word?.savedOn).calendar()}
+            </ParaGraph>
+          </CardBody>
+        </CustomCard>
+      ))}
+    </div>
+  );
+};
+
+const NoVocabWordFound = ({ word = "hello" }) => {
+  return (
+    <div className="flex flex-col gap-4">
+      <ParaGraph>
+        No such word found in your saved vocabulary. Try these instead
+      </ParaGraph>
+      <CustomCard>
+        <ParaGraph>Add "{word}" to your vocabulary</ParaGraph>
+        <WordHeader data={{ word, phonetic: word }} />
+        <ParaGraph>English</ParaGraph>
+      </CustomCard>
+      <CustomCard>
+        <ParaGraph>Search "{word}" in Dictionary</ParaGraph>
+      </CustomCard>
+      <CustomCard>
+        <ParaGraph>
+          Search "{word}" in {STRINGS.APP_NAME}
+        </ParaGraph>
+      </CustomCard>
+    </div>
+  );
+};

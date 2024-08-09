@@ -2,7 +2,10 @@
 
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import { Firestore } from "firebase/firestore";
+import "firebase/compat/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { setReduxFullStateOnLoad } from "../store/reducer";
+import store from "../store/store";
 
 // Import the functions you need from the SDKs you need
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,10 +34,13 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 // Default setting it to LOCAL, Below are the options
 //    firebase.auth.Auth.Persistence.LOCAL
 //    firebase.auth.Auth.Persistence.SESSION
-export const db = new Firestore();
+export const db = firebase.firestore();
 
 export default firebase;
 
+// sahoosrikant3601@gmail.com
+// helloworld69
+// srikant test account
 
 // firebase.auth().onAuthStateChanged((user) => {
 //   if (user) {
@@ -50,7 +56,7 @@ export default firebase;
 
 export const firebaseSignInWithGoogle = async () => {
   try {
-    const result = await firebase.auth().signInWithRedirect(googleProvider);
+    const result = await firebase.auth().signInWithPopup(googleProvider);
     console.log("User signed in with Google!");
     return result.user;
   } catch (error) {
@@ -104,3 +110,50 @@ export const firebaseLogIn = async ({ email, password }) => {
     return { error: true, message: error.message };
   }
 };
+
+export const loadState = (userId) => {
+  const stateRef = doc(db, "states", userId);
+  console.log({ stateRef });
+
+  onSnapshot(stateRef, (stateSnap) => {
+    if (stateSnap.exists()) {
+      console.log({ stateSnap, data: stateSnap.data() });
+      store.dispatch(setReduxFullStateOnLoad(stateSnap.data()));
+    }
+  });
+};
+
+// export const saveState = async (userId, state) => {
+//   const stateRef = doc(db, "states", userId);
+//   await setDoc(stateRef, { data: state });
+// };
+
+// export const SET_SETTING = "SET_SETTING";
+
+// const { key, value } = setting;
+// const data = {
+//   [key]: value,
+// };
+export const saveStateInFireStore = () => async (dispatch, getState) => {
+  const storeReduxData = store.getState().language;
+  const userId = storeReduxData.profile.uid; // Replace this with the actual user ID
+  console.log({ storeReduxData, userId });
+  const stateRef = doc(db, "states", userId);
+  console.log({ stateRef });
+  const res = await setDoc(stateRef, storeReduxData, { merge: true });
+  console.log({ res });
+};
+
+// dispatch({
+//   type: SET_SETTING,
+//   payload: setting,
+// });
+
+// Allow read/write access on all documents to any user signed in to the application
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /{document=**} {
+//       allow read, write: if request.auth != null;
+//     }
+//   }
+// }

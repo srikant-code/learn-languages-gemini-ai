@@ -1,5 +1,7 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Tab, Tabs } from "@nextui-org/react";
 import React from "react";
+import { Link } from "react-router-dom";
 // Adjust the import according to your library
 
 interface TabItem {
@@ -26,26 +28,43 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
   centerTabs = false,
   ...props
   // Spread any other custom props
-}) => (
-  <Tabs
-    classNames={{ base: centerTabs && "items-center flex justify-center" }}
-    size={size}
-    aria-label={ariaLabel}
-    className={className}
-    {...props}>
-    {tabs.map((tab) => {
-      const { title, content, textValue } = tab;
-      return (
-        <Tab
-          key={title}
-          title={title}
-          textValue={textValue}
-          className={tabClassName}>
-          {content}
-        </Tab>
-      );
-    })}
-  </Tabs>
-);
+}) => {
+  const [parent] = useAutoAnimate();
+  return (
+    <Tabs
+      classNames={{ base: centerTabs && "items-center flex justify-center" }}
+      size={size}
+      aria-label={ariaLabel}
+      className={className}
+      color="secondary"
+      {...props}>
+      {tabs.map((tab) => {
+        const { title, content, textValue, route, icon } = tab;
+        return (
+          <Tab
+            as={route ? Link : undefined}
+            to={route || undefined}
+            key={title}
+            ref={parent}
+            title={
+              <div className="flex items-center space-x-2">
+                {icon}
+                <span>{title}</span>
+              </div>
+            }
+            textValue={
+              <div className="flex items-center space-x-2">
+                {icon}
+                <span>{textValue}</span>
+              </div>
+            }
+            className={tabClassName}>
+            {content}
+          </Tab>
+        );
+      })}
+    </Tabs>
+  );
+};
 
 export default CustomTabs;
