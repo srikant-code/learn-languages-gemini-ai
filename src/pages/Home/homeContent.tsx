@@ -13,7 +13,7 @@ import Flag from "../../components/Flag";
 import MarkdownRenderer from "../../components/Markdown";
 import ParaGraph from "../../components/Paragraph";
 import WordRotator from "../../components/Paragraph/wordRotator";
-import { STRINGS } from "../../utilities/constants";
+import { SlideIDs, STRINGS } from "../../utilities/constants";
 import {
   GetAllCountries,
   GetAllLanguages,
@@ -31,6 +31,16 @@ import { FaCoins } from "react-icons/fa";
 import { TbCoinYuanFilled } from "react-icons/tb";
 import { WordButtons, WordHeader } from "../Dictionary/wordHeader";
 import { GetModel } from "../../geminiAI/genAI";
+import { GiFireGem, GiMineExplosion } from "react-icons/gi";
+import {
+  addItem,
+  getAllItems,
+  getItemFromDexie,
+  updateItemInDexie,
+} from "../../store/dexie";
+import StreakCalendar from "./streakCalendar";
+import { Link } from "react-router-dom";
+import { FaGem } from "react-icons/fa6";
 
 interface HomeContentProps {}
 
@@ -91,14 +101,14 @@ const LanguageAnimationLearnHeader = () => {
   // console.log({ activeGreetWord });
 
   return (
-    <CustomCard className="p-6 m-2 mt-5 ">
+    <CustomCard className="p-6 m-2 mt-5 rounded-[2.5rem]">
       {/* <GradientBackground gradientColors={activeGreetWord.colorObj.gradient}> */}
       <div className="flex flex-wrap justify-between items-center">
         <div className="flex gap-6 flex-[2] min-w-[30rem]">
           <Flag flag={PullMostlyUsedIn(activeGreetWord).content} />
           <div className="mt-5">
             <Spacer y={2} />
-            <div className="flex flex-col font-bold text-4xl gap-2">
+            <div className="flex flex-col font-bold text-4xl gap-2 overflow-hidden">
               <WordRotator
                 className={"text-4xl font-bold font-noto"}
                 words={GetAllGreetWordsWithColor}
@@ -106,11 +116,19 @@ const LanguageAnimationLearnHeader = () => {
               />
             </div>
             <Spacer y={2} />
-            <ParaGraph className={"text-4xl font-bold first-letter:uppercase"}>
-              {userProfile?.displayName?.split(" ")[0]}
-            </ParaGraph>
+            <div className="flex gap-4 items-center justify-start">
+              <ParaGraph
+                className={"text-4xl font-bold first-letter:uppercase"}>
+                {userProfile?.displayName?.split(" ")[0]}
+              </ParaGraph>
+              <WordHeader
+                data={{ word: activeGreetWord?.text }}
+                showWord={false}
+                smallButtons
+              />
+            </div>
             <br />
-            <ParaGraph className="font-medium pb-4 pt-3 pr-12">
+            <ParaGraph className="font-medium pb-4 pt-3 whitespace-break-spaces">
               {activeGreetWord.languageName} is mostly used in{" "}
               {PullMostlyUsedIn(activeGreetWord).displayName}
             </ParaGraph>
@@ -121,14 +139,18 @@ const LanguageAnimationLearnHeader = () => {
             size="lg"
             variant="solid"
             color="primary"
-            className={STRINGS.CLASSES.bigButton}>
+            className={`${STRINGS.CLASSES.bigButton} hover:text-white dark:hover:text-white`}
+            as={Link}
+            to={`${SlideIDs.courses.route}/${activeGreetWord.languageCode}`}>
             Start learning {activeGreetWord.languageName}
           </CustomButton>
           <CustomButton
             size="lg"
             variant="bordered"
             color="primary"
-            className={""}>
+            className={"hover:text-black dark:hover:text-white"}
+            as={Link}
+            to={`${SlideIDs.courses.route}`}>
             See all languages
           </CustomButton>
         </div>
@@ -204,10 +226,17 @@ const HomeQuickOverviewCard = ({}) => {
         </CustomCard>
         <div className="flex flex-col gap-4">
           <CustomCardHeaderChild
-            header={"Coins"}
+            header={"Gems"}
             child={<AppCurrencyWithText />}
           />
-          <CustomCardHeaderChild header={"Streak"} child={"🔥 5 days"} />
+          <CustomCardHeaderChild
+            header={"Streak"}
+            child={
+              <span className="flex items-center gap-2">
+                <AppStreakIcon />5 days
+              </span>
+            }
+          />
         </div>
       </div>
     </CustomCard>
@@ -216,7 +245,7 @@ const HomeQuickOverviewCard = ({}) => {
 const HomeIntroducingAICard = ({}) => {
   return (
     <CustomCard className={``} border={false}>
-      <ParaGraph className={heading}>Introducing Gem AI</ParaGraph>
+      <ParaGraph className={heading}>Introducing {STRINGS.APP_NAME}</ParaGraph>
     </CustomCard>
   );
 };
@@ -291,7 +320,10 @@ const HomeAlphabetsCard = ({}) => {
 const HomeLearningCalendarCard = ({}) => {
   return (
     <CustomCard className={``} border={false}>
-      <ParaGraph className={heading}>Learning Calendar</ParaGraph>
+      <ParaGraph className={heading}>
+        Learning Calendar
+        <StreakCalendar />
+      </ParaGraph>
     </CustomCard>
   );
 };
@@ -304,15 +336,43 @@ const HomeAISuggestionsCard = ({}) => {
 };
 
 export const AppCurrencyIcon = ({ className }) => {
+  return <FaGem className={`text-blue-500 text-2xl ${className}`} />;
+};
+export const AppXPIcon = ({ className }) => {
   return (
-    <TbCoinYuanFilled className={`text-yellow-400 text-2xl ${className}`} />
+    <GiMineExplosion className={`text-orange-400 text-2xl ${className}`} />
+  );
+};
+export const AppStreakIcon = ({ className }) => {
+  return (
+    <div className={`text-blue-400 text-2xl ${className}`} children={"🔥"} />
   );
 };
 
-export const AppCurrencyWithText = ({ text = 198 }) => {
+export const AppCurrencyWithText = ({
+  text = 198,
+  pClassName = "",
+  className = "",
+  containerClassName = "",
+}) => {
   return (
-    <span className="flex gap-2 items-center">
-      <AppCurrencyIcon /> {text}
+    <span className={`flex gap-2 items-center ${containerClassName}`}>
+      <AppCurrencyIcon className={className} />
+      <ParaGraph className={pClassName}>{text}</ParaGraph>
+    </span>
+  );
+};
+
+export const AppXPWithText = ({
+  text = 198,
+  pClassName = "",
+  className = "",
+  containerClassName = "",
+}) => {
+  return (
+    <span className={`flex gap-2 items-center ${containerClassName}`}>
+      <AppXPIcon className={className} />
+      <ParaGraph className={pClassName}>{text}</ParaGraph>
     </span>
   );
 };

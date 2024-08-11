@@ -2,19 +2,58 @@ import { FaBookmark } from "react-icons/fa";
 import { AudioPlayer } from "../../components/Audio";
 import CustomButton from "../../components/Button";
 import ParaGraph from "../../components/Paragraph";
+import { useDispatch, useSelector } from "react-redux";
+import { setSetting } from "../../store/reducer";
+import { STRINGS } from "../../utilities/constants";
 export const WordHeader = ({
   data = { word: "A", phonetic: "/'a", audio: undefined },
   smallButtons = false,
+  showWord = true,
 }) => {
+  const dispatch = useDispatch();
+  const myVocabulary =
+    useSelector((state) => state.language[STRINGS.STORAGE.MY_VOCABULARY]) ?? {};
+
+  const setMyVocabulary = (vData) => {
+    if (myVocabulary[data?.word]) {
+      const { [data?.word]: word, ...other } = myVocabulary;
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.MY_VOCABULARY,
+          value: other,
+        })
+      );
+    } else
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.MY_VOCABULARY,
+          value: {
+            ...myVocabulary,
+            [vData.word?.toLowerCase()]: {
+              ...vData.data,
+              savedOn: new Date().toISOString(),
+            },
+          },
+        })
+      );
+  };
+
+  const isAlreadyPresentInVocab = myVocabulary[data?.word?.toLowerCase()];
+
   return (
-    <div className="flex justify-between items-center w-full">
+    <div
+      className={`flex ${
+        !showWord ? "" : "justify-between"
+      } items-center w-full`}>
       <div className="flex flex-col">
-        <ParaGraph
-          className={`${
-            !smallButtons ? "text-2xl" : "text-lg"
-          } font-bold first-letter:uppercase pr-4 text-ellipsis truncate max-w-[60vw]`}>
-          {data?.word}
-        </ParaGraph>
+        {showWord && (
+          <ParaGraph
+            className={`${
+              !smallButtons ? "text-2xl" : "text-lg"
+            } font-bold first-letter:uppercase pr-4 text-ellipsis truncate max-w-[60vw]`}>
+            {data?.word}
+          </ParaGraph>
+        )}
         {data?.phonetic && (
           <ParaGraph className="text-sm text-gray-500">
             {data?.phonetic}
@@ -22,12 +61,18 @@ export const WordHeader = ({
         )}
       </div>
       <div className="flex gap-3">
-        {data?.word?.split(" ")?.length <= 4 && (
+        {data?.word && (
           <CustomButton
             isIconOnly
             children={<FaBookmark />}
-            variant={smallButtons ? "flat" : "bordered"}
+            variant={
+              smallButtons || isAlreadyPresentInVocab ? "flat" : "bordered"
+            }
             size={smallButtons ? "sm" : undefined}
+            color={isAlreadyPresentInVocab ? `success` : "default"}
+            onClick={() => {
+              setMyVocabulary({ word: data?.word, data });
+            }}
           />
         )}
         <AudioPlayer

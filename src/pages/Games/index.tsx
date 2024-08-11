@@ -1,18 +1,30 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Spacer } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import CustomButton from "../../components/Button";
 import { CustomCard } from "../../components/Card";
-import ParaGraph, { IconHeader } from "../../components/Paragraph";
-import { SlideIDs, STRINGS } from "../../utilities/constants";
-import { CardBody, CardHeader, Spacer } from "@nextui-org/react";
-import { AppCurrencyWithText } from "../Home/homeContent";
+import CustomImage, { AllImages } from "../../components/Image";
+import ParaGraph from "../../components/Paragraph";
+import CustomTabs from "../../components/Tabs";
+import { STRINGS } from "../../utilities/constants";
+import { ShuffleArray } from "../../utilities/utilities";
+import {
+  AppCurrencyIcon,
+  AppCurrencyWithText,
+  AppXPIcon,
+  AppXPWithText,
+} from "../Home/homeContent";
+import { GamesMetaData } from "./gamesMetadata";
+import { MediumGameCards } from "./mediumGameCards";
+import { Link, Outlet } from "react-router-dom";
 
 interface GamesProps {}
 
 const Games: FunctionComponent<GamesProps> = () => {
   return (
     <div>
-      <IconHeader icon={SlideIDs.games.icon}>Games</IconHeader>
-      <GamesContent userId={"hello"} />
+      <Outlet />
+      {/* <JumbledWordsGame /> */}
     </div>
   );
 };
@@ -98,89 +110,60 @@ export default Games;
 
 // ```javascript
 
-const MyGamesData = [
-  {
-    id: "id1",
-    name: "Game 1",
-    description: "This is a game about learning English words.",
-    points: 10,
+const GameCategories = {
+  "Time-Bound Games": {
+    id: "Time-Bound Games",
+    heading: (
+      <span className="flex gap-2">
+        Race Against Time - Earn 2X Rewards <AppXPIcon /> <AppCurrencyIcon />!
+      </span>
+    ),
+    summary: "Play within the limit, earn double coins and XP.",
+    detailedText: (
+      <>{`Dive into the thrill of our time-bound games! These games are not just about fun, they’re about strategy and speed. Complete the games within the set time limit and earn double the coins and XP. It’s time to game on and level up faster!`}</>
+    ),
+    props: { timer: true },
   },
-  {
-    id: "id2",
-    name: "Game 2",
-    description: "This is a game about learning English wordsz.",
-    points: 30,
+  "Casual Games": {
+    id: "Casual Games",
+    heading: "Relax and Enjoy - No Timers, No Pressure!",
+    summary: "Enjoy games at your own pace, anytime, anywhere.",
+    detailedText: `Looking for a laid-back gaming experience? Our casual games are perfect for you. Whether you’re waiting for a bus or winding down for the day, these games provide a fun and relaxing way to pass the time. No timers, no pressure, just pure enjoyment.`,
+    props: {},
   },
-];
+  "Multiplayer Games": {
+    id: "Multiplayer Games",
+    heading: "Coming Soon - The Ultimate Challenge!",
+    summary: "Get ready to compete with players worldwide. Stay tuned!",
+    detailedText: `Get ready for an exciting new way to game! Our multiplayer games are coming soon. Challenge your friends or players from around the world. It’s time to put your skills to the test and see who comes out on top. Stay tuned!`,
+    props: { multiplayer: true },
+  },
+};
 
-export const GamesContent = ({ userId }) => {
+const gamesList = Object.values(GamesMetaData);
+
+export const GamesContent = ({}) => {
   const [games, setGames] = useState([]);
-
-  useEffect(() => {
-    const fetchGamesData = async () => {
-      const gamesList = await fetchGames();
-      setGames(gamesList);
-    };
-
-    fetchGamesData();
-  }, []);
-
-  const handlePlayGame = async (gameId, points) => {
-    await updateUserGameProgress(userId, gameId, points);
-    // Update UI or notify user of points earned
-  };
 
   return (
     <div className="flex flex-col gap-4 p-4">
       <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
-        Language Learning Games
+        {STRINGS.APP_NAME} Games ({gamesList.length})
       </ParaGraph>
-      <GamesHeroSection />
-      <div className="flex flex-col gap-4 justify-center">
-        {MyGamesData.map((game) => (
-          <div className="" key={game.id}>
-            <CustomCard>
-              <CardHeader>
-                <ParaGraph h4>{game.name}</ParaGraph>
-              </CardHeader>
-              <CardBody>
-                <ParaGraph>{game.description}</ParaGraph>
-                <ParaGraph>Points: {game.points}</ParaGraph>
-                <CustomButton
-                  onClick={() => handlePlayGame(game.id, game.points)}>
-                  Play Game
-                </CustomButton>
-              </CardBody>
-            </CustomCard>
-          </div>
-        ))}
-      </div>
+      <CustomTabs
+        id={STRINGS.STORAGE.TABS.gamesPage}
+        tabs={Object.values(GameCategories).map((item) => {
+          return {
+            title: item.id,
+            content: <RenderAllGames {...item} />,
+          };
+        })}
+      />
+
+      <MediumGameCards />
     </div>
   );
 };
-
-// ```
-
-// ### Home Page Component
-
-// ```javascript
-// import React from 'react';
-// import Courses from './Courses';
-// import ExploreLanguages from './ExploreLanguages';
-// import Games from './Games';
-
-// const HomePage = ({ userId }) => {
-//   return (
-//     <div>
-//       <Courses userId={userId} />
-//       <ExploreLanguages userId={userId} />
-//       <Games userId={userId} />
-//     </div>
-//   );
-// };
-
-// export default HomePage;
-// ```
 
 // ### Suitable Games for Language Learning
 
@@ -212,77 +195,213 @@ export const GamesContent = ({ userId }) => {
 // And then below should be categories of games with the text and there will be a background image.
 // Do this in tailwind and react.
 
-const gamesList = [
-  { title: "Puzzle Builder", subtitle: "The hunt is on", xp: 50, coins: 30 },
-  { title: "Jumbler", subtitle: "Mix and match", xp: 40, coins: 20 },
-  { title: "Cards", subtitle: "Card master", xp: 60, coins: 35 },
-  { title: "Dice", subtitle: "Roll the dice", xp: 45, coins: 25 },
-];
-
 const categories = [
   { name: "Puzzles", bgImage: STRINGS.DUMMY.BACKGROUND_IMAGE },
   { name: "Writing", bgImage: STRINGS.DUMMY.BACKGROUND_IMAGE },
   { name: "Speaking", bgImage: STRINGS.DUMMY.BACKGROUND_IMAGE },
 ];
 
-function GamesHeroSection() {
+export const TransformScale = `transition-transform transform hover:scale-105`;
+function RenderAllGames({ ...props }) {
   const [activeGame, setActiveGame] = useState(gamesList[0]);
-  const transformScale = `transition-transform transform hover:scale-105`;
+  const [parent] = useAutoAnimate();
+
   return (
     <div className="p-4 flex flex-col gap-6 ">
-      <ParaGraph className="text-lg font-bold">
-        Games ({gamesList.length})
-      </ParaGraph>
-      <div className="flex justify-between items-start gap-6">
-        <CustomCard
-          as={CustomButton}
-          className={`items-start w-2/3 p-5 gap-4 rounded-3xl h-full ${transformScale}`}>
-          <div className="flex flex-col items-start gap-4">
-            <ParaGraph className="font-bold text-3xl">
-              {activeGame.title}
-            </ParaGraph>
-            <ParaGraph>{activeGame.subtitle}</ParaGraph>
-            <div className="flex gap-2">
-              <CustomButton className="px-6" variant="solid" color={"primary"}>
-                Play →
-              </CustomButton>
-              <CustomButton className="bg-green-500 hover:bg-green-700 text-white font-bold">
-                XP: {activeGame.xp}
-              </CustomButton>
-              <CustomButton className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold">
-                <AppCurrencyWithText text={activeGame.coins} />
-              </CustomButton>
+      <div className="flex flex-row flex-wrap items-start gap-6">
+        <CustomCard>
+          <div className="flex ">
+            <CustomImage
+              style={{ height: props.props?.multiplayer ? 70 : null }}
+              src={
+                props.props?.multiplayer
+                  ? AllImages.multiplayer
+                  : props.props?.timer
+                  ? AllImages.clock
+                  : AllImages.casual
+              }
+              className="h-[100px]"
+            />
+            <Spacer y={8} />
+            <div className="flex flex-col gap-2 p-4 px-8">
+              <ParaGraph className="font-bold text-2xl">{props.id}</ParaGraph>
+              <ParaGraph className="font-semibold text-xl">
+                {props.heading}
+              </ParaGraph>
+              <ParaGraph className="text-medium">
+                {props.detailedText}
+              </ParaGraph>
             </div>
-            <div className="flex gap-2"></div>
           </div>
         </CustomCard>
-        <div className="w-1/3 space-y-4">
-          {gamesList.map((game, index) => (
-            <CustomCard
-              as={CustomButton}
+        {ShuffleArray(gamesList).map((game, index) => {
+          return (
+            <RenderHeroCard
               key={index}
-              className={`items-start w-full p-4 rounded-2xl ${transformScale}`}
-              onClick={() => setActiveGame(game)}>
-              <ParaGraph className="font-bold">{game.title}</ParaGraph>
-              <ParaGraph>{game.subtitle}</ParaGraph>
-            </CustomCard>
-          ))}
-        </div>
+              activeGame={game}
+              multiplayer={props.props?.multiplayer}
+              timer={props.props?.timer}
+            />
+          );
+        })}
+        {/* <SmallGameCards setActiveGame={setActiveGame} /> */}
       </div>
-      <div className="flex flex-wrap gap-4">
-        {categories.map((category, index) => (
-          <CustomCard
-            as={CustomButton}
-            key={index}
-            className={`items-start flex-1 p-6 rounded-2xl ${transformScale}`}
-            style={{
-              backgroundImage: `url(${category.bgImage})`,
-              backgroundSize: "cover",
-            }}>
-            <ParaGraph className="font-bold text-xl">{category.name}</ParaGraph>
-          </CustomCard>
-        ))}
-      </div>
+      <RenderGames categories={categories} />
     </div>
   );
 }
+
+const RenderHeroCard = ({ activeGame, multiplayer, timer }) => {
+  return (
+    <CustomCard
+      style={{ flex: 3, borderRadius: "2.9rem", padding: 1 }}
+      as={CustomButton}
+      className={`p-0
+            bg-gradient-to-tl ${
+              multiplayer
+                ? "from-slate-900 via-slate-500 to-slate-400"
+                : "from-slate-900 via-orange-500 to-yellow-400"
+            }
+          min-w-[500px] whitespace-normal`}>
+      {/* from-red-600 via-orange-500 to-yellow-400 */}
+      <div
+        className={`flex items-start flex-row justify-between gap-4 ${TransformScale} w-full relative`}>
+        <div
+          style={{ alignSelf: "normal" }}
+          className={`flex flex-col justify-between gap-4 pl-14 py-16`}>
+          <div
+            className="flex-1 flex flex-col items-start"
+            style={{ alignSelf: "start" }}>
+            <ParaGraph
+              className="font-bold text-5xl text-left"
+              style={{ lineHeight: "3.6rem" }}>
+              {activeGame.title}
+            </ParaGraph>
+            <ParaGraph
+              className="font-bold text-xl text-left"
+              style={{ lineHeight: "4rem" }}>
+              {activeGame.gameCategory}
+            </ParaGraph>
+          </div>
+          <div className="flex flex-col items-start justify-between gap-4">
+            <ParaGraph className="text-left font-medium">
+              {activeGame.description}
+            </ParaGraph>
+            <div className="flex flex-row gap-2 items-center">
+              <CustomButton
+                className="px-6 py-8 font-bold text-xl hover:text-white"
+                variant={multiplayer ? "flat" : "solid"}
+                disabled={multiplayer}
+                color={multiplayer ? undefined : "primary"}
+                as={multiplayer ? undefined : Link}
+                to={
+                  multiplayer
+                    ? undefined
+                    : `${timer ? "time_" : ""}${activeGame.title
+                        ?.toLowerCase()
+                        ?.replaceAll(" ", "_")}`
+                }>
+                {multiplayer ? "Coming Soon" : timer ? `⏰ Play →` : `Play →`}
+              </CustomButton>
+              <div className="flex gap-4">
+                <CustomCard className="p-2 flex place-content-center rounded-2xl h-fit font-bold">
+                  <ParaGraph className="text-sm text-left font-medium">
+                    Max XP
+                  </ParaGraph>
+                  <AppXPWithText text={activeGame.maxXP / (timer ? 1 : 2)} />
+                </CustomCard>
+                <CustomCard className="p-2 flex place-content-center rounded-2xl h-fit font-bold">
+                  <ParaGraph className="text-sm text-left font-medium">
+                    Max {STRINGS.APP_CURRENCY}
+                  </ParaGraph>
+                  <AppCurrencyWithText
+                    text={activeGame.maxCoins / (timer ? 1 : 2)}
+                  />
+                </CustomCard>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute right-4 top-4" style={{ zIndex: 11 }}>
+          {(timer || multiplayer) && (
+            <CustomCard className={"p-0 opacity-80 bg-blend-multiply"}>
+              <div className="p-0">
+                <CustomImage
+                  src={timer ? AllImages.clock : AllImages.multiplayer}
+                  className="rotate-12 h-[50px] p-4"
+                  style={{ padding: multiplayer ? "1rem" : 0 }}
+                />
+              </div>
+            </CustomCard>
+          )}
+        </div>
+        <div className="w-[100%] m-2">
+          <GameCardImage
+            game={activeGame}
+            className={"h-[340px]"}
+            disabled={multiplayer}
+          />
+        </div>
+      </div>
+    </CustomCard>
+  );
+};
+
+const RenderGames = ({ categories }) => {
+  return (
+    <div className="flex flex-wrap gap-4">
+      {categories.map((category, index) => (
+        <CustomCard
+          as={CustomButton}
+          key={index}
+          className={`items-start flex-1 p-6 rounded-2xl ${TransformScale}`}
+          style={{
+            backgroundImage: `url(${category.bgImage})`,
+            backgroundSize: "cover",
+          }}>
+          <ParaGraph className="font-bold text-xl">{category.name}</ParaGraph>
+        </CustomCard>
+      ))}
+    </div>
+  );
+};
+
+export const GameCardImage = ({ game, className, disabled }) => {
+  return (
+    <CustomCard
+      className={`border-none h-full flex p-0 rounded-[2.2rem] relative justify-center items-center ${className} `}>
+      {game?.image && (
+        <BgImage
+          style={{ mixBlendMode: disabled ? "luminosity" : undefined }}
+          image={game.image}
+        />
+      )}
+      <div className="flex place-items-center">
+        {game?.imageText && (
+          <CustomImage
+            src={game?.imageText}
+            style={{ mixBlendMode: disabled ? "luminosity" : undefined }}
+            className={`w-3/4 z-10 m-10`}
+          />
+        )}
+      </div>
+    </CustomCard>
+  );
+};
+
+export const BgImage = ({ image, style }) => {
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${image})`,
+        backgroundSize: "cover",
+        width: "110%",
+        height: "110%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        ...style,
+      }}
+      className={"max-w-none absolute"}
+    />
+  );
+};

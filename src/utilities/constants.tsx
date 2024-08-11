@@ -8,20 +8,37 @@ import {
   FaTrophy,
 } from "react-icons/fa";
 import { FaMoon, FaPersonSnowboarding } from "react-icons/fa6";
+import { TbLayoutDashboardFilled } from "react-icons/tb";
 export const STRINGS = {
-  APP_NAME: "GemAI",
+  APP_NAME: "GemLingua",
+  APP_CURRENCY: "Gems",
   CLASSES: {
     bigButton: "p-5 px-8 h-16 font-medium text-xl rounded-3xl",
     borderedHeading:
       "border-b-2 dark:border-slate-700 pb-3 text-xl font-semibold first-letter:uppercase",
     heading: "text-2xl font-semibold first-letter:uppercase",
-    subHeading: "text-xl font-semibold first-letter:uppercase",
+    subHeading: "text-xl font-semibold first-letter:uppercase text-ellipsis",
     subText: "text-sm text-gray-500",
     gradientPinkYellow: "bg-gradient-to-r from-pink-500 to-yellow-500",
     gradientPinkRed: "bg-gradient-to-r from-pink-500 to-yellow-500",
     gradientPinkPurpleDark:
       "bg-gradient-to-tr from-slate-800 via-pink-950 to-violet-950 light:from-slate-200 light:via-pink-200 light:to-violet-200",
     basicTransitions: "transition-all ease-in-out duration-500",
+    buttonVariantWhiteSpaceBreak: "whitespace-break-spaces text-left p-4 h-fit",
+  },
+  DIFFICULTY: {
+    easy: {
+      id: "easy",
+      name: "Easy",
+    },
+    medium: {
+      id: "medium",
+      name: "Medium",
+    },
+    hard: {
+      id: "hard",
+      name: "Hard",
+    },
   },
   DUMMY: {
     PROFILE_IMAGE: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
@@ -55,7 +72,50 @@ export const STRINGS = {
   },
   SEPARATOR: { BULL: " • " },
   STORAGE: {
+    ALPHABETS_DATA: "alphabetsData",
+    CHALLENGES: "challengesData",
+    CHAPTERS_DATA: "chaptersData",
+    CHAT_INPUT_VALUE: "chatInputValue",
+    COINS: "coins",
+    COURSES_DATA: "coursesData",
+    CURRENT_LEARNING_LANGUAGE: "currentLearningLanguage",
+    DICTIONARY_API: "dictionaryAPIData",
+    DICTIONARY_SEARCH_BAR: "dictionarySearchBar",
+    FLASH_CARDS_DATA: "flashCardsData",
+    GAMES_DATA: "gamesData",
+    LAST_DATE: "lastDate",
+    MY_VOCABULARY: "myVocabulary",
+    ONGOING_CHAT_ID: "ongoingChatID",
+    SAVED_CHATS: "savedChats",
     SETTINGS: "settings",
+    STREAK: "streak",
+    SUBMISSIONS_DATA: "submissionsData",
+    TABS: {
+      allChapters: "allChapters",
+      alphabets: "alphabets",
+      appHeader: "appHeader",
+      chat: "chat",
+      challengesPage: "challengesPage",
+      coursePage: "coursePage",
+      coursePractice: "coursePractice",
+      dictionary: "dictionary",
+      flashCards: "flashCards",
+      gamesPage: "gamesPage",
+      gamePlay: "gamePlay",
+      loginForm: "loginForm",
+      rightSideBar: "rightSideBar",
+    },
+    TIME_SPENT: "timeSpent",
+    STREAK_CALENDAR: "streakCalendar",
+    VOCABULARY_SEARCH_BAR: "vocabularySearchBar",
+    WORDS_LISTENED: "wordsListened",
+    XP: "xp",
+    //
+    languagesUserKnows: "languagesUserKnows",
+    languagesUserWantsToKnow: "languagesUserWantsToKnow",
+    motivation: "motivation",
+    dailyGoal: "dailyGoal",
+    login: "login",
   },
   THEMES: {
     LIGHT: "light",
@@ -101,11 +161,49 @@ export const SlideIDs = {
     description: "Home description",
     icon: <FaHome />,
   },
-  lessons: {
-    route: "/lessons",
-    path: "lessons",
-    name: "Lessons",
-    description: "Lessons description",
+  dashboard: {
+    route: "/dashboard",
+    path: "dashboard",
+    name: "Dashboard",
+    description: "Dashboard description",
+    icon: <TbLayoutDashboardFilled />,
+  },
+  courses: {
+    route: "/courses",
+    path: "courses",
+    name: "Courses",
+    description: "Courses description",
+    icon: <FaReadme />,
+  },
+  course: {
+    route: "/:course",
+    path: ":course",
+    name: "Course",
+    description: "Course description",
+    icon: <FaReadme />,
+  },
+  // chapters: {
+  //   route: "/chapters",
+  //   path: "chapters",
+  //   name: "Chapters",
+  //   icon: <FaReadme />,
+  // },
+  chapter: {
+    route: "/:chapter",
+    path: ":chapter",
+    name: "Chapter",
+    icon: <FaReadme />,
+  },
+  // lessons: {
+  //   route: "/lessons",
+  //   path: "lessons",
+  //   name: "Lessons",
+  //   icon: <FaReadme />,
+  // },
+  lesson: {
+    route: "/:lesson",
+    path: ":lesson",
+    name: "Lesson",
     icon: <FaReadme />,
   },
   myVocabulary: {
@@ -160,11 +258,11 @@ export const SlideIDs = {
 };
 
 export const FooterSlogans = {
-  [SlideIDs.home.route]: {
+  [SlideIDs.dashboard.route]: {
     slogan: "Your Journey Begins Here",
     subtext: "Start your language learning journey with us.",
   },
-  [SlideIDs.lessons.route]: {
+  [SlideIDs.courses.route]: {
     slogan: "Learn, Grow, Repeat",
     subtext: "Structured lessons to guide your learning.",
   },

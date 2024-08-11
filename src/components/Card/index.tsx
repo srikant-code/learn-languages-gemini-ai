@@ -30,25 +30,23 @@ const GradientBackground = ({
 
 export default GradientBackground;
 
-export const CustomCard = ({
-  className,
-  border = true,
-  removeAllClasses = false,
-  ...props
-}) => {
-  return (
-    <Card
-      className={
-        removeAllClasses
-          ? className
-          : `shadow-none ${
-              border ? "border dark:border-slate-600" : ""
-            } rounded-3xl relative p-6 pb-8 min-w-fit ${className}`
-      }
-      {...props}
-    />
-  );
-};
+export const CustomCard = React.forwardRef(
+  ({ className, border = true, removeAllClasses = false, ...props }, ref) => {
+    return (
+      <Card
+        ref={ref}
+        className={
+          removeAllClasses
+            ? className
+            : `shadow-none ${
+                border ? "border dark:border-slate-600" : ""
+              } rounded-3xl relative p-6 pb-8 min-w-fit bg-gradient-to-bl from-white  to-slate-100 dark:bg-gradient-to-tr dark:from-slate-900  dark:to-slate-800 ${className}`
+        }
+        {...props}
+      />
+    );
+  }
+);
 
 export const CustomCardHeaderChild = ({ header, child, rightContent }) => {
   return (

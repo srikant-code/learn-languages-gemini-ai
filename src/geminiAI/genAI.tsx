@@ -11,9 +11,7 @@ import { PROMPTS } from "./prompts";
 export const GenAI = (apiKey) => {
   const USER_DEFINED_API_KEY = store.getState().language.apiKey;
   return new GoogleGenerativeAI(
-    apiKey ||
-      USER_DEFINED_API_KEY ||
-      import.meta.env.VITE_REACT_APP_GEMINI_API_KEY
+    apiKey || USER_DEFINED_API_KEY || import.meta.env.VITE_REACT_APP_GEMINI_API
   );
 };
 
@@ -39,20 +37,20 @@ const GetSafetySettings = () => {
       category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
       threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
     },
-    {
-      category: HarmCategory.HARM_CATEGORY_UNSPECIFIED,
-      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    },
+    // {
+    //   category: HarmCategory.HARM_CATEGORY_UNSPECIFIED,
+    //   threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    // },
   ];
 };
 
-const GetGenerationConfig = () => {
+const GetGenerationConfig = ({ json = true }) => {
   return {
     temperature: 1.1,
     topP: 0.95,
     topK: 64,
     maxOutputTokens: 8192,
-    responseMimeType: "application/json",
+    responseMimeType: json ? "application/json" : "text/plain",
     // stopSequences: ["red"],
   };
 };
@@ -63,30 +61,68 @@ export const GetModel = (model) => {
   return GenAI().getGenerativeModel({
     model: model || USER_SELECTED_AI_MODEL || MODELS.FLASH_1_5.value,
     safetySettings: GetSafetySettings(),
+    // systemInstruction: "You are a cat. Your name is Neko.",
   });
 };
 
-const ConvertGeminiResponseToText = (result) => {
-  const response = await result.response;
-  const text = response.text();
+const ConvertGeminiResponseToText = async (result) => {
+  // const response = await result.response;
+  // const text = response.text();
+  const text = result.response.text();
   console.log(text);
-  // TODO: Store in firebase object
-  // TODO: safetySettings - https://ai.google.dev/docs/safety_setting
   return text ?? "No response";
 };
-// const ConvertGeminiStreamResponseToText = (result) => {
-//   let text = "";
-//   for await (const chunk of result.stream) {
-//     const chunkText = chunk.text();
-//     console.log(chunkText);
-//     text += chunkText;
-//   }
-//   // TODO: Store in firebase object
-//   // TODO: safetySettings - https://ai.google.dev/docs/safety_setting
+// const ConvertGeminiResponseToText = async (result) => {
+//   const response = await result.response;
+//   const text = await response.text();
+//   console.log(text);
 //   return text ?? "No response";
 // };
 
-export const PromptBuilder = ({ promptID }): string => {
+const ConvertGeminiStreamResponseToText = async (result, callback) => {
+  let text = "";
+  let usageMetadata = {};
+
+  for await (const chunk of result.stream) {
+    console.log({ chunk });
+    const chunkText = await chunk.text();
+    console.log({ chunkText });
+    text += chunkText;
+
+    // Call the callback function with the updated text
+    callback(text);
+
+    // Access usage metadata
+    usageMetadata = chunk.usageMetadata;
+  }
+
+  return {
+    text: text ?? "No response",
+    usageMetadata,
+  };
+};
+
+// const ConvertGeminiStreamResponseToText = async (result) => {
+//   let text = "";
+//   for await (const chunk of result.stream) {
+//     const chunkText = await chunk.text();
+//     console.log(chunkText);
+//     text += chunkText;
+//   }
+//   return text ?? "No response";
+// };
+
+// const ConvertGeminiStreamResponseToText = async (result, callback) => {
+//   for await (const chunk of result.stream) {
+//     const chunkData = JSON.parse(chunk.data);
+//     const chunkText = chunkData.candidates[0].content.parts[0].text;
+//     console.log(chunkText);
+//   }
+// };
+
+// TODO: safetySettings - https://ai.google.dev/docs/safety_setting
+
+export const PromptBuilder = async ({ promptID }): string => {
   // PROMPTS[promptID];
   const model = GetModel();
   const prompt = "Write a story about a magic backpack.";
@@ -100,7 +136,7 @@ export const PromptBuilder = ({ promptID }): string => {
   };
 };
 
-export const GeminiChat = ({
+export const GeminiChat = async ({
   history = [
     {
       role: "user",
@@ -112,29 +148,37 @@ export const GeminiChat = ({
     },
   ],
   msg = "How many paws are in my house?",
-  generationConfig = GetGenerationConfig(),
+  json = true,
+  generationConfig,
+  callback,
 }) => {
   // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
   const model = GetModel();
   const chat = model.startChat({
     history,
-    generationConfig,
+    generationConfig: generationConfig || GetGenerationConfig({ json }),
   });
 
-  // Build the query
-  // User goals
-  // User courses and lessons data
-  // Some training data
-  // Output format schema
-
-  // For multi-turn conversations (like chat)
-  const history = await chat.getHistory();
-  const msgContent = { role: "user", parts: [{ text: msg }] };
-  const contents = [...history, msgContent];
-  const { totalTokens } = await model.countTokens({ contents });
-
   return {
-    response: ConvertGeminiResponseToText(await chat.sendMessage(msg)),
-    totalTokens,
+    response: json
+      ? ConvertGeminiResponseToText(await chat.sendMessage(msg))
+      : ConvertGeminiStreamResponseToText(
+          await chat.sendMessageStream(msg),
+          callback
+        ),
   };
 };
+
+// Build the query
+// User goals
+// User courses and lessons data
+// Some training data
+// Output format schema
+
+// For multi-turn conversations (like chat)
+// const history = await chat.getHistory();
+// const msgContent = { role: "user", parts: [{ text: msg }] };
+// const contents = [...history, msgContent];
+// const { totalTokens } = await model.countTokens({ contents });
+
+// How to learn oriya language, give me full course content for it. I want to learn it from scratch.

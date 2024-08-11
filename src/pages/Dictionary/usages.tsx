@@ -11,9 +11,9 @@ const Usages = ({ usages }) => {
             {position}
           </ParaGraph>
           {sentences.map((sentence, sentIndex) => (
-            <p key={sentIndex} className="ml-3">
+            <ParaGraph key={sentIndex} className="ml-3">
               {sentence}
-            </p>
+            </ParaGraph>
           ))}
         </div>
       ))}

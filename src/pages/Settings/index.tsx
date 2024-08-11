@@ -49,10 +49,10 @@ export const SettingsObject = [
     section: SECTION.PROFILE.id,
     valueExtractor: ({ setting }) => {
       return [
-        `Name: ${setting.displayName ?? ""}`,
-        `Email: ${setting.email ?? ""}`,
+        `Name: ${setting?.displayName ?? ""}`,
+        `Email: ${setting?.email ?? ""}`,
         `${
-          setting.emailVerified ? "Email is verified" : "Email is not verified"
+          setting?.emailVerified ? "Email is verified" : "Email is not verified"
         }`,
       ].join(STRINGS.SEPARATOR.BULL);
     },
@@ -118,13 +118,13 @@ export const SettingsObject = [
       classNames: {
         base: cn(
           "inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center",
-          "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent"
+          "justify-between cursor-pointer rounded-3xl gap-2 p-4 border-2 border-transparent"
           // "data-[selected=true]:border-primary"
         ),
       },
     },
     children: (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 ">
         <p className="text-medium">Enable dark mode</p>
         <p className="text-tiny text-default-400">
           Get access to new features before they are released.
@@ -153,7 +153,8 @@ export const SettingsObject = [
     icon: <FaKey />,
     section: SECTION.AI.id,
     componentProps: {
-      placeholder: "Enter your API key from Google AI Studio",
+      placeholder:
+        "Enter your API key from https://aistudio.google.com website",
       label: "Gem AI API Key",
     },
   },
@@ -179,10 +180,10 @@ export const SettingsObject = [
     valueExtractor: ({ setting }) => {
       return [
         `Joined ${
-          ConvertMillToMomentCalendar(setting.metadata.createdAt) ?? ""
+          ConvertMillToMomentCalendar(setting?.metadata?.createdAt) ?? ""
         }`,
         `Last logged in ${
-          ConvertMillToMomentCalendar(setting.metadata.lastLoginAt) ?? ""
+          ConvertMillToMomentCalendar(setting?.metadata?.lastLoginAt) ?? ""
         }`,
       ].join(STRINGS.SEPARATOR.BULL);
     },
@@ -195,11 +196,11 @@ export const SettingsObject = [
           <Spacer y={1} />
           <ParaGraph>
             Last logged in{" "}
-            {ConvertMillToMomentCalendar(setting.metadata.lastLoginAt)}
+            {ConvertMillToMomentCalendar(setting?.metadata?.lastLoginAt) ?? ""}
           </ParaGraph>
           <ParaGraph>
             Account created on{" "}
-            {ConvertMillToMomentCalendar(setting.metadata.createdAt)}
+            {ConvertMillToMomentCalendar(setting?.metadata?.createdAt) ?? ""}
           </ParaGraph>
         </div>
       );
@@ -285,7 +286,6 @@ const Settings: FunctionComponent<SettingsProps> = () => {
 
   return (
     <div>
-      <IconHeader icon={SlideIDs.settings.icon}>Settings</IconHeader>
       <div className="flex flex-col gap-2">
         {Object.keys(createSections).map((section, index) => {
           return (
