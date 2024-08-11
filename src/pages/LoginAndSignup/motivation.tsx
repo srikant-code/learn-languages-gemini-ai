@@ -63,75 +63,227 @@ export const Motivations = [
 
 export const MotivationSuggestedActions = {
   [MOTIVATION.JOB_OPPORTUNITIES]: [
-    { label: "Practice business vocabulary and phrases", icon: "💼" },
-    { label: "Learn formal language etiquette", icon: "👔" },
-    { label: "Participate in simulated job interviews", icon: "🎙️" },
-    { label: "Learn to write professional emails", icon: "✉️" },
     {
-      label: "Understand workplace culture of the target language",
+      label: "Practice business vocabulary and phrases",
+      icon: "💼",
+      prompt: "Generate a list of business vocabulary and phrases",
+    },
+    {
+      label: "Learn formal language etiquette",
+      icon: "👔",
+      prompt: "Provide a lesson on formal language etiquette",
+    },
+    {
+      label: "Participate in simulated job interviews",
+      icon: "🎙️",
+      prompt: "Create a simulated job interview scenario",
+    },
+    {
+      label: "Learn to write professional emails",
+      icon: "✉️",
+      prompt: "Provide a lesson on writing professional emails",
+    },
+    {
+      label: "Understand workplace culture in target",
       icon: "🏢",
+      prompt: "Describe the workplace culture in target",
     },
   ],
   [MOTIVATION.LEARN_NEW_CULTURES]: [
-    { label: "Explore cultural lessons on traditions and customs", icon: "🌍" },
-    { label: "Learn about famous historical figures and events", icon: "📚" },
-    { label: "Discover popular music, movies, and books", icon: "🎵" },
-    { label: "Learn to cook traditional dishes", icon: "🍲" },
-    { label: "Participate in cultural quizzes and games", icon: "🎮" },
+    {
+      label: "Explore cultural lessons on traditions and customs",
+      icon: "🌍",
+      prompt:
+        "Provide a lesson on traditions and customs of the target culture",
+    },
+    {
+      label: "Learn about famous historical figures and events",
+      icon: "📚",
+      prompt:
+        "Provide information on famous historical figures and events of the target culture",
+    },
+    {
+      label: "Discover popular music, movies, and books",
+      icon: "🎵",
+      prompt: "List popular music, movies, and books of the target culture",
+    },
+    {
+      label: "Learn to cook traditional dishes",
+      icon: "🍲",
+      prompt: "Provide a recipe for a traditional dish from the target culture",
+    },
+    {
+      label: "Participate in cultural quizzes and games",
+      icon: "🎮",
+      prompt: "Create a cultural quiz or game related to the target culture",
+    },
   ],
   [MOTIVATION.BRAIN_TRAINING]: [
-    { label: "Participate in language puzzles and word games", icon: "🧩" },
-    { label: "Learn complex grammar structures", icon: "📖" },
-    { label: "Practice memory exercises with vocabulary", icon: "🧠" },
-    { label: "Listen to language podcasts", icon: "🎧" },
-    { label: "Read advanced level literature", icon: "📚" },
+    {
+      label: "Participate in language puzzles and word games",
+      icon: "🧩",
+      prompt: "Generate a language puzzle or word game",
+    },
+    {
+      label: "Learn complex grammar structures",
+      icon: "📖",
+      prompt: "Provide a lesson on complex grammar structures",
+    },
+    {
+      label: "Practice memory exercises with vocabulary",
+      icon: "🧠",
+      prompt: "Create a memory exercise using vocabulary words",
+    },
+    {
+      label: "Listen to language podcasts",
+      icon: "🎧",
+      prompt: "Recommend a language podcast",
+    },
+    {
+      label: "Read advanced level literature",
+      icon: "📚",
+      prompt: "Recommend a piece of advanced level literature",
+    },
   ],
   [MOTIVATION.FAMILY_AND_FRIENDS]: [
-    { label: "Learn colloquial phrases and slangs", icon: "💬" },
-    { label: "Practice everyday conversations", icon: "🗣️" },
-    { label: "Learn about family-related vocabulary", icon: "👨‍👩‍👧‍👦" },
-    { label: "Understand cultural nuances in communication", icon: "🌐" },
-    { label: "Participate in role-plays with family scenarios", icon: "🎭" },
+    {
+      label: "Learn colloquial phrases and slangs",
+      icon: "💬",
+      prompt: "Provide a list of colloquial phrases and slangs",
+    },
+    {
+      label: "Practice everyday conversations",
+      icon: "🗣️",
+      prompt: "Create a scenario for an everyday conversation",
+    },
+    {
+      label: "Learn about family-related vocabulary",
+      icon: "👨‍👩‍👧‍👦",
+      prompt: "Provide a list of family-related vocabulary words",
+    },
+    {
+      label: "Understand cultural nuances in communication",
+      icon: "🌐",
+      prompt: "Explain some cultural nuances in communication",
+    },
+    {
+      label: "Participate in role-plays with family scenarios",
+      icon: "🎭",
+      prompt: "Create a role-play scenario involving a family situation",
+    },
   ],
   [MOTIVATION.TRAVELING_TO_NEW_PLACE]: [
-    { label: "Learn essential travel phrases", icon: "✈️" },
+    {
+      label: "Learn essential travel phrases",
+      icon: "✈️",
+      prompt: "Provide a list of essential travel phrases",
+    },
     {
       label: "Understand transportation and directions vocabulary",
       icon: "🚗",
+      prompt:
+        "Provide a list of vocabulary words related to transportation and directions",
     },
-    { label: "Practice ordering at restaurants", icon: "🍽️" },
-    { label: "Learn about tourist attractions", icon: "🗺️" },
-    { label: "Understand currency and shopping vocabulary", icon: "💰" },
+    {
+      label: "Practice ordering at restaurants",
+      icon: "🍽️",
+      prompt: "Create a scenario for ordering at a restaurant at target",
+    },
+    {
+      label: "Learn about tourist attractions",
+      icon: "🗺️",
+      prompt: "Provide information about popular tourist attractions at target",
+    },
+    {
+      label: "Understand currency and shopping vocabulary",
+      icon: "💰",
+      prompt:
+        "Provide a list of vocabulary words related to currency and shopping",
+    },
   ],
   [MOTIVATION.SCHOOL_AND_COLLEGE]: [
-    { label: "Practice academic vocabulary", icon: "🎓" },
-    { label: "Learn to write essays and reports", icon: "📝" },
-    { label: "Understand lecture-style content", icon: "👩‍🏫" },
-    { label: "Participate in study group discussions", icon: "👥" },
-    { label: "Practice presentations in the target language", icon: "🎤" },
+    {
+      label: "Practice academic vocabulary",
+      icon: "🎓",
+      prompt: "Generate a list of academic vocabulary",
+    },
+    {
+      label: "Learn to write essays and reports",
+      icon: "📝",
+      prompt: "Provide a lesson on writing essays and reports",
+    },
+    {
+      label: "Understand lecture-style content",
+      icon: "👩‍🏫",
+      prompt: "Create a lecture-style content on a given topic",
+    },
+    {
+      label: "Participate in study group discussions",
+      icon: "👥",
+      prompt: "Create a scenario for a study group discussion",
+    },
+    {
+      label: "Practice presentations in the target language",
+      icon: "🎤",
+      prompt: "Create a presentation script",
+    },
   ],
   [MOTIVATION.MOVING_AND_STAYING_IN_NEW_CITY]: [
-    { label: "Learn about housing and accommodation vocabulary", icon: "🏠" },
-    { label: "Understand local slang and dialects", icon: "🗣️" },
+    {
+      label: "Learn about housing and accommodation vocabulary",
+      icon: "🏠",
+      prompt:
+        "Generate a list of vocabulary related to housing and accommodation",
+    },
+    {
+      label: "Understand local slang and dialects",
+      icon: "🗣️",
+      prompt: "Provide a list of local slang and dialects",
+    },
     {
       label: "Practice conversations at local places (like markets, hospitals)",
       icon: "🏪",
+      prompt:
+        "Create a conversation scenario at a local place like a market or hospital",
     },
-    { label: "Learn about local laws and regulations", icon: "⚖️" },
-    { label: "Understand cultural norms and etiquette", icon: "🎩" },
+    {
+      label: "Learn about local laws and regulations",
+      icon: "⚖️",
+      prompt: "Provide information about local laws and regulations",
+    },
+    {
+      label: "Understand cultural norms and etiquette",
+      icon: "🎩",
+      prompt: "Explain the cultural norms and etiquette of target",
+    },
   ],
   [MOTIVATION.OTHERS]: [
     {
       label: "Explore a variety of lessons and choose what interests you",
       icon: "🔍",
+      prompt: "Generate a variety of lessons on different topics",
     },
-    { label: "Participate in community discussions and forums", icon: "💬" },
-    { label: "Set your own learning goals and track them", icon: "🎯" },
+    {
+      label: "Participate in community discussions and forums",
+      icon: "💬",
+      prompt: "Create a scenario for a community discussion or forum",
+    },
+    {
+      label: "Set your own learning goals and track them",
+      icon: "🎯",
+      prompt: "Provide a template for setting and tracking learning goals",
+    },
     {
       label: "Try out different learning methods (like flashcards, immersion)",
       icon: "📚",
+      prompt:
+        "Generate a lesson using a different learning method like flashcards or immersion",
     },
-    { label: "Explore user-generated content and lessons", icon: "👥" },
+    {
+      label: "Explore user-generated content and lessons",
+      icon: "👥",
+      prompt: "Provide a list of content and lessons",
+    },
   ],
 };
 

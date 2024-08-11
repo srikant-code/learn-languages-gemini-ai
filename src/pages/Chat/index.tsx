@@ -106,6 +106,11 @@ export const PERSONA = {
   USER: { displayName: "You", id: "user" },
   BOT: { displayName: STRINGS.APP_NAME, id: "model" },
 };
+export const AI_TABS = {
+  ALL_CHATS: "All Chats",
+  EXPLORE: "Explore",
+  id: STRINGS.APP_NAME,
+};
 
 const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
   const [messages, setMessages] = useState([]);
@@ -120,10 +125,6 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
     useSelector((state) => state.language[STRINGS.STORAGE.ONGOING_CHAT_ID]) ??
     null;
 
-  const handleNewChat = ({}) => {
-    setMessages([]);
-  };
-
   const setOngoingChatID = (val) => {
     dispatch(
       setSetting({
@@ -131,6 +132,11 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
         value: val,
       })
     );
+  };
+
+  const handleNewChat = ({}) => {
+    setMessages([]);
+    setOngoingChatID(null);
   };
 
   const setChatInputValue = (val) => {
@@ -248,12 +254,13 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
           showBackButton={ongoingChatID}
           onClickBack={() => {
             setOngoingChatID(null);
+            setMessages([]);
           }}
         />
         <div className="flex flex-1 flex-col place-content-between" span={18}>
           <ScrollShadow
             size={50}
-            style={{ maxHeight: "74vh" }}
+            style={{ flex: 1, height: "100%", maxHeight: "72vh" }}
             className="overflow-auto p-4">
             <div ref={parent}>
               <Spacer y={6} />
@@ -262,16 +269,17 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
               ) : (
                 <CustomTabs
                   fullWidth
+                  id={STRINGS.STORAGE.TABS.chat}
                   tabs={[
                     {
-                      title: "All Chats",
+                      title: AI_TABS.ALL_CHATS,
                       content: (
                         <div>
                           <AllChats setOngoingChat={setOngoingChatID} />
                         </div>
                       ),
                     },
-                    { title: "Explore", content: <Explore /> },
+                    { title: AI_TABS.EXPLORE, content: <Explore /> },
                   ]}
                 />
               )}
@@ -279,10 +287,11 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
             </div>
           </ScrollShadow>
         </div>
-        <div className="">
+        <div className="absolute bottom-4 w-full">
           <Spacer y={4} />
           <ChatBar
             {...{
+              messages,
               handleNewChat,
               handleSend,
               isLoading,
@@ -299,6 +308,7 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
 export default AIChat;
 
 const ChatBar = ({
+  messages,
   handleNewChat,
   handleSend,
   isLoading,
@@ -306,26 +316,33 @@ const ChatBar = ({
   setInputValue,
 }) => {
   return (
-    <div className="flex flex-row items-center gap-4">
+    <div className="flex flex-row items-center gap-4 pr-10">
       <CustomButton auto isIconOnly onClick={handleNewChat} loading={isLoading}>
         <FaPlus />
       </CustomButton>
-      <CustomInput
-        textarea
-        placeholder="Ask me anything..."
-        labelPlacement="outside"
-        isClearable={false}
-        // startContent={<FaMessage className="text-white m-2" />}
-        value={inputValue}
-        variant="bordered"
-        onChange={(val) => setInputValue(val)}
-        onKeyDown={handleSend}
-        width="80%"
-        color="default"
-        className="my-4"
-        size="lg"
-        // addonAfter={<ImageUploader />}
-      />
+      <div className="flex-1">
+        <CustomInput
+          textarea
+          placeholder="Ask me anything..."
+          labelPlacement="outside"
+          label={
+            messages?.length
+              ? undefined
+              : `Press enter/send to start new chat with ${STRINGS.APP_NAME}`
+          }
+          isClearable={false}
+          // startContent={<FaMessage className="text-white m-2" />}
+          value={inputValue}
+          variant="bordered"
+          onChange={(val) => setInputValue(val)}
+          onKeyDown={handleSend}
+          width="60%"
+          color="default"
+          className="my-4"
+          size="lg"
+          // addonAfter={<ImageUploader />}
+        />
+      </div>
       <CustomButton
         auto
         disabled={!inputValue}
@@ -368,6 +385,8 @@ export const NoSelectedChat = ({}) => {
 
 const ChatInterFaceHeader = ({ showBackButton, onClickBack, isLoading }) => {
   const [parent] = useAutoAnimate();
+  const settings = useSelector((state) => state.language) ?? "";
+  const title = settings[STRINGS.STORAGE.SAVED_CHATS][showBackButton]?.title;
   return (
     <div className="flex flex-row justify-between items-center pl-5">
       <div className="flex flex-row gap-4" ref={parent}>
@@ -383,11 +402,11 @@ const ChatInterFaceHeader = ({ showBackButton, onClickBack, isLoading }) => {
           </CustomButton>
         )}
         <div className="flex flex-col" span={6}>
-          <ParaGraph className="text-xl font-bold text-foreground-800">
-            Chats
+          <ParaGraph className="text-xl font-bold text-foreground-800 text-ellipsis overflow-hidden text-nowrap w-[280px]">
+            {title ? title : `Chats with ${STRINGS.APP_NAME}`}
           </ParaGraph>
           {/* List of chats */}
-          <ParaGraph className="text-foreground-800">Chat Interface</ParaGraph>
+          <ParaGraph className="text-foreground-800 text-sm">{`${STRINGS.APP_NAME} AI internally uses Gemini API`}</ParaGraph>
         </div>
       </div>
     </div>

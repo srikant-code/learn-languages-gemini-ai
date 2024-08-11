@@ -121,7 +121,7 @@ export default GamePlay;
 export const GameButtonCard = ({
   children,
   onClick,
-  bClass = "",
+  innerDivClassName = "",
   className = "",
   ...props
 }) => {
@@ -133,7 +133,7 @@ export const GameButtonCard = ({
         {...props}>
         <div
           onClick={onClick}
-          className={`flex items-center justify-center w-full ${bClass} p-4 min-w-28 min-h-28`}>
+          className={`flex items-center justify-center w-full p-0 ${innerDivClassName} min-w-28 min-h-28`}>
           {children}
         </div>
       </CustomCard>
@@ -213,6 +213,7 @@ const RenderHowToPlay = ({
       </div>
       <CustomTabs
         fullWidth
+        id={STRINGS.STORAGE.TABS.gamePlay}
         tabs={[
           {
             title: "How to Play",

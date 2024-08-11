@@ -8,29 +8,26 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import { TextSelectionPopover } from "./components/Popover";
-import firebase, { loadState, saveStateInFireStore } from "./firebase/firebase";
+import firebase from "./firebase/firebase";
 import useDarkPalette from "./hooks/useDarkPalette";
 import NotFoundPage from "./pages/404Page";
 import Alphabets from "./pages/Alphabets";
 import Challenges from "./pages/Challenges";
-import Dictionary from "./pages/Dictionary";
-import Games, { GamesContent } from "./pages/Games";
-import Home from "./pages/Home";
-import HomeContent from "./pages/Home/homeContent";
 import Courses, { CoursesHome } from "./pages/Courses";
-import { LoginAndSignup } from "./pages/LoginAndSignup";
-import Settings from "./pages/Settings";
-import { setSetting } from "./store/reducer";
-import { SlideIDs, STRINGS } from "./utilities/constants";
-import Onboarding from "./pages/LoginAndSignup/onboarding";
-import { Sleep } from "./utilities/utilities";
 import ChaptersAndLessons, {
   ChaptersAndLessonsHome,
 } from "./pages/Courses/chaptersHome";
-import Lessons, { LessonsHome } from "./pages/Courses/lesson/lessons";
 import Lesson from "./pages/Courses/lesson/lesson";
+import Dictionary from "./pages/Dictionary";
+import Games, { GamesContent } from "./pages/Games";
 import GamePlay from "./pages/Games/GameLogic";
-import CustomButton from "./components/Button";
+import Home from "./pages/Home";
+import HomeContent from "./pages/Home/homeContent";
+import { LoginAndSignup } from "./pages/LoginAndSignup";
+import Onboarding from "./pages/LoginAndSignup/onboarding";
+import Settings from "./pages/Settings";
+import { setSetting } from "./store/reducer";
+import { SlideIDs, STRINGS } from "./utilities/constants";
 
 // ProtectedRoute component
 const ProtectedRoute = ({ isSignedIn, children }) => {
@@ -240,7 +237,8 @@ function App() {
 export default App;
 
 const ThemeHandler = ({ children }) => {
-  const theme = useSelector((state) => state.language.theme);
+  const theme =
+    useSelector((state) => state.language?.theme) || STRINGS.THEMES.LIGHT;
 
   const isDefaultDark = useDarkPalette().isDark;
 

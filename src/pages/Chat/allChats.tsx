@@ -73,15 +73,18 @@ export const AllChats = ({ setOngoingChat }) => {
                       }}
                       className="flex flex-row justify-between w-full p-6">
                       <div className="flex flex-col items-start flex-1 w-full">
-                        <ParaGraph className={"text-xl"}>
+                        <ParaGraph
+                          className={
+                            "text-md text-ellipsis overflow-hidden max-h-12"
+                          }>
                           {curChat.title}
                         </ParaGraph>
                         <ParaGraph
                           className={`text-md opacity-80 text-ellipsis overflow-hidden max-h-5`}>
                           {curChat.lastMessage.role === PERSONA.USER.id
-                            ? PERSONA.USER.displayName
-                            : PERSONA.BOT.displayName}
-                          : {curChat.lastMessage.parts[0].text}
+                            ? `${PERSONA.USER.displayName}: `
+                            : ""}
+                          {curChat.lastMessage.parts[0].text}
                         </ParaGraph>
                       </div>
                       <div className="flex flex-col items-end gap-2">

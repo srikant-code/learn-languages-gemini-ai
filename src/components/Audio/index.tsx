@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { FaPause, FaPlay, FaStop } from "react-icons/fa";
+import { FaPause, FaStop } from "react-icons/fa";
+import { HiSpeakerWave } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { setSetting } from "../../store/reducer";
 import { STRINGS } from "../../utilities/constants";
@@ -119,7 +120,13 @@ const AudioPlayer = ({
       {showVoiceSelector && <VoiceSelector />}
       {src && <audio ref={audioRef} src={src} {...props} />}
       <CustomButton isIconOnly onClick={togglePlayPause} {...buttonProps}>
-        {playing ? <FaPause /> : <FaPlay />}
+        {playing ? (
+          <FaPause />
+        ) : (
+          <HiSpeakerWave
+            className={buttonProps?.size === "sm" ? "text-xl" : "text-2xl"}
+          />
+        )}
       </CustomButton>
       {showStop && (
         <CustomButton isIconOnly onClick={stop} {...buttonProps}>

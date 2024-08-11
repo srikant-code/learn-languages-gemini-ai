@@ -12,6 +12,7 @@ import { STRINGS } from "../../../utilities/constants";
 import { WordHeader } from "../../Dictionary/wordHeader";
 import ParaGraph from "../../../components/Paragraph";
 import { CustomCard } from "../../../components/Card";
+import moment from "moment";
 
 const WordTable = ({ data, limit = 10 }) => {
   const [words, setWords] = useState([]);
@@ -107,7 +108,7 @@ const WordData = ({ data }) => {
           {Math.floor(wordInfo.totalWordsListened)}
         </ParaGraph>
         <ParaGraph>
-          <strong>Coins and XP earned:</strong>{" "}
+          <strong>{STRINGS.APP_CURRENCY} and XP earned:</strong>{" "}
           {Math.floor(wordInfo.totalWordsListened)}
         </ParaGraph>
         <ParaGraph>
@@ -118,7 +119,7 @@ const WordData = ({ data }) => {
         </ParaGraph>
         <ParaGraph>
           <strong>Last listened time:</strong>{" "}
-          {new Date(wordInfo.lastListenedTime).toLocaleString()}
+          {moment(wordInfo.lastListenedTime).calendar()}
         </ParaGraph>
         <ParaGraph>
           <strong>Last listened word:</strong>{" "}

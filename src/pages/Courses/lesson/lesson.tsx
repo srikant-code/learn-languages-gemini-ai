@@ -6,6 +6,7 @@ import { Spacer } from "@nextui-org/react";
 import { ChapterProgress } from "../allChapters";
 import { IconCardWithTextButton } from "../../Home/appHeader";
 import CustomButton from "../../../components/Button";
+import { CustomCard } from "../../../components/Card";
 
 interface LessonProps {}
 
@@ -25,15 +26,17 @@ const Lesson: FunctionComponent<LessonProps> = () => {
           </div>
         </div>
         <div>
-          <IconCardWithTextButton heading={"coins"} child={"32"} />
+          <IconCardWithTextButton heading={STRINGS.APP_CURRENCY} child={"32"} />
         </div>
       </div>
       <Spacer y={6} />
-      <hr />
       <div>
-        <MarkdownRenderer
-          markdownContent={"# Hello content on English\n fkaj"}
-        />
+        <CustomCard>
+          <MarkdownRenderer
+            markdownContent={"# Hello content on English\n fkaj"}
+          />
+        </CustomCard>
+        <Spacer y={6} />
         <div className="flex flex-col gap-4">
           <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
             Suggested Actions

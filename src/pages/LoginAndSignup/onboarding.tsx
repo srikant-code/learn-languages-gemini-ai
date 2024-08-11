@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../components/Button";
 import { GetAllCountries } from "../../utilities/countryIcons";
 import LanguageFinder from "./languageFinder";
@@ -19,7 +19,7 @@ const Onboarding = () => {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.language) ?? {};
   const [langsUserKnows, setLangsUserKnows] = useState(
-    settings[STRINGS.STORAGE.languagesUserKnows] ?? {
+    settings?.[STRINGS.STORAGE.languagesUserKnows] || {
       en: {
         read: true,
         write: true,
@@ -28,7 +28,7 @@ const Onboarding = () => {
     }
   );
   const [langsUserWantsToKnow, setLangsUserWantsKnow] = useState(
-    settings[STRINGS.STORAGE.languagesUserWantsToKnow] ?? {
+    settings?.[STRINGS.STORAGE.languagesUserWantsToKnow] || {
       en: {
         read: true,
         write: true,
@@ -139,6 +139,17 @@ const Onboarding = () => {
 
   const [parent] = useAutoAnimate();
   const isLastStep = isCurrentStep(steps.length - 1);
+
+  // debug useEffect
+  // useEffect(() => {
+  //   dispatch(
+  //     setSetting({
+  //       key: STRINGS.STORAGE.languagesUserWantsToKnow,
+  //       value: undefined,
+  //     })
+  //   );
+  // }, []);
+
   return (
     <div
       className={`min-h-screen flex flex-row items-center justify-center bg-gradient-to-r from-blue-500 ${
@@ -212,6 +223,7 @@ export default Onboarding;
 export const LanguageFinderToLearn = ({
   langsUserWantsToKnow,
   setLangsUserWantsKnow,
+  ...props
 }) => {
   return (
     <LanguageFinder
@@ -224,6 +236,7 @@ export const LanguageFinderToLearn = ({
         "So you want to learn/improve your existing knowledge, for all of these languages right?"
       }
       messageForNoSelection="Come on! Don't be cheeky. You definitely would want to learn/improve on atleast one language. Select it to proceed."
+      {...props}
     />
   );
 };

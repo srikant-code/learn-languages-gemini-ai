@@ -9,7 +9,7 @@ import { AppCurrencyIcon, AppStreakIcon, AppXPIcon } from "./homeContent";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
 import { FiTarget } from "react-icons/fi";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { CustomCard } from "../../components/Card";
 import Footer from "../../components/Footer";
 import { IconHeader } from "../../components/Paragraph";
@@ -20,6 +20,7 @@ import { useState } from "react";
 import { CheckRightTop } from "../LoginAndSignup/languageFinder";
 import { FaPlus } from "react-icons/fa6";
 import { setSetting } from "../../store/reducer";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface AppHeaderProps {}
 
@@ -47,12 +48,14 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
   const settings = useSelector((state) => state.language) ?? {};
   const currentlyLearning =
     settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE] ??
-    Object.keys(settings[STRINGS.STORAGE.languagesUserWantsToKnow])[0];
+    Object.keys(settings?.[STRINGS.STORAGE.languagesUserWantsToKnow] || {})[0];
   const [isOpenChangeLanguage, setIsOpenChangeLanguage] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [parent2] = useAutoAnimate();
   return (
     <>
-      <div shouldHideOnScroll className="">
+      <div className="">
         {/* <SetupUserLearningGoalTime /> */}
         <div className="p-2 pb-6 flex flex-row items-center justify-between gap-4 rounded-3xl overflow-scroll">
           <Popover
@@ -65,13 +68,13 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
                   left={
                     <Flag
                       flag={
-                        GetAllLanguages[currentlyLearning].usedIn[0]?.content
+                        GetAllLanguages?.[currentlyLearning]?.usedIn[0]?.content
                       }
                       className="w-[45px]"
                     />
                   }
                   heading={"Currently learning"}
-                  child={GetAllLanguages[currentlyLearning].languageName}
+                  child={GetAllLanguages?.[currentlyLearning]?.languageName}
                   onClick={setIsOpenChangeLanguage}
                 />
               </div>
@@ -79,9 +82,7 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
             <PopoverContent className="">
               <div className="px-1 py-2 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <ParaGraph className="text-lg font-bold">
-                    Your Languages
-                  </ParaGraph>
+                  <ParaGraph className="text-lg font-bold">Learning</ParaGraph>
                   <CustomButton
                     isIconOnly
                     size="sm"
@@ -91,7 +92,7 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
                   </CustomButton>
                 </div>
                 <div className="flex flex-col gap-2 items-start">
-                  {Object.keys(settings.languagesUserWantsToKnow).map(
+                  {Object.keys(settings?.languagesUserWantsToKnow || {}).map(
                     (lang, index) => {
                       const isSelectedLang =
                         settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE] ===
@@ -126,6 +127,60 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
                                 value: lang,
                               })
                             );
+                            navigate(`${SlideIDs.courses.route}/${lang}`);
+                          }}
+                        />
+                      );
+                    }
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <ParaGraph className="text-lg font-bold">You know</ParaGraph>
+                  <CustomButton
+                    isIconOnly
+                    size="sm"
+                    as={Link}
+                    to={SlideIDs.courses.route}>
+                    <FaPlus />
+                  </CustomButton>
+                </div>
+                <div className="flex flex-col gap-2 items-start">
+                  {Object.keys(settings?.languagesUserKnows || {}).map(
+                    (lang, index) => {
+                      const isSelectedLang =
+                        settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE] ===
+                        lang;
+                      return (
+                        <IconCardWithTextButton
+                          key={index}
+                          left={
+                            <>
+                              <Flag
+                                flag={GetAllLanguages[lang].usedIn[0]?.content}
+                                className="w-[45px]"
+                              />
+                              {isSelectedLang && (
+                                <CheckRightTop
+                                  style={{ top: 5, left: 5 }}
+                                  className={"bg-white rounded-full"}
+                                />
+                              )}
+                            </>
+                          }
+                          heading={
+                            isSelectedLang
+                              ? "currently learning"
+                              : "Switch to learn"
+                          }
+                          child={GetAllLanguages[lang].languageName}
+                          onClick={() => {
+                            dispatch(
+                              setSetting({
+                                key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+                                value: lang,
+                              })
+                            );
+                            navigate(`${SlideIDs.courses.route}/${lang}`);
                           }}
                         />
                       );
@@ -176,7 +231,7 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
                   <div className="text-small font-bold flex flex-col gap-4">
                     <IconCardWithTextButton
                       left={<AppCurrencyIcon />}
-                      heading={"Coins"}
+                      heading={STRINGS.APP_CURRENCY}
                       child={`32`}
                     />
                     <IconCardWithTextButton
@@ -193,13 +248,19 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
       </div>
       <CustomTabs
         fullWidth
+        id={STRINGS.STORAGE.TABS.appHeader}
+        selectedKey={
+          NavItems.find((item) =>
+            window.location.pathname.startsWith(item.route)
+          )?.name ?? undefined
+        }
         tabs={NavItems.map((item) => {
           return {
             title: item.name,
             route: item.route,
             icon: item.icon,
             content: (
-              <div>
+              <div ref={parent2}>
                 <IconHeader icon={item.icon} title={item.name}>
                   {item.name}
                 </IconHeader>
@@ -220,9 +281,15 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
 
 export default AppHeader;
 
-export const IconCardWithTextButton = ({ left, heading, child, onClick }) => {
+export const IconCardWithTextButton = ({
+  left,
+  heading,
+  child,
+  onClick,
+  buttonProps = {},
+}) => {
   return (
-    <CustomCard as={CustomButton} className="p-0">
+    <CustomCard as={CustomButton} className="p-0" {...buttonProps}>
       <div
         className="px-4 py-1 flex flex-row items-center gap-4"
         onClick={onClick}>

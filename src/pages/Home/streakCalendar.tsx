@@ -16,7 +16,8 @@ import ParaGraph from "../../components/Paragraph";
 // };
 
 const StreakCalendar = ({ noOfPastDaysToShow = 30 }) => {
-  const streakCalendar = useSelector((state) => state.language.streakCalendar);
+  const streakCalendar =
+    useSelector((state) => state.language?.streakCalendar) || {};
   const [currentDate, setCurrentDate] = useState(moment());
 
   const getPreviousWeek = () => {

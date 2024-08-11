@@ -14,12 +14,22 @@ import CustomImage, { AllImages } from "../../../components/Image";
 
 interface MemoryMaestroGamePlayProps {}
 
-const MemoryCard = ({ value, onClick, isFlipped }) => (
+export const FlipCard = ({
+  value,
+  valueFront,
+  onClick,
+  isFlipped,
+  className,
+  innerDivClassName,
+}) => (
   <GameButtonCard
-    className={`flipCard ${isFlipped ? "flipped" : ""} p-0`}
-    bClass="flipCard-content"
+    className={`flipCard ${isFlipped ? "flipped" : ""} p-0 ${className}`}
+    innerDivClassName={`flipCard-content ${innerDivClassName}`}
     onClick={onClick}>
-    <ParaGraph className="text-3xl font-bold">{isFlipped && value}</ParaGraph>
+    {isFlipped && <div className=" w-full h-full">{value}</div>}
+    {!isFlipped && (
+      <div className="flipCard-content w-full h-full">{valueFront}</div>
+    )}
   </GameButtonCard>
 );
 
@@ -136,9 +146,11 @@ const MemoryMaestroGamePlay: FunctionComponent<MemoryMaestroGamePlayProps> = ({
           </div>
           <div className="flex flex-wrap gap-4">
             {cards.map((card, index) => (
-              <MemoryCard
+              <FlipCard
                 key={index}
-                value={card}
+                value={
+                  <ParaGraph className="text-3xl font-bold">{card}</ParaGraph>
+                }
                 isFlipped={
                   flippedCards.includes(index) ||
                   matchedCards.includes(index) ||

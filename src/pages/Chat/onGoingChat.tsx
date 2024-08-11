@@ -6,11 +6,23 @@ import ParaGraph from "../../components/Paragraph";
 import { AppIconAndText } from "../LoginAndSignup";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useEffect, useRef } from "react";
+import CustomButton from "../../components/Button";
+import { AudioPlayer } from "../../components/Audio";
+import { useSelector } from "react-redux";
+import { STRINGS } from "../../utilities/constants";
 
 export const OngoingChat = ({ messages, isLoading }) => {
   const [parent] = useAutoAnimate();
   const [parent2] = useAutoAnimate();
   const bottomOfChatRef = useRef(null);
+
+  const settings = useSelector((state) => state.language);
+
+  const savedChats = settings[STRINGS.STORAGE.SAVED_CHATS];
+  const ongoingChatID = settings[STRINGS.STORAGE.ONGOING_CHAT_ID];
+  const curChat = savedChats[ongoingChatID];
+  const totalTokensUsed =
+    curChat?.otherData?.usageMetadata?.totalTokenCount ?? undefined;
 
   useEffect(() => {
     if (bottomOfChatRef.current)
@@ -22,6 +34,21 @@ export const OngoingChat = ({ messages, isLoading }) => {
       {messages.map((message, index) => {
         const isUser = message.role === PERSONA.USER.id;
         const currentMessage = message.parts[0]?.text;
+
+        const copyButton = (
+          <CustomCopyButton size={"sm"} text={currentMessage} />
+        );
+
+        const audioPlayer = (
+          <AudioPlayer
+            text={currentMessage}
+            src={undefined}
+            buttonProps={{
+              variant: "flat",
+              size: "sm",
+            }}
+          />
+        );
 
         return (
           <div
@@ -44,7 +71,9 @@ export const OngoingChat = ({ messages, isLoading }) => {
               )}
               <div className="flex gap-4 items-center">
                 {isUser && (
-                  <CustomCopyButton size={"sm"} text={currentMessage} />
+                  <div className="flex gap-2">
+                    {copyButton} {audioPlayer}
+                  </div>
                 )}
                 <ParaGraph className="font-bold">
                   {isUser ? PERSONA.USER.displayName : PERSONA.BOT.displayName}
@@ -53,7 +82,10 @@ export const OngoingChat = ({ messages, isLoading }) => {
                   <Spinner size="sm" />
                 ) : (
                   !isUser && (
-                    <CustomCopyButton size={"sm"} text={currentMessage} />
+                    <div className="flex gap-2">
+                      {audioPlayer}
+                      {copyButton}
+                    </div>
                   )
                 )}
               </div>
@@ -73,6 +105,13 @@ export const OngoingChat = ({ messages, isLoading }) => {
         );
       })}
       <div ref={bottomOfChatRef} />
+      {totalTokensUsed ? (
+        <div>
+          <ParaGraph className="text-center text-xs text-gray-500">
+            {totalTokensUsed} / 1,000,000 tokens used
+          </ParaGraph>
+        </div>
+      ) : null}
     </div>
   ) : (
     <NoSelectedChat />

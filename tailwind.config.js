@@ -19,6 +19,7 @@ export default {
       fontFamily: {
         noto: ["Noto Sans", "sans-serif"],
       },
+      display: ["group-hover"],
     },
   },
   darkMode: "class",

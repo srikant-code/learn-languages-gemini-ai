@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { STRINGS } from "../utilities/constants";
+import { Sleep } from "../utilities/utilities";
 import { getItemFromDexie, updateItemInDexie } from "./dexie";
+
+const dataFromDixie = await getItemFromDexie();
+await Sleep(200);
 
 export const languageSlice = createSlice({
   name: "language",
   initialState:
     // localStorage.getItem(STRINGS.STORAGE.SETTINGS)
     //   ? JSON.parse(localStorage.getItem(STRINGS.STORAGE.SETTINGS))
-    (await getItemFromDexie()) ?? {
+    dataFromDixie ?? {
       theme: "",
       language: { label: "English", value: "en" },
       apiKey: "",
@@ -30,12 +34,12 @@ export const languageSlice = createSlice({
       });
     },
     setReduxFullStateOnLoad: (state, action) => {
-      // // Clear the current state
-      // for (const key in state) {
-      //   delete state[key];
-      // }
-      // // Assign the new state
-      // Object.assign(state, action.payload);
+      // Clear the current state
+      for (const key in state) {
+        delete state[key];
+      }
+      // Assign the new state
+      Object.assign(state, action.payload);
     },
   },
 });

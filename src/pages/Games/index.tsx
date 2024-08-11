@@ -151,6 +151,7 @@ export const GamesContent = ({}) => {
         {STRINGS.APP_NAME} Games ({gamesList.length})
       </ParaGraph>
       <CustomTabs
+        id={STRINGS.STORAGE.TABS.gamesPage}
         tabs={Object.values(GameCategories).map((item) => {
           return {
             title: item.id,
@@ -311,7 +312,7 @@ const RenderHeroCard = ({ activeGame, multiplayer, timer }) => {
                 </CustomCard>
                 <CustomCard className="p-2 flex place-content-center rounded-2xl h-fit font-bold">
                   <ParaGraph className="text-sm text-left font-medium">
-                    Max Coins
+                    Max {STRINGS.APP_CURRENCY}
                   </ParaGraph>
                   <AppCurrencyWithText
                     text={activeGame.maxCoins / (timer ? 1 : 2)}

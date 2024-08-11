@@ -12,10 +12,12 @@ import { SettingsObject } from "../Settings";
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaKey } from "react-icons/fa";
 import { useState } from "react";
 import CustomButton from "../../components/Button";
+import { CourseItems } from "../Courses";
 interface LeftSideBarProps {}
 
 const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
-  const theme = useSelector((state) => state.language.theme);
+  const theme =
+    useSelector((state) => state.language?.theme) || STRINGS.THEMES.LIGHT;
   const dispatch = useDispatch();
   const toggleTheme = () => {
     dispatch(
@@ -136,6 +138,7 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
                   icon: setting?.icon,
                 };
               }),
+              ...CourseItems,
             ]}
             placeholder="Quick access..."
           />
@@ -185,7 +188,7 @@ const UserProfileLegacy = () => {
             Novice
           </Chip>
           <Chip className="" color="warning">
-            23 coins
+            23 {STRINGS.APP_CURRENCY}
           </Chip>
         </div>
       </div>

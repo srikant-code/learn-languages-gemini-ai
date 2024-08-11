@@ -2,31 +2,48 @@ const Chapters = {
   SOUNDS_AND_PRONUNCIATION: {
     name: "Sounds & Pronunciation",
     id: "SOUNDS_AND_PRONUNCIATION",
+    description: "Covering basic sounds and pronunciation",
   },
-  BASIC_VOCABULARY: { name: "Basic Vocabulary", id: "BASIC_VOCABULARY" },
-  BASIC_GRAMMAR: { name: "Basic Grammar", id: "BASIC_GRAMMAR" },
+  BASIC_VOCABULARY: {
+    name: "Basic Vocabulary",
+    id: "BASIC_VOCABULARY",
+    description: "Introducing essential vocabulary",
+  },
+  BASIC_GRAMMAR: {
+    name: "Basic Grammar",
+    id: "BASIC_GRAMMAR",
+    description: "For fundamental grammar rules",
+  },
   EVERYDAY_CONVERSATIONS: {
     name: "Everyday Conversations",
     id: "EVERYDAY_CONVERSATIONS",
+    description: "For common daily conversations",
   },
   EXPANDING_VOCABULARY: {
     name: "Expanding Vocabulary",
     id: "EXPANDING_VOCABULARY",
+    description: "To broaden your vocabulary",
   },
   INTERMEDIATE_GRAMMAR: {
     name: "Intermediate Grammar",
     id: "INTERMEDIATE_GRAMMAR",
+    description: "Study more complex grammar",
   },
-  BUILDING_FLUENCY: { name: "Building Fluency", id: "BUILDING_FLUENCY" },
+  BUILDING_FLUENCY: {
+    name: "Building Fluency",
+    id: "BUILDING_FLUENCY",
+    description: "Aimed at improving fluency",
+  },
   CULTURAL_UNDERSTANDING: {
     name: "Cultural Understanding",
     id: "CULTURAL_UNDERSTANDING",
+    description: "About cultural insights",
   },
 };
 
 export const ChaptersData = {
   [Chapters.SOUNDS_AND_PRONUNCIATION.id]: {
-    description: "chapter description",
+    description: Chapters.SOUNDS_AND_PRONUNCIATION.description,
     chapterId: Chapters.SOUNDS_AND_PRONUNCIATION.id,
     chapterName: Chapters.SOUNDS_AND_PRONUNCIATION.name,
     chapters: [
@@ -66,7 +83,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.BASIC_VOCABULARY.id]: {
-    description: "chapter description",
+    description: Chapters.BASIC_VOCABULARY.description,
     chapterId: Chapters.BASIC_VOCABULARY.id,
     chapterName: Chapters.BASIC_VOCABULARY.name,
     chapters: [
@@ -109,7 +126,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.BASIC_GRAMMAR.id]: {
-    description: "chapter description",
+    description: Chapters.BASIC_GRAMMAR.description,
     chapterId: Chapters.BASIC_GRAMMAR.id,
     chapterName: Chapters.BASIC_GRAMMAR.name,
     chapters: [
@@ -152,7 +169,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.EVERYDAY_CONVERSATIONS.id]: {
-    description: "chapter description",
+    description: Chapters.EVERYDAY_CONVERSATIONS.description,
     chapterId: Chapters.EVERYDAY_CONVERSATIONS.id,
     chapterName: Chapters.EVERYDAY_CONVERSATIONS.name,
     chapters: [
@@ -195,7 +212,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.EXPANDING_VOCABULARY.id]: {
-    description: "chapter description",
+    description: Chapters.EXPANDING_VOCABULARY.description,
     chapterId: Chapters.EXPANDING_VOCABULARY.id,
     chapterName: Chapters.EXPANDING_VOCABULARY.name,
     chapters: [
@@ -236,7 +253,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.INTERMEDIATE_GRAMMAR.id]: {
-    description: "chapter description",
+    description: Chapters.INTERMEDIATE_GRAMMAR.description,
     chapterId: Chapters.INTERMEDIATE_GRAMMAR.id,
     chapterName: Chapters.INTERMEDIATE_GRAMMAR.name,
     chapters: [
@@ -281,7 +298,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.BUILDING_FLUENCY.id]: {
-    description: "chapter description",
+    description: Chapters.BUILDING_FLUENCY.description,
     chapterId: Chapters.BUILDING_FLUENCY.id,
     chapterName: Chapters.BUILDING_FLUENCY.name,
     chapters: [
@@ -321,7 +338,7 @@ export const ChaptersData = {
     ],
   },
   [Chapters.CULTURAL_UNDERSTANDING.id]: {
-    description: "chapter description",
+    description: Chapters.CULTURAL_UNDERSTANDING.description,
     chapterId: Chapters.CULTURAL_UNDERSTANDING.id,
     chapterName: Chapters.CULTURAL_UNDERSTANDING.name,
     chapters: [

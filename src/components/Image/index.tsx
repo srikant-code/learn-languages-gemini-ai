@@ -39,6 +39,11 @@ import multiplayer from "../../assets/imgs/app/multiplayer.png";
 import puzzle from "../../assets/imgs/app/puzzle.png";
 import target1 from "../../assets/imgs/app/target_1.png";
 import target2 from "../../assets/imgs/app/target_2.png";
+import flashCards from "../../assets/imgs/app/flashcards.png";
+import myVocabulary from "../../assets/imgs/app/vocabulary.png";
+import archived from "../../assets/imgs/app/archive.png";
+import completed from "../../assets/imgs/app/completed.png";
+import enroll from "../../assets/imgs/app/enroll.png";
 
 // import other images...
 
@@ -182,6 +187,11 @@ export const AllImages = {
     puzzle,
     target1,
     target2,
+    flashCards,
+    myVocabulary,
+    archived,
+    completed,
+    enroll,
   },
   misc: {
     cards_and_wallet,

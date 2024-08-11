@@ -58,10 +58,18 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
 
   const addOrDeleteLang = (lang) => {
     // console.log({ abc: lang });
+    const { [lang.languageCode]: langToRemove, ...otherLangs } = selectedLangs;
     if (selectedLangs[lang.languageCode]) {
       setSelectedLangs({
-        ...selectedLangs,
-        [lang.languageCode]: undefined,
+        ...(Object.keys(otherLangs)?.length >= 1
+          ? otherLangs
+          : {
+              en: {
+                read: true,
+                write: true,
+                speak: true,
+              },
+            }),
       });
     } else
       setSelectedLangs({
@@ -114,10 +122,16 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
                         className={
                           "text-small whitespace-break-spaces text-left"
                         }>
-                        Used in{" "}
-                        {SearchMatchHighlighter(
-                          lang?.usedIn[0].displayName,
-                          langInput
+                        {lang?.languageCode === "en" ? (
+                          "Default"
+                        ) : (
+                          <>
+                            Used in{" "}
+                            {SearchMatchHighlighter(
+                              lang?.usedIn[0].displayName,
+                              langInput
+                            )}
+                          </>
                         )}
                       </ParaGraph>
                     </div>

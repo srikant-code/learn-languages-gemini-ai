@@ -118,13 +118,13 @@ export const SettingsObject = [
       classNames: {
         base: cn(
           "inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center",
-          "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent"
+          "justify-between cursor-pointer rounded-3xl gap-2 p-4 border-2 border-transparent"
           // "data-[selected=true]:border-primary"
         ),
       },
     },
     children: (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 ">
         <p className="text-medium">Enable dark mode</p>
         <p className="text-tiny text-default-400">
           Get access to new features before they are released.
@@ -153,7 +153,8 @@ export const SettingsObject = [
     icon: <FaKey />,
     section: SECTION.AI.id,
     componentProps: {
-      placeholder: "Enter your API key from Google AI Studio",
+      placeholder:
+        "Enter your API key from https://aistudio.google.com website",
       label: "Gem AI API Key",
     },
   },

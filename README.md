@@ -308,6 +308,8 @@ X- Firebase
 
 
 ### Before submission checklist
+
+- [ ] Header display the heading on top,
 - [ ] Play game during AI load
 - [ ] AI feel theme buttons and text effects, border effects in related cards
 - [ ] Create themes for dark, contrast and different modes
@@ -318,7 +320,10 @@ X- Firebase
 - [ ] check for API keys
 - [x] Change navbar and sidebar swap? if time permits
 - [ ] Disable firebase firestore storage
+- [ ] Highlight the current text when TTS
 - [ ] Popover check if it can be made on top of selection 
+- [ ] Add emojis in tabs
+- [ ] Save notifications when anything updates in settings and app. utilise the popover
 - <NotificationComponent
     message="Hello, World!"
     time={5000}
@@ -333,64 +338,154 @@ X- Firebase
 ---
 TODO for last day 9th august 
 
-State to directly open the tabs of dictionary and AI chat
-Tabs can be activated using ID and same ID in redux, it will restore when switching tabs or pages.
+--- State to directly open the tabs of dictionary and AI chat
+--- Tabs can be activated using ID and same ID in redux, it will restore when switching tabs or pages.
 
 prefill the AI chat value for user to edit, or even send a request if confirmed.
-Add emojis in tabs
 
 Figure out how to modify the existing GeminiChat function to render the normal AI response.
 
-Update the chat interface with audio button on each message and more.
+-- Update the chat interface with audio button on each message and more.
 X- markdown improvements
-Header display the heading on top, 
 XXX- user should be able to edit it.
 
-AI feel wherever it is used and the response is parsed. Also in cached places
-Buttons, border and card gradients, text gradients.
 
 -- use coins to unlock the course contents
 
-AI
-- Word of the day - call dictionary and cache it, retreive from cache.
-X- AI suggestions on the users next actions.
 
 Focus on translations to defined languauges
 
-Theme contrast mode.
-
-Games
-  - 
 
 Courses
 - 10 lessons, 150 trohies/coins
 - vocab - copy button add, english wagera ka translation with colorful cards, graident
+- quick translate - 2 text boxes and just fill the translation to target language
+
+Challenges, Coins, Streaks, Badges
+- Coins logic to add and subtract after successful submission and add to history.
+- Create the UI with images for each of the finalized challenges post creation of games and courses
+
+STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE Fix this in Settings
+Quick access integrate with eveything
+Dashboard integration
+
+Theme contrast mode.
+
+-- useHeaders
+- app icon
+-- responsiveness
+
+11th August 2024
+
+- AI integration and update the store
+- Somehow integrate the useSelectors with my UI for
+course, flashcards, chapters, lessons, assessments/submissions, challenges, games, alphabets, dictionary
+- accessibility check
+- coins and xp assign to things, Streaks, Badges
+- practice components and integration, - stories, translate
+- search bar integration 
+- homepage dashboard integration with components and AI
+
+- profile section integration, skill graph in profile
+  - Add the user goals, change app language
+  - description of points, XP UI and what you can do using AI usages to global points.
+  - badges system based on points. show on profile
+  - skill graph in profile
+
+AI feel wherever it is used and the response is parsed. Also in cached places
+Buttons, border and card gradients, text gradients.
+
+Games
+  -
+
+Overall App
+- enable learning timer and handle completed UI + coins that day.
+- not enough coins modal in update coins functionality
+E2E testing - onboarding login etc
+onboarding add the API key of Gemini
+-- Theme contrast mode.
+-- Deployment in vercel.
+-- Github commit.
+
+AI
+
+- Word of the day - call dictionary and cache it, retreive from cache.
+FlashCards AI integration
+Courses lesson AI integration
 - generate 100 different story headers for reading comprehension, + quizes on lessons for reading comprehension
 - generate 100 different topics for speaking exercieses
 - generate 100 texts for writing exercises..
-- quick translate - 2 text boxes and just fill the translation to target language
-
-Profile
-- Add the user goals, change app language
-- description of points, XP UI and what you can do using AI usages to global points.
-- badges system based on points. show on profile
-- skill graph in profile
+X- AI suggestions on the users next actions.
 
 
-FlashCards
-Courses AI integration.
-Quick access integrate with eveything
-Dashboard integration
-enable learning timer and handle completed UI + coins that day.
 
-E2E testing - onboarding login etc
-onboarding add the API key of Gemini
+------------------------------------------------------------
 
-Save notifications when anything updates in settings and app. 
+coursesData: {
+  or: {
+    enrolledOn
+    lastChapterID
+    lastLessonID
+    lastUpdatedOn
+    chaptersData: {
+      [Chapters.SOUNDS_AND_PRONUNCIATION.id]: {
+        ...defaultValues,
+        unlockedOn: new Date(),
+        unlockedByUser: true,
+        completed: true,
+      },
+    }
+  },
+  hi:{
+
+  }
+}
 
 
-Deployment in vercel.
-Github commit.
-useHeaders
-app icon
-responsiveness
+flashCards : {
+  or: {
+
+  },
+  hi: {
+
+  }
+}
+
+alphabets: {
+  or: {
+
+  },
+  hi: {
+
+  }
+}
+
+
+coins: {
+  total: 93784,
+  lastLog: [time],
+  logs: {
+    [time] : {
+      earnedAmount: -100,
+      earnedFor:{
+        id: "COMPLETE_CHAPTER",
+        ...moreDetails
+      }
+    }
+  }
+}
+
+xp: {
+  total: 93784,
+  lastLog: [time],
+  logs: {
+    [time] : {
+      earnedAmount: -100,
+      earnedFor:{
+        id: "COMPLETE_CHAPTER",
+        ...moreDetails
+      }
+    }
+  }
+}
+

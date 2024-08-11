@@ -1,7 +1,7 @@
 import { Spacer } from "@nextui-org/react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import CustomAutocomplete from "../../components/Autocomplete";
 import CustomButton from "../../components/Button";
 import { CustomCard } from "../../components/Card";
@@ -10,10 +10,11 @@ import CustomImage, { AllImages } from "../../components/Image";
 import ParaGraph from "../../components/Paragraph";
 import { CustomProgress } from "../../components/Progress";
 import CustomTabs from "../../components/Tabs";
-import { STRINGS } from "../../utilities/constants";
+import { SlideIDs, STRINGS } from "../../utilities/constants";
 import { GetAllLanguages } from "../../utilities/countryIcons";
 import { AppCurrencyWithText } from "../Home/homeContent";
 import { LanguageFinderToLearn } from "../LoginAndSignup/onboarding";
+import { setSetting } from "../../store/reducer";
 
 interface CoursesProps {}
 
@@ -128,15 +129,39 @@ export const CoursesHome = () => {
   return (
     <CustomTabs
       ariaLabel="Courses"
+      fullWidth
+      id={STRINGS.STORAGE.TABS.coursePage}
       tabs={[
         {
-          title: "My Courses",
+          title: "Active",
           content: <CoursesContent />,
-          textValue: "textValue",
+          // textValue: "textValue",
         },
         {
-          title: "Explore New Languages",
+          title: "Archived",
+          content: <CoursesContent archived />,
+          // textValue: "textValue",
+        },
+        {
+          title: "Completed",
+          content: <CoursesContent completed />,
+          // textValue: "textValue",
+        },
+        {
+          title: "Add New Languages",
           content: <ExploreLanguages />,
+        },
+        {
+          title: "Languages you know",
+          content: (
+            <ExploreLanguages
+              languageSettingKey={STRINGS.STORAGE.languagesUserKnows}
+              heading="Languages you know"
+              inputProps={null}
+              messageForConfirmation={null}
+              messageForNoSelection={null}
+            />
+          ),
         },
       ]}
     />
@@ -162,46 +187,92 @@ const MyCoursesData = [
   },
 ];
 
-const CoursesContent = ({}) => {
-  const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+const CoursesContent = ({ archived, completed }) => {
+  const settings = useSelector((state) => state.language) ?? {};
+  const languagesUserWantsToKnow =
+    settings?.[STRINGS.STORAGE.languagesUserWantsToKnow] || {};
+  const languagesUserKnows = settings?.[STRINGS.STORAGE.languagesUserKnows] || {};
 
-  const handleSelectCourse = (courseId) => {
-    setSelectedCourse(courses);
-  };
+  const renderCourses = (courses) =>
+    Object.keys(courses)
+      ?.map((course) => {
+        return {
+          id: course,
+          name: GetAllLanguages[course].languageName,
+          progress: 30,
+          lastTopic: "The most widely spoken language in the world.",
+        };
+      })
+      ?.map((course) => (
+        <div className="" key={course.id}>
+          <CourseCard course={course} />
+        </div>
+      ));
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
-        My Courses
-      </ParaGraph>
-      <div className="flex gap-8 flex-col">
-        {MyCoursesData.map((course) => (
-          <div className="" key={course.id}>
-            <CourseCard
-              course={course}
-              onClick={() => handleSelectCourse(course.id)}
-            />
-          </div>
-        ))}
+    <div className="flex flex-col gap-8 p-4">
+      <div className="flex flex-col gap-2">
+        <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
+          {completed ? "Completed" : archived ? "Archived" : "My Courses"}
+        </ParaGraph>
+        <ParaGraph className={`text-sm`}>
+          {completed
+            ? "The courses that you have finished learning."
+            : archived
+            ? "The courses on which you had some progress but later dropped it."
+            : "The courses you have enrolled in."}
+        </ParaGraph>
       </div>
-      {selectedCourse && (
-        <div>
-          <ParaGraph className={`${STRINGS.CLASSES.heading}`}>
-            {selectedCourse.name}
-          </ParaGraph>
-          <ParaGraph>Last Topic: {selectedCourse.lastTopic}</ParaGraph>
-          <ParaGraph>
-            Challenges: {selectedCourse.challenges.join(", ")}
-          </ParaGraph>
-        </div>
-      )}
-      <CustomImage src={AllImages.book} />
+      <div className="flex gap-8 flex-col">
+        {archived || completed ? (
+          <NoCourses
+            text={
+              archived
+                ? "You have no archived courses yet."
+                : "You have no completed courses yet."
+            }
+            image={completed ? AllImages.app.completed : undefined}
+          />
+        ) : (
+          <div className="flex flex-col gap-8">
+            <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
+              I want to learn
+            </ParaGraph>
+            <div className="flex flex-col gap-4">
+              {renderCourses(languagesUserWantsToKnow)}
+            </div>
+            <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
+              I already know
+            </ParaGraph>
+            <div className="flex flex-col gap-4">
+              {renderCourses(languagesUserKnows)}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-const CourseCard = ({ course, onClick }) => {
+const NoCourses = ({
+  text = "You have no courses yet.",
+  image = AllImages.app.archived,
+}) => {
+  return (
+    <div className="w-full flex items-center justify-center flex-wrap">
+      <CustomImage src={image} className={"max-w-[300px]"} />
+      <ParaGraph className="text-lg font-bold">{text}</ParaGraph>
+    </div>
+  );
+};
+
+const CourseCard = ({
+  course,
+  onClick = () => {
+    console.log("clicked course card");
+  },
+}) => {
+  const dispatch = useDispatch();
   return (
     <CustomCard
       bg-gradient-to-tr
@@ -228,7 +299,15 @@ const CourseCard = ({ course, onClick }) => {
         <CustomButton
           as={Link}
           to={course.id}
-          className="self-start"
+          onClick={() => {
+            dispatch(
+              setSetting({
+                key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+                value: course.id,
+              })
+            );
+          }}
+          className="self-start hover:text-black dark:hover:text-white"
           variant="faded"
           color="primary">
           View all chapters
@@ -254,8 +333,10 @@ const CourseCard = ({ course, onClick }) => {
           </div>
         </div>
         <CustomButton
-          onClick={() => onClick(course.id)}
-          className="self-end"
+          // onClick={() => onClick(course.id)}
+          as={Link}
+          to={course.id}
+          className="self-end hover:text-white"
           color={"primary"}
           variant="solid">
           Continue
@@ -294,20 +375,32 @@ console.log({ GetAllLanguages });
 //   },
 // ];
 
-const ExploreLanguages = ({}) => {
+const ExploreLanguages = ({
+  languageSettingKey = STRINGS.STORAGE.languagesUserWantsToKnow,
+  heading = "Explore Languages",
+  ...props
+}) => {
   const settings = useSelector((state) => state.language) ?? {};
-  const [languages2, setLanguages2] = useState(
-    settings[STRINGS.STORAGE.languagesUserWantsToKnow] ?? []
-  );
+  const languagesUWTK = settings[languageSettingKey] ?? [];
+
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-col gap-4 p-2">
       <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
-        Explore Languages ({MyLanguagesData?.length})
+        {heading} ({MyLanguagesData?.length})
       </ParaGraph>
       <LanguageFinderToLearn
-        langsUserWantsToKnow={languages2}
-        setLangsUserWantsKnow={setLanguages2}
+        langsUserWantsToKnow={languagesUWTK}
+        setLangsUserWantsKnow={(data) => {
+          dispatch(
+            setSetting({
+              key: languageSettingKey,
+              value: data,
+            })
+          );
+        }}
+        {...props}
       />
     </div>
   );
@@ -323,30 +416,31 @@ const ExploreLanguages = ({}) => {
 // 6. **Personalized Recommendations**: Suggest courses or challenges based on the user's progress and interests.
 
 // These additions can make the homepage more engaging and encourage users to stay motivated in their language learning journey. Let me know if you need any more help!
-
+export const CourseItems = [
+  ...Object.values(GetAllLanguages).map((lang) => {
+    return {
+      label: `Learn ${lang.languageName}`,
+      // route: lang.route,
+      description: `Widely used in ${
+        lang.usedIn ? lang.usedIn[0]?.id?.countryName : ""
+      }`,
+      value: lang.languageCode,
+      route: `${SlideIDs.courses.route}/${lang.languageCode}`,
+      icon: (
+        <Flag
+          className={"w-[20px]"}
+          flag={lang.usedIn ? lang.usedIn[0].content : undefined}
+        />
+      ),
+    };
+  }),
+];
 const SearchBarForCourses = () => {
   return (
     <CustomAutocomplete
       className="sticky top-0 z-[99]"
       allowsCustomValue
-      items={[
-        ...Object.values(GetAllLanguages).map((lang) => {
-          return {
-            label: `Learn ${lang.languageName}`,
-            // route: lang.route,
-            description: `Widely used in ${
-              lang.usedIn ? lang.usedIn[0]?.id?.countryName : ""
-            }`,
-            value: lang.languageCode,
-            icon: (
-              <Flag
-                className={"w-[20px]"}
-                flag={lang.usedIn ? lang.usedIn[0].content : undefined}
-              />
-            ),
-          };
-        }),
-      ]}
+      items={CourseItems}
       placeholder="Search anything in courses and languages..."
     />
   );

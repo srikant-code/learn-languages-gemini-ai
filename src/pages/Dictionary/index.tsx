@@ -33,6 +33,12 @@ const Dictionary: FunctionComponent<DictionaryProps> = () => {
 
 export default Dictionary;
 
+export const DICTIONARY_TABS = {
+  API: "Dictionary API results",
+  AI: STRINGS.APP_NAME,
+  id: "Dictionary",
+};
+
 const DictionarySearchBar = ({
   setInput,
   input,
@@ -170,9 +176,10 @@ export const DictionaryRender = ({ className }) => {
         // size="sm"
         fullWidth
         ariaLabel="Tabs example"
+        id={STRINGS.STORAGE.TABS.dictionary}
         tabs={[
           {
-            title: "Dictionary API results",
+            title: DICTIONARY_TABS.API,
             content: isLoading ? (
               <div className="flex w-full items-center justify-center py-20">
                 <Spinner label="Fetching data from Dictionary API (Open source)" />
@@ -196,7 +203,7 @@ export const DictionaryRender = ({ className }) => {
             ),
           },
           {
-            title: STRINGS.APP_NAME,
+            title: DICTIONARY_TABS.AI,
             content: <DictionaryAIRender data={SampleAIDictionaryData} />,
           },
         ]}
@@ -215,7 +222,7 @@ const AppTryAIButton = ({ onClick }) => {
         onClick={onClick}>
         <ParaGraph>Switch to {STRINGS.APP_NAME} instead.</ParaGraph>
       </CustomButton>
-      <ParaGraph className="text-sm">Powered by Google Gemini AI</ParaGraph>
+      <ParaGraph className="text-sm">Internally uses Gemini API</ParaGraph>
     </div>
   );
 };

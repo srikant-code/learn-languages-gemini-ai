@@ -15,6 +15,10 @@ import SortButton from "../../components/Button/sortButton";
 import { useDispatch, useSelector } from "react-redux";
 import { setSetting } from "../../store/reducer";
 import moment from "moment";
+import CustomImage, { AllImages } from "../../components/Image";
+import { SetActiveTabInRedux } from "../../components/Tabs";
+import { DICTIONARY_TABS } from "../Dictionary";
+import { AI_TABS } from "../Chat";
 
 // In firebase there should be a collection of words.
 // It will store details like the synonyms, meanings, antonyms, and other realted things.
@@ -117,9 +121,12 @@ export default Vocabulary;
 const VocabularyContent = ({ userId }) => {
   const myVocabularyFromStore =
     useSelector((state) => state.language[STRINGS.STORAGE.MY_VOCABULARY]) ?? {};
-  const myVocabularyFromRedux = Object.values(myVocabularyFromStore);
+  const searchWordInput =
+    useSelector(
+      (state) => state.language[STRINGS.STORAGE.VOCABULARY_SEARCH_BAR]
+    ) ?? "";
   const dispatch = useDispatch();
-  const [searchWordInput, setSearchWordInput] = useState("");
+  const myVocabularyFromRedux = Object.values(myVocabularyFromStore);
   const [renderVocabData, setRenderVocabData] = useState(myVocabularyFromRedux);
 
   const filteredVocab = renderVocabData.filter((v) => {
@@ -159,7 +166,14 @@ const VocabularyContent = ({ userId }) => {
         <CustomInput
           placeholder="Add a new word or Search an existing one..."
           value={searchWordInput}
-          onChange={(e) => setSearchWordInput(e)}
+          onChange={(e) =>
+            dispatch(
+              setSetting({
+                key: STRINGS.STORAGE.VOCABULARY_SEARCH_BAR,
+                value: e,
+              })
+            )
+          }
           endContent={
             <div className="flex gap-4">
               <CustomButton isIconOnly onClick={undefined}>
@@ -175,16 +189,14 @@ const VocabularyContent = ({ userId }) => {
         {/* Searchbar filter, <br />
         alphabetical, <br /> */}
         {/* sort by date, */}
+        {/* start something using AI */}
         <br />
-        language
+        {/* language sort */}
       </ParaGraph>
-      <Spacer y={4} />
-      <ParaGraph>
-        {/* Unsave feature, <br /> */}
-        start something using AI, <br />
-        more details on the word -&gt; go to dictionary
-      </ParaGraph>
-      <Spacer y={4} />
+
+      {/* Unsave feature, <br /> */}
+      {/* more details on the word -&gt; go to dictionary */}
+
       <RenderVocabularyCards vocabulary={filteredVocab} />
       {filteredVocab?.length ? null : (
         <NoVocabWordFound word={searchWordInput} />
@@ -265,23 +277,89 @@ const RenderVocabularyCards = ({ vocabulary }) => {
 };
 
 const NoVocabWordFound = ({ word = "hello" }) => {
+  const dispatch = useDispatch();
   return (
     <div className="flex flex-col gap-4">
-      <ParaGraph>
-        No such word found in your saved vocabulary. Try these instead
+      <div className="flex flex-col items-center justify-center">
+        <CustomImage
+          src={AllImages.app.myVocabulary}
+          className={`max-w-[250px] w-[100%] ${""}`}
+        />
+      </div>
+      <ParaGraph className={`text-left ${STRINGS.CLASSES.subHeading}`}>
+        "{word}" was not found in your saved vocabulary.
+      </ParaGraph>
+      <ParaGraph className={`text-left ${STRINGS.CLASSES.subText}`}>
+        Try these instead...
       </ParaGraph>
       <CustomCard>
         <ParaGraph>Add "{word}" to your vocabulary</ParaGraph>
         <WordHeader data={{ word, phonetic: word }} />
-        <ParaGraph>English</ParaGraph>
+        {/* <ParaGraph>English</ParaGraph> */}
       </CustomCard>
-      <CustomCard>
-        <ParaGraph>Search "{word}" in Dictionary</ParaGraph>
+      <CustomCard className="p-0" as={CustomButton}>
+        <div
+          className="p-6"
+          onClick={() => {
+            SetActiveTabInRedux({
+              dispatch,
+              tabID: STRINGS.STORAGE.TABS.rightSideBar,
+              activeTab: DICTIONARY_TABS.id,
+            });
+            SetActiveTabInRedux({
+              dispatch,
+              tabID: STRINGS.STORAGE.TABS.dictionary,
+              activeTab: DICTIONARY_TABS.API,
+            });
+          }}>
+          <ParaGraph>Search "{word}" in Dictionary</ParaGraph>
+        </div>
       </CustomCard>
-      <CustomCard>
-        <ParaGraph>
-          Search "{word}" in {STRINGS.APP_NAME}
-        </ParaGraph>
+      <CustomCard className="p-0" as={CustomButton}>
+        <div
+          className="p-6"
+          onClick={() => {
+            SetActiveTabInRedux({
+              dispatch,
+              tabID: STRINGS.STORAGE.TABS.rightSideBar,
+              activeTab: DICTIONARY_TABS.id,
+            });
+            SetActiveTabInRedux({
+              dispatch,
+              tabID: STRINGS.STORAGE.TABS.dictionary,
+              activeTab: DICTIONARY_TABS.AI,
+            });
+          }}>
+          <ParaGraph>
+            Search "{word}" in {STRINGS.APP_NAME}
+          </ParaGraph>
+        </div>
+      </CustomCard>
+      <CustomCard className="p-0" as={CustomButton}>
+        <div
+          className="p-6"
+          onClick={() => {
+            SetActiveTabInRedux({
+              dispatch,
+              tabID: STRINGS.STORAGE.TABS.rightSideBar,
+              activeTab: AI_TABS.id,
+            });
+            SetActiveTabInRedux({
+              dispatch,
+              tabID: STRINGS.STORAGE.TABS.chat,
+              activeTab: AI_TABS.ALL_CHATS,
+            });
+            dispatch(
+              setSetting({
+                key: STRINGS.STORAGE.CHAT_INPUT_VALUE,
+                value: `Explain me about "${word}". How and where can I use it.`,
+              })
+            );
+          }}>
+          <ParaGraph>
+            Ask something about "{word}" to {STRINGS.APP_NAME} AI
+          </ParaGraph>
+        </div>
       </CustomCard>
     </div>
   );

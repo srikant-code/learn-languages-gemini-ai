@@ -186,6 +186,7 @@ export const LogInSignupForm = ({ cardClassName, className }) => {
             onSelectionChange={setSelectedTab}
             centerTabs
             className={`${STRINGS.CLASSES.basicTransitions}`}
+            id={STRINGS.STORAGE.TABS.loginForm}
             tabs={[
               {
                 title: TABS.LOGIN,

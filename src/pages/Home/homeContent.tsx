@@ -13,7 +13,7 @@ import Flag from "../../components/Flag";
 import MarkdownRenderer from "../../components/Markdown";
 import ParaGraph from "../../components/Paragraph";
 import WordRotator from "../../components/Paragraph/wordRotator";
-import { STRINGS } from "../../utilities/constants";
+import { SlideIDs, STRINGS } from "../../utilities/constants";
 import {
   GetAllCountries,
   GetAllLanguages,
@@ -31,7 +31,7 @@ import { FaCoins } from "react-icons/fa";
 import { TbCoinYuanFilled } from "react-icons/tb";
 import { WordButtons, WordHeader } from "../Dictionary/wordHeader";
 import { GetModel } from "../../geminiAI/genAI";
-import { GiMineExplosion } from "react-icons/gi";
+import { GiFireGem, GiMineExplosion } from "react-icons/gi";
 import {
   addItem,
   getAllItems,
@@ -39,6 +39,8 @@ import {
   updateItemInDexie,
 } from "../../store/dexie";
 import StreakCalendar from "./streakCalendar";
+import { Link } from "react-router-dom";
+import { FaGem } from "react-icons/fa6";
 
 interface HomeContentProps {}
 
@@ -137,14 +139,18 @@ const LanguageAnimationLearnHeader = () => {
             size="lg"
             variant="solid"
             color="primary"
-            className={STRINGS.CLASSES.bigButton}>
+            className={`${STRINGS.CLASSES.bigButton} hover:text-white dark:hover:text-white`}
+            as={Link}
+            to={`${SlideIDs.courses.route}/${activeGreetWord.languageCode}`}>
             Start learning {activeGreetWord.languageName}
           </CustomButton>
           <CustomButton
             size="lg"
             variant="bordered"
             color="primary"
-            className={""}>
+            className={"hover:text-black dark:hover:text-white"}
+            as={Link}
+            to={`${SlideIDs.courses.route}`}>
             See all languages
           </CustomButton>
         </div>
@@ -220,7 +226,7 @@ const HomeQuickOverviewCard = ({}) => {
         </CustomCard>
         <div className="flex flex-col gap-4">
           <CustomCardHeaderChild
-            header={"Coins"}
+            header={"Gems"}
             child={<AppCurrencyWithText />}
           />
           <CustomCardHeaderChild
@@ -330,12 +336,12 @@ const HomeAISuggestionsCard = ({}) => {
 };
 
 export const AppCurrencyIcon = ({ className }) => {
-  return (
-    <TbCoinYuanFilled className={`text-yellow-400 text-2xl ${className}`} />
-  );
+  return <FaGem className={`text-blue-500 text-2xl ${className}`} />;
 };
 export const AppXPIcon = ({ className }) => {
-  return <GiMineExplosion className={`text-blue-400 text-2xl ${className}`} />;
+  return (
+    <GiMineExplosion className={`text-orange-400 text-2xl ${className}`} />
+  );
 };
 export const AppStreakIcon = ({ className }) => {
   return (

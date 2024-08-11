@@ -3,10 +3,12 @@ import { Spacer } from "@nextui-org/react";
 import { useState } from "react";
 import CustomButton from "../../components/Button";
 import { CustomCard } from "../../components/Card";
-import ParaGraph from "../../components/Paragraph";
+import ParaGraph, { IconHeaderNonSticky } from "../../components/Paragraph";
 import CustomTabs from "../../components/Tabs";
 import { STRINGS } from "../../utilities/constants";
 import { WordButtons, WordHeader } from "../Dictionary/wordHeader";
+import { BsAlphabet } from "react-icons/bs";
+import { LettersComponent } from "./alphabetsTemplate";
 
 interface AlphabetsProps {}
 
@@ -30,9 +32,9 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
     <div>
       {/* <CustomAutocomplete></CustomAutocomplete> */}
       <div>
-        <ParaGraph className="text-xl font-bold ml-4">
-          English Alphabets
-        </ParaGraph>
+        <div className={"ml-4"}>
+          <IconHeaderNonSticky title={"English Alphabets"} Icon={BsAlphabet} />
+        </div>
         <div className="flex flex-row" ref={parent}>
           <div className="flex flex-wrap gap-4 p-4">
             {Object.keys(alphabetsObject).map((letter) => (
@@ -109,6 +111,7 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
                 </ParaGraph> */}
                 <ParaGraph className={subHeading}>Examples / Usages</ParaGraph>
                 <CustomTabs
+                  id={STRINGS.STORAGE.TABS.alphabets}
                   ariaLabel="Examples"
                   tabs={[
                     {
@@ -144,6 +147,9 @@ const Alphabets: FunctionComponent<AlphabetsProps> = () => {
             </CustomCard>
           )}
         </div>
+      </div>
+      <div>
+        <LettersComponent />
       </div>
     </div>
   );

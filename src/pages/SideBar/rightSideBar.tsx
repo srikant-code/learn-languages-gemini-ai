@@ -1,7 +1,7 @@
 import { ScrollShadow } from "@nextui-org/react";
 import CustomTabs from "../../components/Tabs";
 import AIChat from "../Chat";
-import { DictionaryRender } from "../Dictionary";
+import { DICTIONARY_TABS, DictionaryRender } from "../Dictionary";
 import Vocabulary from "../MyVocabulary";
 import { STRINGS } from "../../utilities/constants";
 
@@ -11,11 +11,12 @@ const RightSideBar: FunctionComponent<RightSideBarProps> = ({ ...props }) => {
   return (
     <div className="w-full flex items-center" {...props}>
       <CustomTabs
+        id={STRINGS.STORAGE.TABS.rightSideBar}
         ariaLabel="Tabs example"
         centerTabs
         tabs={[
           {
-            title: "Dictionary",
+            title: DICTIONARY_TABS.id,
             content: <ScrollWrapper children={<DictionaryRender />} />,
           },
           {

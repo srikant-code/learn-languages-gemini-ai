@@ -10,6 +10,7 @@ import { CustomProgress } from "../../components/Progress";
 import CustomTabs from "../../components/Tabs";
 import { STRINGS } from "../../utilities/constants";
 import { AppCurrencyWithText, AppStreakIcon } from "../Home/homeContent";
+import { ChallengesComponent } from "./challengesTemplate";
 
 interface ChallengesProps {}
 
@@ -350,6 +351,7 @@ const ChallengesPage = ({ challenges }) => {
       <Spacer y={8} />
       <Spacer y={4} />
       <CustomTabs
+        id={STRINGS.STORAGE.TABS.challengesPage}
         // className=""
         fullWidth
         tabs={Object.keys(challenges).map((category) => {
@@ -380,6 +382,7 @@ const ChallengesPage = ({ challenges }) => {
           ))}
         </div>
       </div>
+      <ChallengesComponent />
     </div>
   );
 };
@@ -417,7 +420,7 @@ function ChallengeHeaderCard({
               />
             </ParaGraph>
             <ParaGraph className="text-green-950 font-bold">
-              +{bonusCoins} Coin
+              +{bonusCoins} {STRINGS.APP_CURRENCY}
             </ParaGraph>
           </div>
           <ParaGraph className="font-bold pl-4">

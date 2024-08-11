@@ -52,7 +52,7 @@ const DrawingCanvas = ({ onSend }) => {
   const [parent] = useAutoAnimate();
   return (
     <div>
-      <CustomCard className={"relative p-0"}>
+      <CustomCard className={"relative p-0 w-[500px]"}>
         <CanvasDraw
           ref={canvasRef}
           brushRadius={brushRadius}
