@@ -11,9 +11,7 @@ import { PROMPTS } from "./prompts";
 export const GenAI = (apiKey) => {
   const USER_DEFINED_API_KEY = store.getState().language.apiKey;
   return new GoogleGenerativeAI(
-    apiKey ||
-      USER_DEFINED_API_KEY ||
-      import.meta.env.VITE_REACT_APP_GEMINI_API_KEY
+    apiKey || USER_DEFINED_API_KEY || import.meta.env.VITE_REACT_APP_GEMINI_API
   );
 };
 

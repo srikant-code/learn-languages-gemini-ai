@@ -13,7 +13,7 @@ import store from "../store/store";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_REACT_APP_FIREBASE_API_KEY,
+  apiKey: import.meta.env.VITE_REACT_APP_FIREBASE_API,
   authDomain: import.meta.env.VITE_REACT_APP_FIREBASE_AUTH_DOMAIN,
   databaseURL: import.meta.env.VITE_REACT_APP_FIREBASE_DATABASE_URL,
   projectId: import.meta.env.VITE_REACT_APP_FIREBASE_PROJECT_ID,
