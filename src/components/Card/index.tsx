@@ -40,9 +40,11 @@ export const CustomCard = React.forwardRef(
             ? className
             : `shadow-none ${
                 border ? "border dark:border-slate-600" : ""
-              } rounded-3xl relative p-6 pb-8 min-w-fit bg-gradient-to-bl from-white  to-slate-100 dark:bg-gradient-to-tr dark:from-slate-900  dark:to-slate-800 ${className}`
+              } text-left rounded-3xl relative p-6 pb-8 min-w-fit bg-gradient-to-bl from-white  to-slate-100 dark:bg-gradient-to-tr dark:from-slate-900  dark:to-slate-800 ${className}`
         }
+        isPressable
         {...props}
+        tabIndex={0}
       />
     );
   }

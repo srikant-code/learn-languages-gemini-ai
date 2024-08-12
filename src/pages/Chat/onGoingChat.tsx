@@ -93,7 +93,8 @@ export const OngoingChat = ({ messages, isLoading }) => {
             <CustomCard
               className={`flex flex-col ml-0 my-3 ${isUser ? `self-end` : ""} ${
                 !isUser ? "dark:border-primary-400" : "dark:border-slate-400"
-              } rounded-3xl`}>
+              } rounded-3xl w-full`}
+              isPressable={false}>
               <div className={`p-0 w-full min-w-[180px]`}>
                 <MarkdownRenderer
                   markdownContent={currentMessage ?? ""}

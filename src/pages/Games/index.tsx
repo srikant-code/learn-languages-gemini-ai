@@ -262,7 +262,7 @@ const RenderHeroCard = ({ activeGame, multiplayer, timer }) => {
                 ? "from-slate-900 via-slate-500 to-slate-400"
                 : "from-slate-900 via-orange-500 to-yellow-400"
             }
-          min-w-[500px] whitespace-normal`}>
+          min-w-[500px] w-full whitespace-normal`}>
       {/* from-red-600 via-orange-500 to-yellow-400 */}
       <div
         className={`flex items-start flex-row justify-between gap-4 ${TransformScale} w-full relative`}>
@@ -324,11 +324,11 @@ const RenderHeroCard = ({ activeGame, multiplayer, timer }) => {
         </div>
         <div className="absolute right-4 top-4" style={{ zIndex: 11 }}>
           {(timer || multiplayer) && (
-            <CustomCard className={"p-0 opacity-80 bg-blend-multiply"}>
-              <div className="p-0">
+            <CustomCard className={"p-0 opacity-80 bg-blend-multiply w-full"}>
+              <div className="p-0 w-full">
                 <CustomImage
                   src={timer ? AllImages.clock : AllImages.multiplayer}
-                  className="rotate-12 h-[50px] p-4"
+                  className="rotate-12 h-[50px] p-4 w-full"
                   style={{ padding: multiplayer ? "1rem" : 0 }}
                 />
               </div>
@@ -338,7 +338,7 @@ const RenderHeroCard = ({ activeGame, multiplayer, timer }) => {
         <div className="w-[100%] m-2">
           <GameCardImage
             game={activeGame}
-            className={"h-[340px]"}
+            className={"h-[340px] w-full"}
             disabled={multiplayer}
           />
         </div>

@@ -10,31 +10,46 @@ import moment from "moment";
 import { FaTrash } from "react-icons/fa6";
 import SortButton from "../../components/Button/sortButton";
 import { useEffect, useState } from "react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export const AllChats = ({ setOngoingChat }) => {
   const savedChats = useSelector((state) => state.language?.savedChats) ?? {};
   const dispatch = useDispatch();
-  const [savedChatsKeys, setSavedChatsKeys] = useState(
-    Object.keys(savedChats) ?? []
-  );
+  const [savedChatsKeys, setSavedChatsKeys] = useState(Object.keys(savedChats));
   const [savedChatsValues, setSavedChatsValues] = useState(
-    Object.values(savedChats) ?? []
+    Object.values(savedChats)
   );
 
-  useEffect(() => {
-    let newChatKeys = [];
-    savedChatsValues.forEach((chat) => {
-      newChatKeys = [...newChatKeys, chat.id];
-    });
-    setSavedChatsKeys(newChatKeys);
-  }, [savedChatsValues]);
+  // useEffect(() => {
+  //   setSavedChatsKeys(Object.keys(savedChats));
+  //   setSavedChatsValues(Object.values(savedChats));
+  // }, [savedChats]);
 
-  useEffect(() => {
-    setSavedChatsKeys(Object.keys(savedChats) ?? []);
-    setSavedChatsValues(Object.values(savedChats) ?? []);
-  }, [savedChats]);
+  // const savedChats = useSelector((state) => state.language?.savedChats) ?? {};
+  // const dispatch = useDispatch();
+  // const [savedChatsKeys, setSavedChatsKeys] = useState(
+  //   Object.keys(savedChats) ?? []
+  // );
+  // const [savedChatsValues, setSavedChatsValues] = useState(
+  //   Object.values(savedChats) ?? []
+  // );
+
+  // useEffect(() => {
+  //   let newChatKeys = [];
+  //   savedChatsValues.forEach((chat) => {
+  //     newChatKeys = [...newChatKeys, chat.id];
+  //   });
+  //   setSavedChatsKeys(newChatKeys);
+  // }, [savedChatsValues]);
+
+  // useEffect(() => {
+  //   setSavedChatsKeys(Object.keys(savedChats) ?? []);
+  //   setSavedChatsValues(Object.values(savedChats) ?? []);
+  // }, [savedChats]);
 
   console.log({ savedChatsKeys, savedChatsValues, savedChats });
+
+  const [parent] = useAutoAnimate();
 
   return (
     <div>
@@ -61,7 +76,7 @@ export const AllChats = ({ setOngoingChat }) => {
         {!savedChatsKeys?.length ? (
           <NoSelectedChat />
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3" ref={parent}>
             {savedChatsKeys.map((chatID, index) => {
               const curChat = savedChats[chatID];
               return (

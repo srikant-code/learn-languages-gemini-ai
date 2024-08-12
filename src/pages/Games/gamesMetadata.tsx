@@ -383,7 +383,7 @@ export const GamesMetaData = {
     comboPointsFormula: "points = correctMatches * 10",
     hintPointDeductionFormula: "points = points - (hintsUsed * 2)",
     correctAnswer: "example",
-    Component: MemoryMaestroGamePlay,
+    // Component: MemoryMaestroGamePlay,
     gameDifficulty,
   },
 };

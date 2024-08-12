@@ -13,6 +13,10 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight, FaKey } from "react-icons/fa";
 import { useState } from "react";
 import CustomButton from "../../components/Button";
 import { CourseItems } from "../Courses";
+import CustomAutocompleteInput from "../../components/Autocomplete/inputTest";
+import { MotivationSuggestedActions } from "../LoginAndSignup/motivation";
+import { ChaptersSuggestedActions } from "../Courses/lesson/lessonsData";
+import { GetAllLanguages } from "../../utilities/countryIcons";
 interface LeftSideBarProps {}
 
 const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
@@ -69,6 +73,54 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
     },
   ];
 
+  const settings = useSelector((state) => state.language) ?? {};
+  const selectedLang =
+    GetAllLanguages[settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE]];
+
+  function flattenReduxStructure(reduxStructure) {
+    let result = [];
+    for (let chatID in reduxStructure) {
+      let chat = reduxStructure[chatID];
+      for (let message of chat.messages) {
+        let messageText = `${message.parts
+          .map((part) => part.text)
+          .join(" ")
+          ?.replace("target", selectedLang?.usedIn[0]?.id?.countryName)} in "${
+          selectedLang.languageName
+        }" language.`;
+        result.push({
+          label: chat.title,
+          route: messageText,
+          description: messageText,
+          sentBy: message.role === "user" ? "user" : "bot",
+        });
+      }
+    }
+    return result;
+  }
+
+  console.log(
+    flattenReduxStructure(settingsFromRedux[STRINGS.STORAGE.SAVED_CHATS])
+  );
+
+  function convertData(action) {
+    let result = [];
+    for (let key in action) {
+      action[key].forEach((action) => {
+        let newItem = {
+          label: action.label,
+          route: action.label,
+          icon: action.icon,
+          description: `${action.prompt?.replace(
+            "target",
+            selectedLang?.usedIn[0]?.id?.countryName
+          )} in "${selectedLang.languageName}" language.`,
+        };
+        result.push(newItem);
+      });
+    }
+    return result;
+  }
   return (
     <div
       className={`hover:w-[290px] relative ${className}`}
@@ -105,41 +157,50 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
         style={{ width: "inherit" }}>
         <div variant="light" className="">
           <AppIconAndText onlyLogo={!hoverState && sideBarCollapsed} />
-          <CustomAutocomplete
+          <CustomAutocompleteInput
             className="p-4 z-[99]"
             items={[
-              ...Object.values(SlideIDs).map((slide) => {
-                return {
-                  label: slide.name,
-                  route: slide.route,
-                  description: slide.description,
-                  value: slide.name,
-                  icon: slide.icon,
-                };
-              }),
-              ...SettingsObject.map((setting) => {
-                console.log({ setting, settingsFromRedux });
-                const settingTypeCustom = setting.type === STRINGS.TYPES.CUSTOM;
-                return {
-                  label: setting.componentProps?.label,
-                  route: setting?.route ?? undefined,
-                  description:
-                    settingsFromRedux[setting.key]?.label ??
-                    (settingTypeCustom
-                      ? setting.valueExtractor({
-                          setting: settingsFromRedux[setting.key],
-                        })
-                      : settingsFromRedux[setting.key]),
-                  value: settingTypeCustom
-                    ? setting.valueExtractor({
-                        setting: settingsFromRedux[setting.key],
-                      })
-                    : setting.key,
-                  icon: setting?.icon,
-                };
-              }),
+              ...convertData(MotivationSuggestedActions),
+              ...convertData(ChaptersSuggestedActions),
+              ...flattenReduxStructure(
+                settingsFromRedux[STRINGS.STORAGE.SAVED_CHATS]
+              ),
+
+              // ...Object.values(SlideIDs).map((slide) => {
+              //   return {
+              //     label: slide.name,
+              //     route: slide.route,
+              //     description: slide.description,
+              //     value: slide.name,
+              //     icon: slide.icon,
+              //   };
+              // }),
+              // ...SettingsObject.map((setting) => {
+              //   console.log({ setting, settingsFromRedux });
+              //   const settingTypeCustom = setting.type === STRINGS.TYPES.CUSTOM;
+              //   return {
+              //     label: setting.componentProps?.label,
+              //     route: setting?.route ?? undefined,
+              //     description:
+              //       settingsFromRedux[setting.key]?.label ??
+              //       (settingTypeCustom
+              //         ? setting.valueExtractor({
+              //             setting: settingsFromRedux[setting.key],
+              //           })
+              //         : settingsFromRedux[setting.key]),
+              //     value: settingTypeCustom
+              //       ? setting.valueExtractor({
+              //           setting: settingsFromRedux[setting.key],
+              //         })
+              //       : setting.key,
+              //     icon: setting?.icon,
+              //   };
+              // }),
               ...CourseItems,
             ]}
+            shouldCloseOnBlur={false}
+            menuTrigger={"input"}
+            autoFocus
             placeholder="Quick access..."
           />
         </div>

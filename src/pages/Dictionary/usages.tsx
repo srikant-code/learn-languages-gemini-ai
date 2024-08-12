@@ -1,5 +1,6 @@
 import React from "react";
 import ParaGraph from "../../components/Paragraph";
+import { CustomUnOrderedList } from ".";
 
 const Usages = ({ usages }) => {
   return (
@@ -10,11 +11,12 @@ const Usages = ({ usages }) => {
           <ParaGraph className="text-lg font-medium capitalize">
             {position}
           </ParaGraph>
-          {sentences.map((sentence, sentIndex) => (
+          <CustomUnOrderedList items={sentences} />
+          {/* {sentences.map((sentence, sentIndex) => (
             <ParaGraph key={sentIndex} className="ml-3">
               {sentence}
             </ParaGraph>
-          ))}
+          ))} */}
         </div>
       ))}
     </div>

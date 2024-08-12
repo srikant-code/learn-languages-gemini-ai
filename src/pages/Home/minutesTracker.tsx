@@ -36,7 +36,7 @@ const SetupUserLearningGoalTime = () => {
     updateSetting(STORAGE.STREAK, streak);
     updateSetting(
       STORAGE.LAST_DATE,
-      lastDate ? lastDate.toISOString() : new Date().toISOString()
+      lastDate ? lastDate : new Date().toISOString()
     );
     updateSetting(STORAGE.STREAK_CALENDAR, streakCalendar);
   }, []);
@@ -49,7 +49,7 @@ const SetupUserLearningGoalTime = () => {
       JSON.parse(localStorage.getItem(`${STORAGE.SETTINGS}`))[
         STORAGE.TIME_SPENT
       ] || 0,
-    h: lastDate?.getDate(),
+    // h: lastDate?.getDate(),
     ads: new Date().getDate(),
   });
 
@@ -78,7 +78,10 @@ const SetupUserLearningGoalTime = () => {
           STORAGE.TIME_SPENT
         ] || 0;
 
-      if (lastDate && now.getDate() !== lastDate.getDate()) {
+      if (
+        new Date(lastDate) &&
+        now.getDate() !== new Date(lastDate).getDate()
+      ) {
         // A new day has started
         if (savedTimeSpent >= userGoal) {
           // The user completed their learning goal yesterday
@@ -92,7 +95,7 @@ const SetupUserLearningGoalTime = () => {
         }
         savedTimeSpent = 0;
         updateSetting(STORAGE.TIME_SPENT, 0);
-        setLastDate(now);
+        setLastDate(now.toISOString());
         updateSetting(STORAGE.LAST_DATE, now.toISOString());
       } else {
         savedTimeSpent += 1;

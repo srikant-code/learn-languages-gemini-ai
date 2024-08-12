@@ -372,7 +372,7 @@ const ChallengesPage = ({ challenges }) => {
         <ParaGraph className="text-lg font-bold">Badges</ParaGraph>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
           {badges.map((badge) => (
-            <CustomCard key={badge.badgeId} className="p-4 rounded-2xl ">
+            <CustomCard key={badge.badgeId} className="p-4 rounded-2xl w-full">
               <ParaGraph className="text-xl font-bold">
                 {badge.badgeTitle}
               </ParaGraph>
@@ -397,7 +397,7 @@ function ChallengeHeaderCard({
   return (
     <CustomCard
       className="max-h-96 flex flex-row p-0 rounded-3xl justify-between 
-    relative bg-gradient-to-tr from-violet-400 via-pink-400 to-yellow-400">
+    relative bg-gradient-to-tr from-violet-400 via-pink-400 to-yellow-400 w-full">
       <div className="flex flex-col p-8 gap-4 z-10">
         <div className="flex items-start gap-4">
           <CustomImage src={AllImages.badge1} className={`w-[100px]`} />
@@ -492,7 +492,7 @@ const ChallengeCard = ({ challenge, onComplete }) => {
   return (
     <div className="min-w-[300px] w-full max-w-[45%]">
       <CustomCard
-        className={`flex flex-col min-w-min gap-4 z-10 p-6 h-fit rounded-3xl transition-transform transform ${
+        className={`flex flex-col min-w-min gap-4 z-10 p-6 h-fit rounded-3xl transition-transform transform w-full ${
           status === "completed" ? "scale-105" : "hover:scale-105"
         }`}>
         <ParaGraph className="font-bold text-xl">{title}</ParaGraph>
@@ -521,7 +521,7 @@ const ChallengeCard = ({ challenge, onComplete }) => {
           </CustomButton>
         )}
       </CustomCard>
-      <CustomCard className="p-4 mt-[-2.5rem]">
+      <CustomCard className="p-4 mt-[-2.5rem] w-full">
         <Spacer y={8} />
         <div className="px-3 flex gap-4 items-center">
           <FaClock />

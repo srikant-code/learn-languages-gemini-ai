@@ -15,14 +15,19 @@ import { GetAllLanguages } from "../../utilities/countryIcons";
 import { AppCurrencyWithText } from "../Home/homeContent";
 import { LanguageFinderToLearn } from "../LoginAndSignup/onboarding";
 import { setSetting } from "../../store/reducer";
+import {
+  DeleteCourse,
+  useChapterDetails,
+  useCourseDetails,
+} from "../../store/reduxHelpers/courseChapterLessons";
 
 interface CoursesProps {}
 
 const Courses: FunctionComponent<CoursesProps> = () => {
   return (
     <div>
-      <SearchBarForCourses />
-      <Spacer y={6} />
+      {/* <SearchBarForCourses /> */}
+      {/* <Spacer y={6} /> */}
       <Outlet />
     </div>
   );
@@ -132,21 +137,21 @@ export const CoursesHome = () => {
       fullWidth
       id={STRINGS.STORAGE.TABS.coursePage}
       tabs={[
-        {
-          title: "Active",
-          content: <CoursesContent />,
-          // textValue: "textValue",
-        },
-        {
-          title: "Archived",
-          content: <CoursesContent archived />,
-          // textValue: "textValue",
-        },
-        {
-          title: "Completed",
-          content: <CoursesContent completed />,
-          // textValue: "textValue",
-        },
+        // {
+        //   title: "Active",
+        //   content: <CoursesContent />,
+        //   // textValue: "textValue",
+        // },
+        // {
+        //   title: "Archived",
+        //   content: <CoursesContent archived />,
+        //   // textValue: "textValue",
+        // },
+        // {
+        //   title: "Completed",
+        //   content: <CoursesContent completed />,
+        //   // textValue: "textValue",
+        // },
         {
           title: "Add New Languages",
           content: <ExploreLanguages />,
@@ -187,11 +192,29 @@ const MyCoursesData = [
   },
 ];
 
+export function GetArchivedCourses(coursesData, languagesUserWantsToKnow) {
+  const archivedCourses = {};
+
+  // Iterate over each course in coursesData
+  for (const course in coursesData) {
+    // If the course is not present in languagesUserWantsToKnow, add it to archivedCourses
+    if (!(course in languagesUserWantsToKnow)) {
+      archivedCourses[course] = coursesData[course];
+    }
+  }
+
+  console.log({ archivedCourses });
+
+  return archivedCourses;
+}
+
 const CoursesContent = ({ archived, completed }) => {
   const settings = useSelector((state) => state.language) ?? {};
+  const coursesData = settings?.[STRINGS.STORAGE.COURSES_DATA] || {};
   const languagesUserWantsToKnow =
     settings?.[STRINGS.STORAGE.languagesUserWantsToKnow] || {};
-  const languagesUserKnows = settings?.[STRINGS.STORAGE.languagesUserKnows] || {};
+  const languagesUserKnows =
+    settings?.[STRINGS.STORAGE.languagesUserKnows] || {};
 
   const renderCourses = (courses) =>
     Object.keys(courses)
@@ -204,10 +227,18 @@ const CoursesContent = ({ archived, completed }) => {
         };
       })
       ?.map((course) => (
-        <div className="" key={course.id}>
-          <CourseCard course={course} />
-        </div>
+        // <div className={`${archived ? "w-[47%]" : "w-full"}`}>
+        <CourseCard course={course} archived={archived} key={course.id} />
+        // </div>
       ));
+
+  const wantToLearnCourses = archived
+    ? GetArchivedCourses(coursesData, {
+        ...languagesUserWantsToKnow,
+        ...languagesUserKnows,
+      })
+    : languagesUserWantsToKnow;
+  const alreadyKnowCourses = archived ? {} : languagesUserKnows;
 
   return (
     <div className="flex flex-col gap-8 p-4">
@@ -224,7 +255,9 @@ const CoursesContent = ({ archived, completed }) => {
         </ParaGraph>
       </div>
       <div className="flex gap-8 flex-col">
-        {archived || completed ? (
+        {Object.keys(wantToLearnCourses)?.length +
+          Object.keys(wantToLearnCourses)?.length ===
+          0 || completed ? (
           <NoCourses
             text={
               archived
@@ -235,18 +268,31 @@ const CoursesContent = ({ archived, completed }) => {
           />
         ) : (
           <div className="flex flex-col gap-8">
-            <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
-              I want to learn
-            </ParaGraph>
-            <div className="flex flex-col gap-4">
-              {renderCourses(languagesUserWantsToKnow)}
-            </div>
-            <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
-              I already know
-            </ParaGraph>
-            <div className="flex flex-col gap-4">
-              {renderCourses(languagesUserKnows)}
-            </div>
+            {Object.keys(wantToLearnCourses)?.length ? (
+              <>
+                <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
+                  {archived ? "Archived courses" : "I want to learn"} (
+                  {Object.keys(wantToLearnCourses)?.length})
+                </ParaGraph>
+                <div
+                  className="flex flex-col gap-4"
+                  style={{ flexFlow: "row wrap" }}>
+                  {renderCourses(wantToLearnCourses)}
+                </div>
+              </>
+            ) : null}
+            {Object.keys(alreadyKnowCourses)?.length ? (
+              <>
+                <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
+                  I already know ({Object.keys(alreadyKnowCourses)?.length})
+                </ParaGraph>
+                <div
+                  className="flex flex-col gap-4"
+                  style={{ flexFlow: "row wrap" }}>
+                  {renderCourses(alreadyKnowCourses)}
+                </div>
+              </>
+            ) : null}
           </div>
         )}
       </div>
@@ -254,7 +300,7 @@ const CoursesContent = ({ archived, completed }) => {
   );
 };
 
-const NoCourses = ({
+export const NoCourses = ({
   text = "You have no courses yet.",
   image = AllImages.app.archived,
 }) => {
@@ -271,22 +317,33 @@ const CourseCard = ({
   onClick = () => {
     console.log("clicked course card");
   },
+  archived,
 }) => {
   const dispatch = useDispatch();
+  const settings = useSelector((state) => state.language) || {};
+  const courseData = useCourseDetails(course?.id);
+  // const chapterData = useChapterDetails(course);
+
+  const lastOpenedChapter = courseData?.lastOpenedChapter;
+  const lastOpenedLesson = courseData?.lastOpenedLesson;
+
+  console.log({ lastOpenedChapter });
   return (
     <CustomCard
       bg-gradient-to-tr
       from-green-500
       to-yellow-500
-      className="flex p-0 flex-row">
+      className={`flex p-0 flex-row ${archived ? "w-[47%] flex-1" : "w-full"}`}>
       <div
-        className="flex flex-col gap-4 bg-gradient-to-tr 
-      from-pink-400 to-purple-400 px-10 pr-12 py-8 flex-1 justify-between">
+        className={`flex flex-col gap-4 bg-gradient-to-tr 
+      from-pink-400 to-purple-400 ${
+        archived ? "from-slate-700 to-slate-800" : ""
+      } px-10 pr-12 py-8 flex-1 justify-between h-full `}>
         <div className="flex flex-col justify-between items-start gap-2">
           <ParaGraph className="text-sm font-bold uppercase text-white">
             course
           </ParaGraph>
-          <div className="flex flex-row flex-wrap gap-2">
+          <div className="flex flex-col gap-2">
             <ParaGraph className={`${STRINGS.CLASSES.heading} text-white`}>
               {course.name} Fundamentals
             </ParaGraph>
@@ -296,6 +353,36 @@ const CourseCard = ({
             />
           </div>
         </div>
+        <CustomButton
+          onClick={() => {
+            DeleteCourse({ courseID: course.id });
+            const { [course.id]: langToRemove, ...otherLangs } =
+              settings[STRINGS.STORAGE.languagesUserWantsToKnow];
+            if (settings[STRINGS.STORAGE.languagesUserWantsToKnow][course.id]) {
+              console.log("Removing course", course.id);
+              dispatch(
+                setSetting({
+                  key: STRINGS.STORAGE.languagesUserWantsToKnow,
+                  value: {
+                    ...(Object.keys(otherLangs)?.length >= 1
+                      ? otherLangs
+                      : {
+                          en: {
+                            read: true,
+                            write: true,
+                            speak: true,
+                          },
+                        }),
+                  },
+                })
+              );
+            }
+          }}
+          className="self-start hover:text-black dark:hover:text-white"
+          variant="faded"
+          color="danger">
+          Delete
+        </CustomButton>
         <CustomButton
           as={Link}
           to={course.id}
@@ -313,35 +400,37 @@ const CourseCard = ({
           View all chapters
         </CustomButton>
       </div>
-      <div
-        className="py-8 px-10 flex flex-col justify-between"
-        style={{ flex: 3 }}>
-        <div className="flex flex-col gap-2">
-          <ParaGraph className="text-sm font-bold uppercase">
-            Chapter 5
-          </ParaGraph>
-          <ParaGraph className={`${STRINGS.CLASSES.heading} `}>
-            Types Of Arrays & Strings
-          </ParaGraph>
-        </div>
-        <Spacer y={8} />
-        <div className="flex flex-col gap-4">
-          <CustomProgress value={course.progress} />
-          <ParaGraph className="">{course.progress}/16 Challenges</ParaGraph>
-          <div>
-            <AppCurrencyWithText text={30} />
+      {!archived && (
+        <div
+          className="py-8 px-10 flex flex-col justify-between"
+          style={{ flex: 3 }}>
+          <div className="flex flex-col gap-2">
+            <ParaGraph className="text-sm font-bold uppercase">
+              {lastOpenedChapter?.chapterName}
+            </ParaGraph>
+            <ParaGraph className={`${STRINGS.CLASSES.heading} `}>
+              {lastOpenedLesson?.lesson}
+            </ParaGraph>
           </div>
+          <Spacer y={8} />
+          <div className="flex flex-col gap-4">
+            <CustomProgress value={course.progress} />
+            <ParaGraph className="">{course.progress}/16 Challenges</ParaGraph>
+            <div>
+              <AppCurrencyWithText text={30} />
+            </div>
+          </div>
+          <CustomButton
+            // onClick={() => onClick(course.id)}
+            as={Link}
+            to={course.id}
+            className="self-end hover:text-white"
+            color={"primary"}
+            variant="solid">
+            Continue
+          </CustomButton>
         </div>
-        <CustomButton
-          // onClick={() => onClick(course.id)}
-          as={Link}
-          to={course.id}
-          className="self-end hover:text-white"
-          color={"primary"}
-          variant="solid">
-          Continue
-        </CustomButton>
-      </div>
+      )}
     </CustomCard>
   );
 };
@@ -425,7 +514,7 @@ export const CourseItems = [
         lang.usedIn ? lang.usedIn[0]?.id?.countryName : ""
       }`,
       value: lang.languageCode,
-      route: `${SlideIDs.courses.route}/${lang.languageCode}`,
+      route: `${SlideIDs.settings.route}`,
       icon: (
         <Flag
           className={"w-[20px]"}

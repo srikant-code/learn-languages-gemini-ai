@@ -1,5 +1,5 @@
 import { Spacer } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheck, FaLock } from "react-icons/fa6";
 import { MdPlayLesson } from "react-icons/md";
 import CustomAccordian from "../../components/Accordian";
@@ -18,17 +18,64 @@ import { Lessons } from "./lesson/lessons";
 import { ChaptersData } from "./lesson/lessonsData";
 import { GetAllLanguages } from "../../utilities/countryIcons";
 import { useParams } from "react-router-dom";
+import {
+  isChapterCompleted,
+  isChapterUnlocked,
+  unlockFirstLessonIfNoOtherLessonIsUnlocked,
+  UpdateCourse,
+  useChapterDetails,
+  useCourseDetails,
+} from "../../store/reduxHelpers/courseChapterLessons";
+import { Sleep } from "../../utilities/utilities";
+import { COINS_OBJ } from "../../store/reduxHelpers/coinsAndXps";
 
-export const CoinsPerChapter = 200;
+export const CoinsPerLesson = 200;
 export const XPsPerChapter = 250;
 
+export const GenerateCourseDataCopy = (courseData) => {
+  return JSON.parse(JSON.stringify(courseData));
+};
+
 const AllChapters = () => {
-  const chaptersData = ChaptersData;
+  const { course } = useParams();
+  const courseData = useCourseDetails(course);
+  const chaptersData = courseData?.chaptersData || {};
   const chapterKeys = Object.keys(chaptersData);
   let totalChapters = chapterKeys?.length;
-  const { course } = useParams();
   const [selectedChapter, setSelectedChapter] = useState(chapterKeys[0]);
 
+  useEffect(() => {
+    const courseDataCopy = GenerateCourseDataCopy(courseData); // Create a deep copy of courseData
+    const isThereANeedToUnlockALesson =
+      unlockFirstLessonIfNoOtherLessonIsUnlocked(courseDataCopy);
+    if (isThereANeedToUnlockALesson) {
+      UpdateCourse({
+        courseID: course,
+        courseDetails: {
+          ...isThereANeedToUnlockALesson.courseData,
+          lastOpenedChapter: isThereANeedToUnlockALesson.firstChapter,
+          lastOpenedLesson: isThereANeedToUnlockALesson.firstLesson,
+          lastUpdateDetails: isThereANeedToUnlockALesson.firstLesson,
+        },
+      });
+      Sleep(100).then(() => {
+        UpdateCoins({
+          earnedForID: COINS_OBJ.COURSE_LESSON_UNLOCK,
+          earnedForDetails: {
+            name: `Unlocked "${
+              isThereANeedToUnlockALesson.firstLesson?.lesson
+            }" lesson in ${GetAllLanguages(course).languageName} course.`,
+            buttonText: "Go to lesson",
+            route: `${SlideIDs.courses.route}/${
+              course || courseRoute
+            }/${lessonEncodedID}`,
+          },
+        });
+      });
+    }
+  }, []);
+
+  console.log({ chaptersData });
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -41,10 +88,11 @@ const AllChapters = () => {
       <div className="p-2">
         <CustomAccordian
           items={chapterKeys.map((chapter, index) => {
+            const chapterFullData = chaptersData[chapter];
             const noOfLessonsInChapter = chaptersData[chapter].chapters?.length;
             return {
               children: (
-                <CustomCard className={`gap-4 border-none`}>
+                <CustomCard className={`gap-4 border-none w-full`}>
                   <ParaGraph className="text-xl font-bold">Topics</ParaGraph>
                   <Lessons chapter={chapter} chapterData={chaptersData} />
                 </CustomCard>
@@ -63,7 +111,7 @@ const AllChapters = () => {
                   <div className="flex flex-row gap-4">
                     <AppCurrencyWithText
                       className=""
-                      text={noOfLessonsInChapter * CoinsPerChapter}
+                      text={noOfLessonsInChapter * CoinsPerLesson}
                     />
                     <AppXPWithText
                       className=""
@@ -81,10 +129,12 @@ const AllChapters = () => {
               //     className={"w-[90px] m-[-1rem]"}
               //   />
               // ),
+              className: "w-full",
               startContent: (
                 <ChapterProgress
-                  isCompleted={index === 0}
+                  isCompleted={isChapterCompleted(chapterFullData)}
                   chapterNumber={index + 1}
+                  hideLock={isChapterUnlocked(chapterFullData)}
                 />
               ),
             };
@@ -132,19 +182,26 @@ export const ChapterProgress = ({
 };
 
 const CourseStatistics = () => {
-  const chaptersData = ChaptersData;
+  const { course } = useParams();
+  const courseData = useCourseDetails(course);
+  const chaptersData = courseData?.chaptersData || {};
   const chapterKeys = Object.keys(chaptersData);
 
   let totalCoinsInCourse = 0;
   let totalXPsInCourse = 0;
 
   let noOfLessonsInCourse = 0;
-  let completedNoOfLessons = 39;
+  let completedNoOfLessons = 0;
+
   chapterKeys.forEach((chapter, index) => {
     const noOfLessonsInChapter = chaptersData[chapter].chapters?.length;
     noOfLessonsInCourse += noOfLessonsInChapter;
-    completedNoOfLessons += 0; // TODO: complete the logic
-    totalCoinsInCourse += CoinsPerChapter * noOfLessonsInChapter;
+    let compLessonCount = 0;
+    chaptersData[chapter].chapters.forEach((lesson, index) => {
+      compLessonCount += lesson?.isUnlocked ? 1 : 0;
+    });
+    completedNoOfLessons += compLessonCount; // TODO: complete the logic
+    totalCoinsInCourse += CoinsPerLesson * noOfLessonsInChapter;
     totalXPsInCourse += XPsPerChapter * noOfLessonsInChapter;
   });
   let courseProgress = Math.floor(
@@ -187,7 +244,7 @@ const CourseStatistics = () => {
           />
           <IconCardWithTextButton
             left={<AppCurrencyIcon className="" />}
-            child={CoinsPerChapter * completedNoOfLessons}
+            child={CoinsPerLesson * completedNoOfLessons}
             heading={`earned ${STRINGS.APP_CURRENCY}`}
           />
           <IconCardWithTextButton

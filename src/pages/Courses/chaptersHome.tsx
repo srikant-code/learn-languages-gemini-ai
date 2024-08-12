@@ -16,6 +16,7 @@ import CustomButton from "../../components/Button";
 import { setSetting } from "../../store/reducer";
 import CustomImage, { AllImages } from "../../components/Image";
 import { Spacer } from "@nextui-org/react";
+import { CreateCourseWrapper } from "../LoginAndSignup/languageFinder";
 
 interface RenderChaptersProps {}
 
@@ -56,11 +57,16 @@ const ChaptersAndLessons: FunctionComponent<RenderChaptersProps> = () => {
         },
       })
     );
-    dispatch(
-      setSetting({
-        key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
-        value: course,
-      })
+    Sleep(100).then(() =>
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+          value: course,
+        })
+      )
+    );
+    Sleep(200).then(() =>
+      CreateCourseWrapper({ lang: GetAllLanguages[course] })
     );
   };
 
@@ -213,7 +219,7 @@ export const ChaptersAndLessonsHome = () => {
           },
         ]}
       />
-      <MarkdownRenderer
+      {/* <MarkdownRenderer
         markdownContent={`
 
         ## TODOs
@@ -233,7 +239,7 @@ export const ChaptersAndLessonsHome = () => {
         - The markdown should show give me more information on this - it should add to the global state. 
         the listener should pull the value and dynamically render the 
         `}
-      />
+      /> */}
     </div>
   );
 };

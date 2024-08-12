@@ -2,25 +2,22 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../../components/Button";
 import Flag from "../../components/Flag";
 import ParaGraph from "../../components/Paragraph";
-import CustomTabs from "../../components/Tabs";
 import { STRINGS } from "../../utilities/constants";
 import { GetAllLanguages } from "../../utilities/countryIcons";
-import { AppCurrencyIcon, AppStreakIcon, AppXPIcon } from "./homeContent";
+import { AppCurrencyIcon, AppXPIcon } from "./homeContent";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
-import { FiTarget } from "react-icons/fi";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa6";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { CustomCard } from "../../components/Card";
 import Footer from "../../components/Footer";
-import { IconHeader } from "../../components/Paragraph";
 import { PopOverProps } from "../../components/Popover/popover";
-import { SlideIDs } from "../../utilities/constants";
-import { ScrollWrapper } from "../SideBar/rightSideBar";
-import { useState } from "react";
-import { CheckRightTop } from "../LoginAndSignup/languageFinder";
-import { FaPlus } from "react-icons/fa6";
 import { setSetting } from "../../store/reducer";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { SlideIDs } from "../../utilities/constants";
+import { CheckRightTop } from "../LoginAndSignup/languageFinder";
+import { ScrollWrapper } from "../SideBar/rightSideBar";
 
 interface AppHeaderProps {}
 
@@ -37,11 +34,11 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
   ];
 
   const NavItems = [
-    SlideIDs.dashboard,
-    SlideIDs.games,
-    SlideIDs.challenges,
+    // SlideIDs.dashboard,
+    // SlideIDs.games,
+    // SlideIDs.challenges,
     SlideIDs.courses,
-    SlideIDs.dictionary,
+    // SlideIDs.dictionary,
   ];
 
   const userProfile = useSelector((state) => state.language.profile) ?? {};
@@ -62,7 +59,7 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
             {...PopOverProps}
             isOpen={isOpenChangeLanguage}
             onClose={() => setIsOpenChangeLanguage(false)}>
-            <PopoverTrigger className="w-full">
+            <PopoverTrigger className="">
               <div>
                 <IconCardWithTextButton
                   left={
@@ -191,7 +188,7 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
             </PopoverContent>
           </Popover>
           <div className="flex items-center gap-4">
-            <IconCardWithTextButton
+            {/* <IconCardWithTextButton
               left={<AppStreakIcon className={"text-xl"} />}
               heading={"Streak"}
               child={`${settings.streak} days`}
@@ -204,15 +201,17 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
                   ? `${settings.timeSpent}/${settings.dailyGoal} mins`
                   : "Set Daily Goal"
               }
-            />
+            /> */}
             <Popover {...PopOverProps} placement="bottom">
               <PopoverTrigger className="w-full">
                 <div>
                   <CustomCard className={"p-0"}>
-                    <div className={"pl-6 pr-14 py-1 flex flex-row gap-4"}>
+                    <div className={"pl-6 pr-2 py-1 flex flex-row gap-4"}>
                       <div className="flex flex-col items-end">
                         <ParaGraph className="headerText p-0 m-0 first-letter:uppercase overflow-ellipsis">
-                          {userProfile?.displayName?.split(" ")[0]}
+                          {userProfile?.displayName
+                            ?.split(" ")[0]
+                            ?.toProperCase()}
                         </ParaGraph>
                         <ParaGraph>Novice</ParaGraph>
                       </div>
@@ -246,7 +245,7 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
           </div>
         </div>
       </div>
-      <CustomTabs
+      {/* <CustomTabs
         fullWidth
         id={STRINGS.STORAGE.TABS.appHeader}
         selectedKey={
@@ -274,7 +273,19 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
             ),
           };
         })}
-      />
+      /> */}
+
+      <div ref={parent2}>
+        {/* <IconHeader icon={SlideIDs.courses.icon} title={SlideIDs.courses.name}>
+          {SlideIDs.courses.name}
+        </IconHeader> */}
+        <ScrollWrapper className={"h-[86vh]"}>
+          <Outlet />
+          {/* <div className="" style={{ flex: 2.5 }}>
+            <Footer />
+          </div> */}
+        </ScrollWrapper>
+      </div>
     </>
   );
 };

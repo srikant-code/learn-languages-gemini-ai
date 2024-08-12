@@ -10,25 +10,29 @@ interface RightSideBarProps {}
 const RightSideBar: FunctionComponent<RightSideBarProps> = ({ ...props }) => {
   return (
     <div className="w-full flex items-center" {...props}>
-      <CustomTabs
-        id={STRINGS.STORAGE.TABS.rightSideBar}
-        ariaLabel="Tabs example"
-        centerTabs
-        tabs={[
-          {
-            title: DICTIONARY_TABS.id,
-            content: <ScrollWrapper children={<DictionaryRender />} />,
-          },
-          {
-            title: STRINGS.APP_NAME,
-            content: <ScrollWrapper children={<AIChat />} />,
-          },
-          {
-            title: "My Vocabulary",
-            content: <ScrollWrapper children={<Vocabulary />} />,
-          },
-        ]}
-      />
+      <div className="px-4">
+        <CustomTabs
+          id={STRINGS.STORAGE.TABS.rightSideBar}
+          ariaLabel="Tabs example"
+          centerTabs
+          fullWidth
+          size="lg"
+          tabs={[
+            {
+              title: DICTIONARY_TABS.id,
+              content: <ScrollWrapper children={<DictionaryRender />} />,
+            },
+            // {
+            //   title: STRINGS.APP_NAME,
+            //   content: <ScrollWrapper children={<AIChat />} />,
+            // },
+            {
+              title: "My Vocabulary",
+              content: <ScrollWrapper children={<Vocabulary />} />,
+            },
+          ]}
+        />{" "}
+      </div>
     </div>
   );
 };

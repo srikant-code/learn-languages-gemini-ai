@@ -23,8 +23,11 @@ import { ConvertMillToMomentCalendar } from "../../utilities/utilities";
 import { ErrorCard } from "../LoginAndSignup";
 import { ProfilePic } from "../SideBar";
 import { BsAlphabet } from "react-icons/bs";
-import { FaPerson } from "react-icons/fa6";
+import { FaArrowLeft, FaPerson } from "react-icons/fa6";
 import { CustomCard } from "../../components/Card";
+import { MdOutlineHome } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { CoursesHome } from "../Courses";
 
 interface SettingsProps {}
 
@@ -132,21 +135,21 @@ export const SettingsObject = [
       </div>
     ),
   },
-  {
-    type: TYPES.SELECT,
-    key: "language",
-    icon: <BsAlphabet />,
-    section: SECTION.LESSONS.id,
-    options: [
-      { label: "English", value: "en" },
-      { label: "Spanish", value: "es" },
-      { label: "French", value: "fr" },
-    ],
-    componentProps: {
-      placeholder: "Enter language",
-      label: "Currently learning",
-    },
-  },
+  // {
+  //   type: TYPES.SELECT,
+  //   key: "language",
+  //   icon: <BsAlphabet />,
+  //   section: SECTION.LESSONS.id,
+  //   options: [
+  //     { label: "English", value: "en" },
+  //     { label: "Spanish", value: "es" },
+  //     { label: "French", value: "fr" },
+  //   ],
+  //   componentProps: {
+  //     placeholder: "Enter language",
+  //     label: "Currently learning",
+  //   },
+  // },
   {
     type: TYPES.INPUT,
     key: "apiKey",
@@ -287,19 +290,36 @@ const Settings: FunctionComponent<SettingsProps> = () => {
   return (
     <div>
       <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-4 pl-4">
+          <CustomButton
+            isIconOnly
+            className=""
+            variant="flat"
+            as={Link}
+            to={"/"}>
+            <MdOutlineHome className="text-2xl" />
+          </CustomButton>
+          <ParaGraph className={`${STRINGS.CLASSES.heading}`}>
+            Settings
+          </ParaGraph>
+        </div>
+        <Spacer y={6} />
+        <CoursesHome />
         {Object.keys(createSections).map((section, index) => {
           return (
             <CustomCard
               key={index}
-              className="m-4 flex flex-col gap-10 px-8 pt-4 pb-10">
+              isPressable={false}
+              className="m-4 flex flex-col gap-10 px-8 pt-4 pb-10 ">
               <ParaGraph className={`${STRINGS.CLASSES.subHeading}`}>
                 {SECTION[section].heading}
               </ParaGraph>
+              {/* <div> */}
               {createSections[section].map((setting) => {
                 switch (setting.type) {
                   case TYPES.BOOLEAN:
                     return (
-                      <div id={setting.id} key={setting.key}>
+                      <div id={setting.id} className="w-full" key={setting.key}>
                         <CustomSwitch
                           isSelected={
                             setting.defaultValue ===
@@ -322,7 +342,7 @@ const Settings: FunctionComponent<SettingsProps> = () => {
                     );
                   case TYPES.SELECT:
                     return (
-                      <div id={setting.id} key={setting.key}>
+                      <div id={setting.id} className="w-full" key={setting.key}>
                         <CustomAutocomplete
                           value={settingsFromRedux[setting.key]?.value}
                           selectedKey={settingsFromRedux[setting.key]?.value}
@@ -341,7 +361,7 @@ const Settings: FunctionComponent<SettingsProps> = () => {
                     );
                   case TYPES.INPUT:
                     return (
-                      <div id={setting.id} key={setting.key}>
+                      <div id={setting.id} className="w-full" key={setting.key}>
                         <CustomInput
                           value={settingsFromRedux[setting.key]}
                           onChange={(input) =>
@@ -359,7 +379,10 @@ const Settings: FunctionComponent<SettingsProps> = () => {
                     // Pass the profile data to the custom render function
                     if (setting.render)
                       return (
-                        <div id={setting.id} key={setting.key}>
+                        <div
+                          id={setting.id}
+                          className="w-full"
+                          key={setting.key}>
                           {setting.render({
                             setting: settingsFromRedux[setting.key],
                           })}
@@ -371,6 +394,7 @@ const Settings: FunctionComponent<SettingsProps> = () => {
                     return null;
                 }
               })}
+              {/* </div> */}
             </CustomCard>
           );
         })}

@@ -30,7 +30,12 @@ const CustomButton = React.forwardRef(
         } ${STRINGS.CLASSES.basicTransitions} ${className}`}
         variant={variant ?? "bordered"}
         {...props}
-        onClick={onClick}>
+        tabIndex={0}
+        // onPress={onClick}
+        onClick={(e) => {
+          // if (e.preventDefault) e.preventDefault();
+          if (onClick) onClick(e);
+        }}>
         {children}
       </Button>
     );

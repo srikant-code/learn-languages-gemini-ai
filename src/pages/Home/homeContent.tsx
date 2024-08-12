@@ -101,9 +101,9 @@ const LanguageAnimationLearnHeader = () => {
   // console.log({ activeGreetWord });
 
   return (
-    <CustomCard className="p-6 m-2 mt-5 rounded-[2.5rem]">
+    <CustomCard className="p-6 m-2 mt-5 rounded-[2.5rem] w-full">
       {/* <GradientBackground gradientColors={activeGreetWord.colorObj.gradient}> */}
-      <div className="flex flex-wrap justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center w-full">
         <div className="flex gap-6 flex-[2] min-w-[30rem]">
           <Flag flag={PullMostlyUsedIn(activeGreetWord).content} />
           <div className="mt-5">
@@ -319,11 +319,9 @@ const HomeAlphabetsCard = ({}) => {
 };
 const HomeLearningCalendarCard = ({}) => {
   return (
-    <CustomCard className={``} border={false}>
-      <ParaGraph className={heading}>
-        Learning Calendar
-        <StreakCalendar />
-      </ParaGraph>
+    <CustomCard className={`w-full flex flex-col gap-4`} border={false}>
+      <ParaGraph className={heading}>Learning Calendar</ParaGraph>
+      <StreakCalendar />
     </CustomCard>
   );
 };

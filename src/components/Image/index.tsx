@@ -44,6 +44,9 @@ import myVocabulary from "../../assets/imgs/app/vocabulary.png";
 import archived from "../../assets/imgs/app/archive.png";
 import completed from "../../assets/imgs/app/completed.png";
 import enroll from "../../assets/imgs/app/enroll.png";
+import unlock from "../../assets/imgs/app/unlock.png";
+import gem from "../../assets/imgs/app/gem.png";
+import gems from "../../assets/imgs/app/gems.png";
 
 // import other images...
 
@@ -192,6 +195,9 @@ export const AllImages = {
     archived,
     completed,
     enroll,
+    unlock,
+    gem,
+    gems,
   },
   misc: {
     cards_and_wallet,

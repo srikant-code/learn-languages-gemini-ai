@@ -80,6 +80,7 @@ export const STRINGS = {
     COURSES_DATA: "coursesData",
     CURRENT_LEARNING_LANGUAGE: "currentLearningLanguage",
     DICTIONARY_API: "dictionaryAPIData",
+    DICTIONARY_AI: "dictionaryAIData",
     DICTIONARY_SEARCH_BAR: "dictionarySearchBar",
     FLASH_CARDS_DATA: "flashCardsData",
     GAMES_DATA: "gamesData",

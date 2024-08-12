@@ -20,9 +20,9 @@ const DictionaryAIRender = ({ data }) => {
       <Idioms idioms={res?.idiomsAndPhrases} />
       <Collocations collocations={res?.collocations} />
       <Thesaurus thesaurus={res?.thesaurus} />
-      <FollowUpActions actions={res?.followUpSuggestedChatActions} />
-      <RenderAlphabetsAndGamesInDic data={res} />
       <Etymology etymology={res?.etymology} />
+      <FollowUpActions actions={res?.followUpSuggestedChatActions} />
+      {/* <RenderAlphabetsAndGamesInDic data={res} /> */}
     </div>
   );
 };

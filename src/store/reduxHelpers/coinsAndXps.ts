@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
+import { STRINGS } from "../../utilities/constants";
 import { setSetting } from "../reducer";
 import store from "../store";
-import { STRINGS } from "../../utilities/constants";
 
 export const COINS_OBJ = {
   COURSE_LESSON_UNLOCK: "COURSE_LESSON_UNLOCK",
+  USE_AI: "USE_AI",
 };
 export const XP_OBJ = {
   COURSE_LESSON_UNLOCK: "COURSE_LESSON_UNLOCK",
@@ -12,13 +13,17 @@ export const XP_OBJ = {
 export const COINS = {
   [COINS_OBJ.COURSE_LESSON_UNLOCK]: {
     id: COINS_OBJ.COURSE_LESSON_UNLOCK,
-    coins: -200,
+    coins: 200,
+  },
+  [COINS_OBJ.USE_AI]: {
+    id: COINS_OBJ.USE_AI,
+    coins: 100,
   },
 };
 export const XP = {
   [XP_OBJ.COURSE_LESSON_UNLOCK]: {
     id: XP_OBJ.COURSE_LESSON_UNLOCK,
-    xp: 0,
+    xp: 250,
   },
 };
 export const UpdateCoins = ({
@@ -72,6 +77,7 @@ export const UpdateCoins = ({
         value: coinsObj,
       })
     );
+  return false;
 
   return coinsObj;
 };

@@ -61,9 +61,37 @@ const components = {
   ul: ({ node, ...props }) => (
     <ul style={{ ...lineHeight }} className="list-disc p-6" {...props} />
   ),
-  li: ({ node, ...props }) => (
-    <li style={{ ...lineHeight }} className="list-disc pb-2" {...props} />
-  ),
+  li: ({ node, ...props }) => {
+    const { children, ...other } = props;
+    return (
+      <li
+        style={{ ...lineHeight }}
+        className="list-disc pb-2 group relative"
+        {...props}>
+        <span className="group">{children} </span>
+        {true && (
+          <span
+            // style={{
+            //   visibility: focus ? "visible" : "hidden",
+            //   opacity: focus ? 1 : 0,
+            // }}
+            className={`opacity-0 transition-opacity duration-200 group-hover:opacity-100 
+        ease-in-out flex gap-2 absolute bottom-0 right-0 bg-slate-100 dark:bg-slate-800 rounded-2xl p-2 ${
+          true ? "group-hover:opacity-100" : ""
+        }`}>
+            <CustomCopyButton text={children} size="sm" />
+            <AudioPlayer
+              text={children}
+              buttonProps={{
+                size: "sm",
+                variant: "flat",
+              }}
+            />
+          </span>
+        )}
+      </li>
+    );
+  },
   code: ({ node, ...props }) => (
     <code
       style={{ ...lineHeight }}
@@ -83,21 +111,10 @@ const components = {
     return (
       <ParaGraph
         style={{ ...lineHeight }}
-        className="py-1 group relative"
+        className="py-1"
+        enableHover
         {...other}>
-        <span>{children}</span>
-        <span
-          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 
-        ease-in-out flex gap-2 absolute bottom-0 right-0 bg-slate-100 dark:bg-slate-800 rounded-2xl p-2">
-          <CustomCopyButton text={children} size="sm" />
-          <AudioPlayer
-            text={children}
-            buttonProps={{
-              size: "sm",
-              variant: "flat",
-            }}
-          />
-        </span>
+        {children}
       </ParaGraph>
     );
   },

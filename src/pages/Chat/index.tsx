@@ -20,9 +20,13 @@ import {
   Sleep,
 } from "../../utilities/utilities";
 import { AllChats } from "./allChats";
-import Explore from "./explore";
+import Explore, { CoursesChapters } from "./explore";
 import { OngoingChat } from "./onGoingChat";
 import { GeminiChat } from "../../geminiAI/genAI";
+import { COINS_OBJ, UpdateCoins } from "../../store/reduxHelpers/coinsAndXps";
+import { CustomCard } from "../../components/Card";
+import { ChaptersData } from "../Courses/lesson/lessonsData";
+import { useLocation } from "react-router-dom";
 
 interface AIChatProps {}
 
@@ -109,6 +113,7 @@ export const PERSONA = {
 export const AI_TABS = {
   ALL_CHATS: "All Chats",
   EXPLORE: "Explore",
+  COURSE: "Course",
   id: STRINGS.APP_NAME,
 };
 
@@ -147,6 +152,26 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
       })
     );
   };
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (savedChats[window.location.pathname.replace("/", "")])
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.ONGOING_CHAT_ID,
+          value: window.location.pathname.replace("/", ""),
+        })
+      );
+    else {
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.CHAT_INPUT_VALUE,
+          value: decodeURIComponent(window.location.pathname.replace("/", "")),
+        })
+      );
+    }
+  }, [location.pathname]);
 
   const handleSend = async () => {
     if (!isLoading && chatInputValue) {
@@ -196,6 +221,16 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
           title:
             ExtractHeadingFromMarkdown(text) ??
             (chatInputValue ? chatInputValue?.toProperCase() : undefined),
+        });
+        Sleep(100).then(() => {
+          UpdateCoins({
+            earnedForID: COINS_OBJ.USE_AI,
+            earnedForDetails: {
+              name: `Used ${STRINGS.APP_NAME} chat.`,
+              buttonText: "Go to chat",
+              route: ongoingChatID,
+            },
+          });
         });
         // setMessages((messages) => {
         //   return [...messages, currentMessage];
@@ -248,7 +283,7 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
   return (
     <div className={className}>
       <div
-        style={{ height: "88vh" }}
+        style={{ height: "72vh" }}
         className="flex flex-col max-h-screen p-4">
         <ChatInterFaceHeader
           showBackButton={ongoingChatID}
@@ -280,6 +315,7 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
                       ),
                     },
                     { title: AI_TABS.EXPLORE, content: <Explore /> },
+                    { title: AI_TABS.COURSE, content: <CoursesChapters /> },
                   ]}
                 />
               )}
@@ -307,7 +343,7 @@ const AIChat: FunctionComponent<AIChatProps> = ({ className }) => {
 
 export default AIChat;
 
-const ChatBar = ({
+export const ChatBar = ({
   messages,
   handleNewChat,
   handleSend,
@@ -316,10 +352,10 @@ const ChatBar = ({
   setInputValue,
 }) => {
   return (
-    <div className="flex flex-row items-center gap-4 pr-10">
-      <CustomButton auto isIconOnly onClick={handleNewChat} loading={isLoading}>
+    <div className="flex flex-row items-center gap-4 pr-8 w-[97%]  p-6 py-3 bg-gradient-to-tr  from-slate-200 to-slate-100 dark:from-slate-900 dark:to-slate-700 rounded-3xl">
+      {/* <CustomButton auto isIconOnly onClick={handleNewChat} loading={isLoading}>
         <FaPlus />
-      </CustomButton>
+      </CustomButton> */}
       <div className="flex-1">
         <CustomInput
           textarea
@@ -364,6 +400,7 @@ export const CustomCopyButton = ({ text, ...props }) => {
         setCopied(CopyToClipboard(text));
         Sleep(2000).then(() => setCopied(null));
       }}
+      variant={"flat"}
       color={copied === false ? "danger" : copied ? "success" : "default"}
       className=""
       {...props}>
@@ -376,17 +413,17 @@ export const NoSelectedChat = ({}) => {
   return (
     <div className="flex flex-col items-center">
       <CustomImage src={AllImages.chat} />
-      <ParaGraph className="">
-        Start a conversation! Here are some suggestions
-      </ParaGraph>
+      <ParaGraph className="">Start a conversation!</ParaGraph>
+      {/* Here are some suggestions */}
     </div>
   );
 };
 
 const ChatInterFaceHeader = ({ showBackButton, onClickBack, isLoading }) => {
+  console.log({ ChaptersData });
   const [parent] = useAutoAnimate();
   const settings = useSelector((state) => state.language) ?? "";
-  const title = settings[STRINGS.STORAGE.SAVED_CHATS][showBackButton]?.title;
+  const title = settings[STRINGS.STORAGE.SAVED_CHATS]?.[showBackButton]?.title;
   return (
     <div className="flex flex-row justify-between items-center pl-5">
       <div className="flex flex-row gap-4" ref={parent}>
@@ -394,6 +431,7 @@ const ChatInterFaceHeader = ({ showBackButton, onClickBack, isLoading }) => {
           <CustomButton
             auto
             isIconOnly
+            variant="flat"
             // onClick={handleNewChat}
             loading={isLoading}
             size="lg"
@@ -402,7 +440,7 @@ const ChatInterFaceHeader = ({ showBackButton, onClickBack, isLoading }) => {
           </CustomButton>
         )}
         <div className="flex flex-col" span={6}>
-          <ParaGraph className="text-xl font-bold text-foreground-800 text-ellipsis overflow-hidden text-nowrap w-[280px]">
+          <ParaGraph className="text-xl font-bold text-foreground-800 text-ellipsis overflow-hidden text-nowrap">
             {title ? title : `Chats with ${STRINGS.APP_NAME}`}
           </ParaGraph>
           {/* List of chats */}

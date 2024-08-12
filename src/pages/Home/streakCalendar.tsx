@@ -73,7 +73,7 @@ const StreakCalendar = ({ noOfPastDaysToShow = 30 }) => {
 
   return (
     <CustomCard className="streak-calendar mt-4">
-      <div className="flex gap-4 justify-between items-center pb-5">
+      <div className="flex gap-4 justify-between items-center pb-5 w-full">
         <CustomButton isIconOnly onClick={getPreviousWeek}>
           <FaArrowLeft />
         </CustomButton>

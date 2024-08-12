@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ScrollShadow, Spacer } from "@nextui-org/react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { LogInSignupForm } from ".";
 import CustomButton from "../../components/Button";
+import ParaGraph from "../../components/Paragraph";
+import { setSetting } from "../../store/reducer";
+import { STRINGS } from "../../utilities/constants";
 import { GetAllCountries } from "../../utilities/countryIcons";
+import { RemoveNullValuesFromArray } from "../../utilities/utilities";
+import UserDailyGoal from "./goals";
 import LanguageFinder from "./languageFinder";
 import MarqueeAnimation from "./marqueeAnimation";
-import { ScrollShadow, Spacer } from "@nextui-org/react";
-import { RemoveNullValuesFromArray } from "../../utilities/utilities";
-import ParaGraph from "../../components/Paragraph";
-import { useDispatch, useSelector } from "react-redux";
-import { setSetting } from "../../store/reducer";
 import MotivationToLearn from "./motivation";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import UserDailyGoal from "./goals";
-import { LogInSignupForm } from ".";
-import { STRINGS } from "../../utilities/constants";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);

@@ -14,6 +14,24 @@ export const addItem = async (data) => {
   return await db.items.add(data);
 };
 
+addItem({});
+
+const getItem = async (id = 1) => {
+  try {
+    const item = await db.items.get(id);
+    console.log({ item });
+    return item;
+  } catch (e) {
+    const item = await addItem({});
+    return item;
+  }
+};
+
+// Helper function to get data
+export const getItemFromDexie = async () => {
+  return await getItem();
+};
+
 // Helper function to update data
 export const updateItemInDexie = async ({ id = 1, key, data }) => {
   try {
@@ -25,17 +43,6 @@ export const updateItemInDexie = async ({ id = 1, key, data }) => {
   } catch (e) {
     return "error";
   }
-};
-
-const getItem = async (id = 1) => {
-  const item = await db.items.get(id);
-  console.log({ item });
-  return item;
-};
-
-// Helper function to get data
-export const getItemFromDexie = async () => {
-  return await getItem();
 };
 
 // Helper function to get all data

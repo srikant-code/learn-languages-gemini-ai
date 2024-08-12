@@ -56,12 +56,13 @@ const GetGenerationConfig = ({ json = true }) => {
 };
 
 // The Gemini 1.5 models are versatile and work with most use cases
-export const GetModel = (model) => {
+export const GetModel = (model, config = {}) => {
   const USER_SELECTED_AI_MODEL = store.getState().language?.geminiModel?.value;
   return GenAI().getGenerativeModel({
     model: model || USER_SELECTED_AI_MODEL || MODELS.FLASH_1_5.value,
     safetySettings: GetSafetySettings(),
     // systemInstruction: "You are a cat. Your name is Neko.",
+    ...config,
   });
 };
 
@@ -166,6 +167,31 @@ export const GeminiChat = async ({
           await chat.sendMessageStream(msg),
           callback
         ),
+  };
+};
+export const GeminiPrompt = async ({
+  msg = "How many paws are in my house?",
+  json = true,
+  generationConfig,
+  callback,
+}) => {
+  // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+  const model = GetModel(
+    undefined,
+    generationConfig || GetGenerationConfig({ json })
+  );
+
+  const prompt = msg;
+
+  const result = await model.generateContent(prompt);
+  console.log({ result, as: result.response, re: result.response.text() });
+
+  const asb = JSON.parse(
+    result.response.text().replace("```json", "").replace("```", "")
+  );
+
+  return {
+    result: asb,
   };
 };
 

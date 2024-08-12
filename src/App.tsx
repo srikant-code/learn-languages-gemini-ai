@@ -28,6 +28,7 @@ import Onboarding from "./pages/LoginAndSignup/onboarding";
 import Settings from "./pages/Settings";
 import { setSetting } from "./store/reducer";
 import { SlideIDs, STRINGS } from "./utilities/constants";
+import AIChat from "./pages/Chat";
 
 // ProtectedRoute component
 const ProtectedRoute = ({ isSignedIn, children }) => {
@@ -77,8 +78,8 @@ function App() {
       // loader: rootLoader,
       children: [
         {
-          path: SlideIDs.dashboard.path,
-          element: <HomeContent />,
+          path: "",
+          element: <AIChat />,
         },
         {
           path: SlideIDs.games.path,
@@ -100,7 +101,7 @@ function App() {
         },
         {
           path: SlideIDs.courses.path,
-          element: <Courses />,
+          element: <AIChat />,
           children: [
             {
               path: "",
@@ -145,6 +146,10 @@ function App() {
           path: SlideIDs.alphabets.path,
           element: <Alphabets />,
         },
+        {
+          path: ":chatID",
+          element: <AIChat />,
+        },
       ].map((child) => ({
         ...child,
         element: (
@@ -162,6 +167,7 @@ function App() {
       path: SlideIDs.onboarding.path,
       element: <Onboarding />,
     },
+
     {
       path: "/*",
       element: <NotFoundPage />,

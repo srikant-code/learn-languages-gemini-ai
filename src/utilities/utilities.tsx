@@ -66,7 +66,7 @@ export const SearchMatchHighlighter = (text, matchWith, renderFunction) => {
             style={{
               backgroundColor: "hsl(var(--nextui-primary-400)",
             }}
-            className="rounded-lg py-0 px-1 text-white">
+            className="rounded-3xl py-0 px-1 text-white">
             {word}
           </span>
         ) : (
@@ -74,10 +74,10 @@ export const SearchMatchHighlighter = (text, matchWith, renderFunction) => {
         );
       });
       return (
-        <>
+        <span className="rounded-3xl">
           {resultTextArray}
           {/* {console.log({ text })} */}
-        </>
+        </span>
       );
     }
   } catch (e) {

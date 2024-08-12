@@ -140,7 +140,7 @@ const VocabularyContent = ({ userId }) => {
   }, [myVocabularyFromStore]);
 
   return (
-    <div className="p-8">
+    <div className="p-8 px-4">
       <div className="flex gap-4 items-center justify-between">
         <ParaGraph className={STRINGS.CLASSES.heading}>
           My Vocabulary ({renderVocabData.length})
@@ -276,15 +276,15 @@ const RenderVocabularyCards = ({ vocabulary }) => {
   );
 };
 
-const NoVocabWordFound = ({ word = "hello" }) => {
+export const NoVocabWordFound = ({
+  word = "hello",
+  image = AllImages.app.myVocabulary,
+}) => {
   const dispatch = useDispatch();
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-center justify-center">
-        <CustomImage
-          src={AllImages.app.myVocabulary}
-          className={`max-w-[250px] w-[100%] ${""}`}
-        />
+        <CustomImage src={image} className={`max-w-[250px] w-[100%] ${""}`} />
       </div>
       <ParaGraph className={`text-left ${STRINGS.CLASSES.subHeading}`}>
         "{word}" was not found in your saved vocabulary.
@@ -311,8 +311,16 @@ const NoVocabWordFound = ({ word = "hello" }) => {
               tabID: STRINGS.STORAGE.TABS.dictionary,
               activeTab: DICTIONARY_TABS.API,
             });
+            dispatch(
+              setSetting({
+                key: STRINGS.STORAGE.DICTIONARY_SEARCH_BAR,
+                value: word,
+              })
+            );
           }}>
-          <ParaGraph>Search "{word}" in Dictionary</ParaGraph>
+          <ParaGraph className="text-wrap">
+            Search "{word}" in Dictionary
+          </ParaGraph>
         </div>
       </CustomCard>
       <CustomCard className="p-0" as={CustomButton}>
@@ -329,9 +337,15 @@ const NoVocabWordFound = ({ word = "hello" }) => {
               tabID: STRINGS.STORAGE.TABS.dictionary,
               activeTab: DICTIONARY_TABS.AI,
             });
+            dispatch(
+              setSetting({
+                key: STRINGS.STORAGE.DICTIONARY_SEARCH_BAR,
+                value: word,
+              })
+            );
           }}>
-          <ParaGraph>
-            Search "{word}" in {STRINGS.APP_NAME}
+          <ParaGraph className="text-wrap">
+            Search "{word}" in {STRINGS.APP_NAME} Dictionary
           </ParaGraph>
         </div>
       </CustomCard>
@@ -356,7 +370,7 @@ const NoVocabWordFound = ({ word = "hello" }) => {
               })
             );
           }}>
-          <ParaGraph>
+          <ParaGraph className="text-wrap">
             Ask something about "{word}" to {STRINGS.APP_NAME} AI
           </ParaGraph>
         </div>

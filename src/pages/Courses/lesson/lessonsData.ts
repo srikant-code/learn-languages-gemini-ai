@@ -1,4 +1,4 @@
-const Chapters = {
+export const Chapters = {
   SOUNDS_AND_PRONUNCIATION: {
     name: "Sounds & Pronunciation",
     id: "SOUNDS_AND_PRONUNCIATION",
@@ -39,6 +39,450 @@ const Chapters = {
     id: "CULTURAL_UNDERSTANDING",
     description: "About cultural insights",
   },
+};
+
+export const CHAPTERS = {
+  SOUNDS_AND_PRONUNCIATION: Chapters["SOUNDS_AND_PRONUNCIATION"].id,
+  BASIC_VOCABULARY: Chapters["BASIC_VOCABULARY"].id,
+  BASIC_GRAMMAR: Chapters["BASIC_GRAMMAR"].id,
+  EVERYDAY_CONVERSATIONS: Chapters["EVERYDAY_CONVERSATIONS"].id,
+  EXPANDING_VOCABULARY: Chapters["EXPANDING_VOCABULARY"].id,
+  INTERMEDIATE_GRAMMAR: Chapters["INTERMEDIATE_GRAMMAR"].id,
+  BUILDING_FLUENCY: Chapters["BUILDING_FLUENCY"].id,
+  CULTURAL_UNDERSTANDING: Chapters["CULTURAL_UNDERSTANDING"].id,
+};
+
+export const ChaptersMotivation = [
+  {
+    icon: "📚",
+    description: "Generate a lesson on Covering basic sounds and pronunciation",
+    label: CHAPTERS.SOUNDS_AND_PRONUNCIATION,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on Introducing essential vocabulary",
+    label: CHAPTERS.BASIC_VOCABULARY,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on For fundamental grammar rules",
+    label: CHAPTERS.BASIC_GRAMMAR,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on For common daily conversations",
+    label: CHAPTERS.EVERYDAY_CONVERSATIONS,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on To broaden your vocabulary",
+    label: CHAPTERS.EXPANDING_VOCABULARY,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on Study more complex grammar",
+    label: CHAPTERS.INTERMEDIATE_GRAMMAR,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on Aimed at improving fluency",
+    label: CHAPTERS.BUILDING_FLUENCY,
+  },
+  {
+    icon: "📚",
+    description: "Generate a lesson on About cultural insights",
+    label: CHAPTERS.CULTURAL_UNDERSTANDING,
+  },
+];
+
+export const ChaptersSuggestedActions = {
+  [Chapters.SOUNDS_AND_PRONUNCIATION.id]: [
+    {
+      label: "Understanding how sounds are produced",
+      icon: "📚",
+      prompt: "Generate a lesson on Phonetics",
+    },
+    {
+      label: "Differentiating between similar sounds",
+      icon: "📚",
+      prompt: "Generate a lesson on Listening Practice",
+    },
+    {
+      label: "Recognizing word and sentence emphasis",
+      icon: "📚",
+      prompt: "Generate a lesson on Intonation & Stress",
+    },
+    {
+      label: "Mimicking native speakers and recording yourself",
+      icon: "📚",
+      prompt: "Generate a lesson on Speaking Practice",
+    },
+    {
+      label: "Differentiating between short and long vowels",
+      icon: "📚",
+      prompt: "Generate a lesson on Vowel Sounds",
+    },
+    {
+      label: "Practicing difficult consonant combinations",
+      icon: "📚",
+      prompt: "Generate a lesson on Consonant Clusters",
+    },
+    {
+      label: "Identifying and practicing words that differ by only one sound",
+      icon: "📚",
+      prompt: "Generate a lesson on Minimal Pairs",
+    },
+    {
+      label: "Understanding how words blend together in natural speech",
+      icon: "📚",
+      prompt: "Generate a lesson on Connected Speech",
+    },
+  ],
+  [Chapters.BASIC_VOCABULARY.id]: [
+    {
+      label: "Learning common phrases for everyday interactions",
+      icon: "📚",
+      prompt: "Generate a lesson on Greetings & Introductions",
+    },
+    {
+      label: "Building blocks for basic communication",
+      icon: "📚",
+      prompt: "Generate a lesson on Numbers, Days, Time",
+    },
+    {
+      label: "Describing everyday objects and actions",
+      icon: "📚",
+      prompt: "Generate a lesson on Essential Nouns & Verbs",
+    },
+    {
+      label: "Adding basic descriptions",
+      icon: "📚",
+      prompt: "Generate a lesson on Simple Adjectives & Adverbs",
+    },
+    {
+      label: "Effective memorization techniques",
+      icon: "📚",
+      prompt: "Generate a lesson on Using Flashcards & Spaced Repetition",
+    },
+    {
+      label: "Describing objects using basic colors and shapes",
+      icon: "📚",
+      prompt: "Generate a lesson on Colors & Shapes",
+    },
+    {
+      label: "Talking about family members and relationships",
+      icon: "📚",
+      prompt: "Generate a lesson on Family & Relationships",
+    },
+    {
+      label: "Discussing different weather conditions and seasons",
+      icon: "📚",
+      prompt: "Generate a lesson on Weather & Seasons",
+    },
+    {
+      label: "Learning frequently used idiomatic expressions",
+      icon: "📚",
+      prompt: "Generate a lesson on Common Idioms",
+    },
+  ],
+  [Chapters.BASIC_GRAMMAR.id]: [
+    {
+      label: "Understanding subject-verb-object order and variations",
+      icon: "📚",
+      prompt: "Generate a lesson on Sentence Structure",
+    },
+    {
+      label: "Talking about current actions and situations",
+      icon: "📚",
+      prompt: "Generate a lesson on Present Tense",
+    },
+    {
+      label: "Mastering present tense forms for common verbs",
+      icon: "📚",
+      prompt: "Generate a lesson on Basic Verb Conjugation",
+    },
+    {
+      label: "Applying grammar rules for nouns and adjectives",
+      icon: "📚",
+      prompt: "Generate a lesson on Gender & Number Agreement",
+    },
+    {
+      label: "Using question words (who, what, where, etc.)",
+      icon: "📚",
+      prompt: "Generate a lesson on Asking Simple Questions",
+    },
+    {
+      label: "Using 'a', 'an', and 'the' correctly",
+      icon: "📚",
+      prompt: "Generate a lesson on Articles",
+    },
+    {
+      label: "Describing locations using prepositions",
+      icon: "📚",
+      prompt: "Generate a lesson on Prepositions of Place",
+    },
+    {
+      label: "Showing ownership with possessive nouns and pronouns",
+      icon: "📚",
+      prompt: "Generate a lesson on Possessive Forms",
+    },
+    {
+      label: "Giving commands and making requests",
+      icon: "📚",
+      prompt: "Generate a lesson on Imperatives",
+    },
+  ],
+  [Chapters.EVERYDAY_CONVERSATIONS.id]: [
+    {
+      label: "Common Phrases & Expressions",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on navigating everyday situations (shopping, dining, etc.)",
+    },
+    {
+      label: "Asking for Directions & Help",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on finding your way around and seeking assistance",
+    },
+    {
+      label: "Talking about Yourself & Interests",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on sharing personal information and engaging in small talk",
+    },
+    {
+      label: "Simple Storytelling",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on describing past experiences in a basic manner",
+    },
+    {
+      label: "Role-playing & Language Exchange",
+      icon: "📚",
+      prompt: "Generate a lesson on practicing real-life scenarios",
+    },
+    {
+      label: "Making Appointments",
+      icon: "📚",
+      prompt: "Generate a lesson on scheduling meetings and appointments",
+    },
+    {
+      label: "Ordering Food",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on navigating restaurant menus and ordering food",
+    },
+    {
+      label: "Shopping for Clothes",
+      icon: "📚",
+      prompt: "Generate a lesson on conversing while shopping for clothing",
+    },
+    {
+      label: "Expressing Preferences",
+      icon: "📚",
+      prompt: "Generate a lesson on talking about likes and dislikes",
+    },
+  ],
+  [Chapters.EXPANDING_VOCABULARY.id]: [
+    {
+      label: "Thematic Word Lists",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on learning vocabulary related to specific topics (hobbies, travel, etc.)",
+    },
+    {
+      label: "Using a Dictionary & Thesaurus",
+      icon: "📚",
+      prompt: "Generate a lesson on expanding vocabulary and finding synonyms",
+    },
+    {
+      label: "Learning Root Words, Prefixes, Suffixes",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on deciphering word meanings and building vocabulary efficiently",
+    },
+    {
+      label: "Reading Authentic Materials",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on exposing yourself to the language in context",
+    },
+    {
+      label: "Synonyms & Antonyms",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on learning words with similar and opposite meanings",
+    },
+    {
+      label: "Phrasal Verbs",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on understanding and using common phrasal verbs",
+    },
+    {
+      label: "Collocations",
+      icon: "📚",
+      prompt: "Generate a lesson on learning words that commonly go together",
+    },
+    {
+      label: "Proverbs & Sayings",
+      icon: "📚",
+      prompt: "Generate a lesson on understanding and using common proverbs",
+    },
+  ],
+  [Chapters.INTERMEDIATE_GRAMMAR.id]: [
+    {
+      label: "Past Tense",
+      icon: "📚",
+      prompt: "Generate a lesson on talking about past events and experiences",
+    },
+    {
+      label: "Future Tense",
+      icon: "📚",
+      prompt: "Generate a lesson on discussing future plans and possibilities",
+    },
+    {
+      label: "Basic Conditional Sentences",
+      icon: "📚",
+      prompt: "Generate a lesson on expressing hypothetical situations",
+    },
+    {
+      label: "Modal Verbs",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on understanding concepts like possibility, permission, and obligation",
+    },
+    {
+      label: "Using Language Learning Apps & Websites",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on supplementing your learning with interactive exercises",
+    },
+    {
+      label: "Present Perfect Tense",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on talking about experiences and actions with relevance to the present",
+    },
+    {
+      label: "Relative Clauses",
+      icon: "📚",
+      prompt: "Generate a lesson on adding extra information to sentences",
+    },
+    {
+      label: "Reported Speech",
+      icon: "📚",
+      prompt: "Generate a lesson on reporting what someone else has said",
+    },
+    {
+      label: "Passive Voice",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on focusing on the action rather than the subject",
+    },
+  ],
+  [Chapters.BUILDING_FLUENCY.id]: [
+    {
+      label: "Shadowing & Speaking Practice",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on mimicking native speakers to improve pronunciation and fluency",
+    },
+    {
+      label: "Joining Conversation Groups",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on interacting with other learners and native speakers",
+    },
+    {
+      label: "Watching Movies & TV Shows",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on immersing yourself in the language and culture",
+    },
+    {
+      label: "Listening to Music & Podcasts",
+      icon: "📚",
+      prompt: "Generate a lesson on training your ear and expanding vocabulary",
+    },
+    {
+      label: "Debating & Discussing",
+      icon: "📚",
+      prompt: "Generate a lesson on engaging in debates and discussions",
+    },
+    {
+      label: "Public Speaking",
+      icon: "📚",
+      prompt: "Generate a lesson on practicing speeches and presentations",
+    },
+    {
+      label: "Writing Practice",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on improving writing skills through essays and stories",
+    },
+    {
+      label: "Language Games",
+      icon: "📚",
+      prompt: "Generate a lesson on playing games to reinforce language skills",
+    },
+  ],
+  [Chapters.CULTURAL_UNDERSTANDING.id]: [
+    {
+      label: "Customs & Etiquette",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on learning about social norms and appropriate behavior",
+    },
+    {
+      label: "History & Traditions",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on gaining insights into the cultural background",
+    },
+    {
+      label: "Food & Cuisine",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on exploring culinary traditions and specialties",
+    },
+    {
+      label: "Literature & Arts",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on appreciating artistic expressions and cultural perspectives",
+    },
+    {
+      label: "Travel & Immersion",
+      icon: "📚",
+      prompt: "Generate a lesson on experiencing the culture firsthand",
+    },
+    {
+      label: "Festivals & Celebrations",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on learning about important cultural festivals",
+    },
+    {
+      label: "Famous Landmarks",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on exploring significant landmarks and their histories",
+    },
+    {
+      label: "Cultural Symbols",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on understanding symbols and their meanings in different cultures",
+    },
+    {
+      label: "Social Issues",
+      icon: "📚",
+      prompt:
+        "Generate a lesson on discussing contemporary social issues and their cultural impact",
+    },
+  ],
 };
 
 export const ChaptersData = {

@@ -27,7 +27,11 @@ export const languageSlice = createSlice({
     },
     setSetting: (state, action) => {
       state[action.payload.key] = action.payload.value;
-      localStorage.setItem(STRINGS.STORAGE.SETTINGS, JSON.stringify(state));
+      try {
+        localStorage.setItem(STRINGS.STORAGE.SETTINGS, JSON.stringify(state));
+      } catch (e) {
+        console.log("cannot set to localStorage");
+      }
       updateItemInDexie({
         key: action.payload.key,
         data: action.payload.value,

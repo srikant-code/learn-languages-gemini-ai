@@ -43,10 +43,10 @@ const RenderMeaningFromDicAPI = ({ data }) => {
         <div className={`${flex}`}>
           <ParaGraph className={subHeadingClasses}>Antonyms</ParaGraph>
         </div>
-        <RenderAlphabetsAndGamesInDic data={data} />
-        <ParaGraph className={subHeadingClasses}>
+        {/* <RenderAlphabetsAndGamesInDic data={data} /> */}
+        {/* <ParaGraph className={subHeadingClasses}>
           Tools - Translations
-        </ParaGraph>
+        </ParaGraph> */}
       </div>
     </div>
   );
