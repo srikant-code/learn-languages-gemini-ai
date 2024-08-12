@@ -156,7 +156,7 @@ export const LogInSignupForm = ({ cardClassName, className }) => {
       } else {
         // navigate to homepage
         console.log("navigate to homepage");
-        window.location.href = SlideIDs.dashboard.route;
+        window.location.href = "/";
       }
     }
   };

@@ -75,7 +75,9 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
 
   const settings = useSelector((state) => state.language) ?? {};
   const selectedLang =
-    GetAllLanguages[settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE]];
+    GetAllLanguages[
+      settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE] || "en"
+    ];
 
   function flattenReduxStructure(reduxStructure) {
     let result = [];
@@ -86,7 +88,7 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
           .map((part) => part.text)
           .join(" ")
           ?.replace("target", selectedLang?.usedIn[0]?.id?.countryName)} in "${
-          selectedLang.languageName
+          selectedLang?.languageName
         }" language.`;
         result.push({
           label: chat.title,
@@ -107,14 +109,15 @@ const LeftSideBar: FunctionComponent<LeftSideBarProps> = ({ className }) => {
     let result = [];
     for (let key in action) {
       action[key].forEach((action) => {
+        const sa = `${action.prompt?.replace(
+          "target",
+          selectedLang?.usedIn[0]?.id?.countryName
+        )} in "${selectedLang?.languageName}" language.`;
         let newItem = {
           label: action.label,
-          route: action.label,
+          route: sa,
           icon: action.icon,
-          description: `${action.prompt?.replace(
-            "target",
-            selectedLang?.usedIn[0]?.id?.countryName
-          )} in "${selectedLang.languageName}" language.`,
+          description: sa,
         };
         result.push(newItem);
       });

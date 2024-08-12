@@ -63,7 +63,9 @@ export const CoursesChapters: FunctionComponent<ExploreProps> = () => {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.language) ?? {};
   const selectedLang =
-    GetAllLanguages[settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE]];
+    GetAllLanguages[
+      settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE] || "en"
+    ];
   // const prompt = `${data.prompt?.replace(
   //   "target",
   //   selectedLang?.usedIn[0]?.id?.countryName
@@ -112,11 +114,13 @@ const ExploreSuggestedCard = ({ data, index }) => {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.language) ?? {};
   const selectedLang =
-    GetAllLanguages[settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE]];
+    GetAllLanguages[
+      settings?.[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE] || "en"
+    ];
   const prompt = `${data.prompt?.replace(
     "target",
     selectedLang?.usedIn[0]?.id?.countryName
-  )} ${data.label} in "${selectedLang.languageName}" language.`;
+  )} ${data.label} in "${selectedLang?.languageName}" language.`;
   return (
     <CustomCard as={CustomNoWrapButton} className={"p-0 w-full"}>
       <div
