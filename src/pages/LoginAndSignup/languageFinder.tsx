@@ -17,8 +17,9 @@ import {
 import { CreateCourse } from "../../store/reduxHelpers/courseChapterLessons";
 import { ChaptersData } from "../Courses/lesson/lessonsData";
 import { STRINGS } from "../../utilities/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import store from "../../store/store";
+import { setSetting } from "../../store/reducer";
 
 interface LanguageFinderProps {}
 
@@ -59,6 +60,8 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
     return GetAllLanguages[lang];
   });
 
+  const dispatch = useDispatch();
+
   const [langInput, setlangInput] = useState("");
   const filteredLangs = [
     ...updatedSelectedLangsObj,
@@ -82,6 +85,12 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
   useEffect(() => {
     Sleep(200).then((_) =>
       CreateCourseWrapper({ lang: GetAllLanguages["en"] })
+    );
+    dispatch(
+      setSetting({
+        key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+        value: "en",
+      })
     );
   }, []);
 
@@ -112,6 +121,13 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
           speak: true,
         },
       });
+
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+          value: lang.languageCode,
+        })
+      );
 
       Sleep(200).then((_) => CreateCourseWrapper({ lang }));
     }

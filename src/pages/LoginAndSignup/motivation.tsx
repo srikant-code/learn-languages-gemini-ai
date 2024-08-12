@@ -338,7 +338,7 @@ const MotivationToLearn: FunctionComponent<MotivationToLearnProps> = ({
     else setMotivation([...motivation, motiv.label]);
   };
   return (
-    <ScrollShadow className="h-[60vh] flex flex-wrap gap-4">
+    <ScrollShadow className="h-[70vh] flex flex-wrap gap-4">
       {Motivations.map((motiv, index) => {
         return (
           <CustomCard
@@ -346,11 +346,9 @@ const MotivationToLearn: FunctionComponent<MotivationToLearnProps> = ({
             key={index}
             className="p-0 w-full max-w-[47%] flex items-start justify-start">
             <div
-              className="p-6 flex flex-col items-start gap-2"
+              className="p-6 flex flex-col items-start gap-2 w-full relative"
               onClick={() => addOrDeleteMotivation(motiv)}>
-              <ParaGraph className="absolute top-6 right-6 text-5xl">
-                {motiv.icon}
-              </ParaGraph>
+              <ParaGraph className=" text-5xl w-full">{motiv.icon}</ParaGraph>
               <ParaGraph className="text-left text-lg font-semibold min-w-40 max-w-[160px] w-[75%] whitespace-break-spaces">
                 {motiv.label}
               </ParaGraph>

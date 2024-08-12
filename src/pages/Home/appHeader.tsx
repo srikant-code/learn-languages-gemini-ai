@@ -8,7 +8,7 @@ import { AppCurrencyIcon, AppXPIcon } from "./homeContent";
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { CustomCard } from "../../components/Card";
@@ -50,6 +50,12 @@ const AppHeader: FunctionComponent<AppHeaderProps> = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [parent2] = useAutoAnimate();
+
+  useEffect(() => {
+    if (!settings[STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE]) {
+      navigate("/onboarding");
+    }
+  }, []);
   return (
     <>
       <div className="">

@@ -48,7 +48,7 @@ const UserDailyGoal: FunctionComponent<UserDailyGoalProps> = ({
     setDailyGoal(goal.label);
   };
   return (
-    <ScrollShadow className="h-[30vh] flex flex-wrap gap-4">
+    <ScrollShadow className="h-[50vh] flex flex-wrap gap-4">
       {goalsArray.map((goal, index) => {
         return (
           <CustomCard
@@ -58,9 +58,7 @@ const UserDailyGoal: FunctionComponent<UserDailyGoalProps> = ({
             <div
               className="p-6 flex flex-col items-start gap-2"
               onClick={() => addOrDeleteGoal(goal)}>
-              <ParaGraph className="absolute top-6 right-6 text-5xl">
-                {goal.icon}
-              </ParaGraph>
+              <ParaGraph className=" text-5xl">{goal.icon}</ParaGraph>
               <ParaGraph className="text-left text-lg font-semibold min-w-40 max-w-[160px] w-[75%] whitespace-break-spaces">
                 {goal.label} minutes
               </ParaGraph>
