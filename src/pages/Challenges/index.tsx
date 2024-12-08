@@ -1,14 +1,16 @@
-import { CardBody, CardHeader, Progress, Spacer } from "@nextui-org/react";
-import { initializeApp } from "firebase/app";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { Spacer } from "@nextui-org/react";
+import moment from "moment";
 import { useEffect, useState } from "react";
+import { FaClock } from "react-icons/fa";
 import CustomButton from "../../components/Button";
 import { CustomCard } from "../../components/Card";
-import ParaGraph, { IconHeader } from "../../components/Paragraph";
-import { SlideIDs, STRINGS } from "../../utilities/constants";
-import moment from "moment";
-import { AppCurrencyWithText } from "../Home/homeContent";
-import { FaClock } from "react-icons/fa";
+import CustomImage, { AllImages } from "../../components/Image";
+import ParaGraph from "../../components/Paragraph";
+import { CustomProgress } from "../../components/Progress";
+import CustomTabs from "../../components/Tabs";
+import { STRINGS } from "../../utilities/constants";
+import { AppCurrencyWithText, AppStreakIcon } from "../Home/homeContent";
+import { ChallengesComponent } from "./challengesTemplate";
 
 interface ChallengesProps {}
 
@@ -282,7 +284,6 @@ const badges = [
 const Challenges: FunctionComponent<ChallengesProps> = () => {
   return (
     <div>
-      <IconHeader icon={SlideIDs.challenges.icon}>Challenges</IconHeader>
       <div className="p-4">
         <ChallengesPage
           challenges={ChallengesObject}
@@ -347,14 +348,19 @@ const ChallengesPage = ({ challenges }) => {
         titleTop="Pro learner"
         titleBottom="Novice hunter"
       />
-      <ParaGraph className="text-lg font-bold">
-        Today's Challenges ({challenges.length})
-      </ParaGraph>
-      <ParaGraph h3>Total Points: {points}</ParaGraph>
-      <Progress value={progress} color="primary" />
-      {Object.keys(challenges).map((category) => (
-        <RenderChallengesCategories category={category} />
-      ))}
+      <Spacer y={8} />
+      <Spacer y={4} />
+      <CustomTabs
+        id={STRINGS.STORAGE.TABS.challengesPage}
+        // className=""
+        fullWidth
+        tabs={Object.keys(challenges).map((category) => {
+          return {
+            title: category.toProperCase(),
+            content: <RenderChallengesCategories category={category} />,
+          };
+        })}
+      />
       <Spacer y={6} />
       {allCompleted && (
         <CustomCard className="bg-green-200 dark:bg-green-900 p-6 rounded-2xl flex flex-col">
@@ -366,7 +372,7 @@ const ChallengesPage = ({ challenges }) => {
         <ParaGraph className="text-lg font-bold">Badges</ParaGraph>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
           {badges.map((badge) => (
-            <CustomCard key={badge.badgeId} className="p-4 rounded-2xl ">
+            <CustomCard key={badge.badgeId} className="p-4 rounded-2xl w-full">
               <ParaGraph className="text-xl font-bold">
                 {badge.badgeTitle}
               </ParaGraph>
@@ -376,6 +382,7 @@ const ChallengesPage = ({ challenges }) => {
           ))}
         </div>
       </div>
+      <ChallengesComponent />
     </div>
   );
 };
@@ -388,17 +395,47 @@ function ChallengeHeaderCard({
   titleBottom,
 }) {
   return (
-    <CustomCard className="flex flex-col p-4 rounded-3xl justify-between">
-      <div className="flex flex-col">
-        <ParaGraph className="text-gray-600">Coins</ParaGraph>
-        <ParaGraph className="text-xl font-bold">{coins}</ParaGraph>
-        <ParaGraph className="text-green-500">
-          +{bonusCoins} Coin | Streak {streakDays} days
-        </ParaGraph>
+    <CustomCard
+      className="max-h-96 flex flex-row p-0 rounded-3xl justify-between 
+    relative bg-gradient-to-tr from-violet-400 via-pink-400 to-yellow-400 w-full">
+      <div className="flex flex-col p-8 gap-4 z-10">
+        <div className="flex items-start gap-4">
+          <CustomImage src={AllImages.badge1} className={`w-[100px]`} />
+          <div className="">
+            <ParaGraph className={`${STRINGS.CLASSES.heading}`}>
+              {titleTop}
+              <br />
+              {titleBottom}
+            </ParaGraph>
+          </div>
+        </div>
+        {/* <ParaGraph className="text-gray-600">Coins</ParaGraph> */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <ParaGraph className="text-xl font-bold">
+              <AppCurrencyWithText
+                className={"text-5xl"}
+                pClassName={"text-3xl"}
+                text={coins}
+              />
+            </ParaGraph>
+            <ParaGraph className="text-green-950 font-bold">
+              +{bonusCoins} {STRINGS.APP_CURRENCY}
+            </ParaGraph>
+          </div>
+          <ParaGraph className="font-bold pl-4">
+            <AppStreakIcon />
+            {streakDays} days streak
+          </ParaGraph>
+        </div>
       </div>
-      <div className="text-right">
-        <ParaGraph className="text-gray-600">{titleTop}</ParaGraph>
-        <ParaGraph>{titleBottom}</ParaGraph>
+
+      <div>
+        {/* className={"absolute top-0 right-0"} */}
+        <CustomImage
+          src={AllImages.challenges}
+          className={"w-[320px] absolute top-0 right-[-50px]"}
+        />
       </div>
     </CustomCard>
   );
@@ -422,12 +459,19 @@ const RenderChallengesCategories = ({ category }) => {
   };
 
   return (
-    <div key={category} className="p-4">
+    <div key={category} className="p-4 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <ParaGraph className="text-3xl font-bold">
+          Today's Challenges ({challenges.length ?? 0})
+        </ParaGraph>
+        {/* <ParaGraph h3>Total Points: {0}</ParaGraph> */}
+      </div>
+      <CustomProgress value={30} color="primary" />
       <ParaGraph
         className={`first-letter:uppercase ${STRINGS.CLASSES.heading}`}>
         {category} Challenges ({challenges?.length})
       </ParaGraph>
-      <Spacer y={6} />
+      <Spacer y={1} />
       <div className="flex flex-wrap gap-8">
         {challenges.map((challenge) => (
           <ChallengeCard
@@ -448,7 +492,7 @@ const ChallengeCard = ({ challenge, onComplete }) => {
   return (
     <div className="min-w-[300px] w-full max-w-[45%]">
       <CustomCard
-        className={`flex flex-col min-w-min gap-4 z-10 p-6 h-fit rounded-3xl transition-transform transform ${
+        className={`flex flex-col min-w-min gap-4 z-10 p-6 h-fit rounded-3xl transition-transform transform w-full ${
           status === "completed" ? "scale-105" : "hover:scale-105"
         }`}>
         <ParaGraph className="font-bold text-xl">{title}</ParaGraph>
@@ -477,11 +521,11 @@ const ChallengeCard = ({ challenge, onComplete }) => {
           </CustomButton>
         )}
       </CustomCard>
-      <CustomCard className="p-4 mt-[-2.5rem]">
+      <CustomCard className="p-4 mt-[-2.5rem] w-full">
         <Spacer y={8} />
         <div className="px-3 flex gap-4 items-center">
           <FaClock />
-          <ParaGraph className=" text-red-500">Ends: {timeLeft}</ParaGraph>
+          <ParaGraph className="font-medium">Ends: {timeLeft}</ParaGraph>
         </div>
       </CustomCard>
     </div>

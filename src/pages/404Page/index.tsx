@@ -2,7 +2,7 @@ import React from "react";
 import { Spacer } from "@nextui-org/react";
 import ParaGraph from "../../components/Paragraph";
 import CustomButton from "../../components/Button";
-import { BackgroundImageLogin, ImageAndAppLogo } from "../LoginAndSignup";
+import { BackgroundImageLogin, AppIconAndText } from "../LoginAndSignup";
 
 const NotFoundPage = () => {
   return (
@@ -32,7 +32,7 @@ const NotFoundPage = () => {
         color="primary"
         variant="solid"
         onClick={() => (window.location.href = "/")}>
-        Back to Language Lessons
+        Back to Language Learning
       </CustomButton>
       <Spacer y={2} />
       <CustomButton
@@ -43,7 +43,7 @@ const NotFoundPage = () => {
         Return to Previous Page
       </CustomButton>
       <div className={"fixed flex items-center justify-center bottom-4"}>
-        <ImageAndAppLogo className={""} />
+        <AppIconAndText className={""} />
       </div>
     </div>
   );

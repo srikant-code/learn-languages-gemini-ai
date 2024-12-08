@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { FaPause, FaPlay, FaStop } from "react-icons/fa";
+import { FaPause, FaStop } from "react-icons/fa";
+import { HiSpeakerWave } from "react-icons/hi2";
+import { useDispatch, useSelector } from "react-redux";
+import { setSetting } from "../../store/reducer";
+import { STRINGS } from "../../utilities/constants";
 import CustomButton from "../Button";
 import CustomSelect from "../Select";
 import CustomSlider from "../Slider";
@@ -17,6 +21,8 @@ const AudioPlayer = ({
   const audioRef = useRef();
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
+  const dispatch = useDispatch();
+  const settings = useSelector((state) => state.language) ?? {};
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -31,6 +37,29 @@ const AudioPlayer = ({
     };
   }, []);
 
+  // Helper function to calculate words spoken
+  const calculateWordsListened = (elapsedTime) => {
+    const wordsPerMinute = 165; // Average reading speed
+    const wordsPerSecond = (wordsPerMinute * speed) / 60;
+    const wordsListened = Math.floor(elapsedTime * wordsPerSecond) / 1000;
+    console.log(`Words listened: ${wordsListened}`);
+    dispatch(
+      setSetting({
+        key: STRINGS.STORAGE.WORDS_LISTENED,
+        value: {
+          totalWordsListened:
+            (settings[STRINGS.STORAGE.WORDS_LISTENED].totalWordsListened ?? 0) +
+            wordsListened,
+          lastListenedTime: new Date().toISOString(),
+          wordsListened: {
+            ...(settings[STRINGS.STORAGE.WORDS_LISTENED]?.wordsListened ?? {}),
+            [new Date().toISOString()]: { text, wordsListened },
+          },
+        },
+      })
+    );
+  };
+
   const togglePlayPause = () => {
     if (src) {
       if (playing) {
@@ -43,11 +72,22 @@ const AudioPlayer = ({
         window.speechSynthesis.cancel();
       } else {
         const utterance = new SpeechSynthesisUtterance(text);
+        console.log(utterance);
         utterance.rate = speed;
         utterance.voice = window.speechSynthesis
           .getVoices()
           .find((v) => v.name === voice);
-        utterance.onend = () => setPlaying(false);
+        utterance.onend = (event) => {
+          console.log({ event });
+          calculateWordsListened(event.elapsedTime);
+          setPlaying(false);
+        };
+
+        // Add pause event listener
+        utterance.onpause = (event) => {
+          calculateWordsListened(event.elapsedTime);
+        };
+
         window.speechSynthesis.speak(utterance);
       }
     }
@@ -59,6 +99,10 @@ const AudioPlayer = ({
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     } else {
+      // Calculate words spoken at the moment of stopping
+      const elapsedTime = window.speechSynthesis.elapsedTime;
+      calculateWordsListened(elapsedTime);
+
       window.speechSynthesis.cancel();
     }
     setPlaying(false);
@@ -76,7 +120,13 @@ const AudioPlayer = ({
       {showVoiceSelector && <VoiceSelector />}
       {src && <audio ref={audioRef} src={src} {...props} />}
       <CustomButton isIconOnly onClick={togglePlayPause} {...buttonProps}>
-        {playing ? <FaPause /> : <FaPlay />}
+        {playing ? (
+          <FaPause />
+        ) : (
+          <HiSpeakerWave
+            className={buttonProps?.size === "sm" ? "text-xl" : "text-2xl"}
+          />
+        )}
       </CustomButton>
       {showStop && (
         <CustomButton isIconOnly onClick={stop} {...buttonProps}>

@@ -1,25 +1,25 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ScrollShadow, Spacer } from "@nextui-org/react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { LogInSignupForm } from ".";
 import CustomButton from "../../components/Button";
+import ParaGraph from "../../components/Paragraph";
+import { setSetting } from "../../store/reducer";
+import { STRINGS } from "../../utilities/constants";
 import { GetAllCountries } from "../../utilities/countryIcons";
+import { RemoveNullValuesFromArray } from "../../utilities/utilities";
+import UserDailyGoal from "./goals";
 import LanguageFinder from "./languageFinder";
 import MarqueeAnimation from "./marqueeAnimation";
-import { ScrollShadow, Spacer } from "@nextui-org/react";
-import { RemoveNullValuesFromArray } from "../../utilities/utilities";
-import ParaGraph from "../../components/Paragraph";
-import { useDispatch, useSelector } from "react-redux";
-import { setSetting } from "../../store/reducer";
 import MotivationToLearn from "./motivation";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import UserDailyGoal from "./goals";
-import { LogInSignupForm } from ".";
-import { STRINGS } from "../../utilities/constants";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.language) ?? {};
   const [langsUserKnows, setLangsUserKnows] = useState(
-    settings?.languagesUserKnows ?? {
+    settings?.[STRINGS.STORAGE.languagesUserKnows] || {
       en: {
         read: true,
         write: true,
@@ -28,7 +28,7 @@ const Onboarding = () => {
     }
   );
   const [langsUserWantsToKnow, setLangsUserWantsKnow] = useState(
-    settings?.languagesUserWantsToKnow ?? {
+    settings?.[STRINGS.STORAGE.languagesUserWantsToKnow] || {
       en: {
         read: true,
         write: true,
@@ -43,7 +43,7 @@ const Onboarding = () => {
 
   const steps = [
     {
-      id: "languagesUserKnows",
+      id: STRINGS.STORAGE.languagesUserKnows,
       value: langsUserKnows,
       buttonText: "Yes! I know these languages. Go Next!",
       heading: "What languages do you already know?",
@@ -60,7 +60,7 @@ const Onboarding = () => {
       ),
     },
     {
-      id: "languagesUserWantsToKnow",
+      id: STRINGS.STORAGE.languagesUserWantsToKnow,
       value: langsUserWantsToKnow,
       buttonText: "Yes! I want to learn/improve on these languages. Go Next!",
       heading: "What languages do you want to learn?",
@@ -70,21 +70,14 @@ const Onboarding = () => {
       )?.length,
       disabledButtonText: "Select some languages to proceed",
       component: (
-        <LanguageFinder
-          selectedLangs={langsUserWantsToKnow}
-          setSelectedLangs={setLangsUserWantsKnow}
-          inputProps={{
-            placeholder: "Search the language that you want to learn...",
-          }}
-          messageForConfirmation={
-            "So you want to learn/improve your existing knowledge, for all of these languages right?"
-          }
-          messageForNoSelection="Come on! Don't be cheeky. You definitely would want to learn/improve on atleast one language. Select it to proceed."
+        <LanguageFinderToLearn
+          langsUserWantsToKnow={langsUserWantsToKnow}
+          setLangsUserWantsKnow={setLangsUserWantsKnow}
         />
       ),
     },
     {
-      id: "motivation",
+      id: STRINGS.STORAGE.motivation,
       buttonText: "Yes! I am motivated😁. Go Next!",
       value: motivation,
       disabled: !motivation?.length,
@@ -98,7 +91,7 @@ const Onboarding = () => {
       ),
     },
     {
-      id: "dailyGoal",
+      id: STRINGS.STORAGE.dailyGoal,
       buttonText: "Yes! I will stick to my goal😁. Go Next!",
       value: dailyGoal,
       disabled: !dailyGoal,
@@ -109,7 +102,7 @@ const Onboarding = () => {
       ),
     },
     {
-      id: "login",
+      id: STRINGS.STORAGE.login,
       buttonText: "Yes! I will stick to my goal😁. Go Next!",
       value: dailyGoal,
       disabled: !dailyGoal,
@@ -146,6 +139,17 @@ const Onboarding = () => {
 
   const [parent] = useAutoAnimate();
   const isLastStep = isCurrentStep(steps.length - 1);
+
+  // debug useEffect
+  // useEffect(() => {
+  //   dispatch(
+  //     setSetting({
+  //       key: STRINGS.STORAGE.languagesUserWantsToKnow,
+  //       value: undefined,
+  //     })
+  //   );
+  // }, []);
+
   return (
     <div
       className={`min-h-screen flex flex-row items-center justify-center bg-gradient-to-r from-blue-500 ${
@@ -215,3 +219,24 @@ const Onboarding = () => {
 };
 
 export default Onboarding;
+
+export const LanguageFinderToLearn = ({
+  langsUserWantsToKnow,
+  setLangsUserWantsKnow,
+  ...props
+}) => {
+  return (
+    <LanguageFinder
+      selectedLangs={langsUserWantsToKnow}
+      setSelectedLangs={setLangsUserWantsKnow}
+      inputProps={{
+        placeholder: "Search the language that you want to learn...",
+      }}
+      messageForConfirmation={
+        "So you want to learn/improve your existing knowledge, for all of these languages right?"
+      }
+      messageForNoSelection="Come on! Don't be cheeky. You definitely would want to learn/improve on atleast one language. Select it to proceed."
+      {...props}
+    />
+  );
+};

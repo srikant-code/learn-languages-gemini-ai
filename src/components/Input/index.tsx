@@ -1,4 +1,5 @@
 import { Input } from "@nextui-org/react";
+import CustomTextArea from "./textarea";
 
 interface CustomInputProps {}
 
@@ -11,46 +12,54 @@ const CustomInput: FunctionComponent<CustomInputProps> = ({
   onClear,
   disabled,
   onChange,
+  dontClearOnEnter = false,
+  textarea = false,
   ...props
 }) => {
-  return (
-    <Input
-      labelPlacement="outside"
-      size="lg"
-      disabled={disabled}
-      isClearable={isClearable}
-      onKeyDown={(e) => {
-        // console.log("Enter", e);
-        if (e.key === "Enter" && enterEnable) {
-          // do something when Enter key is pressed
-          if (onKeyDown) {
-            onKeyDown(e);
-          }
+  const myProps = {
+    labelPlacement: "outside",
+    size: "lg",
+    disabled: disabled,
+    isClearable: isClearable,
+    onKeyDown: (e) => {
+      // console.log("Enter", e);
+      if (e.key === "Enter" && e.shiftKey === false && enterEnable) {
+        // do something when Enter key is pressed
+        if (e.preventDefault) e.preventDefault();
+        if (onKeyDown) {
+          onKeyDown(e);
         }
-      }}
-      classNames={{
-        input: `p-4 ${className} ${disabled ? "cursor-not-allowed" : ""}`,
-        inputWrapper: "h-[48px]",
-        clearButton: "m-2",
-      }}
-      {...(isClearable
-        ? {
-            onClear: () => {
-              if (isClearable) {
-                if (onClear) onClear();
-                else if (onChange) onChange("");
-              }
-            },
-          }
-        : {})}
-      onChange={(e) => {
-        if (onChange) {
-          onChange(e.target.value);
+        if (onChange && !dontClearOnEnter) onChange("");
+      }
+    },
+    classNames: {
+      input: `p-4 text-black dark:text-white ${className} ${
+        disabled ? "cursor-not-allowed" : ""
+      }`,
+      inputWrapper: "h-[48px]",
+      clearButton: "m-2",
+    },
+    ...(isClearable
+      ? {
+          onClear: () => {
+            if (isClearable) {
+              if (onClear) onClear();
+              else if (onChange) onChange("");
+            }
+          },
         }
-      }}
-      {...props}>
-      {children}
-    </Input>
+      : {}),
+    onChange: (e) => {
+      if (onChange) {
+        onChange(e.target.value);
+      }
+    },
+    ...props,
+  };
+  return textarea ? (
+    <CustomTextArea {...myProps}>{children}</CustomTextArea>
+  ) : (
+    <Input {...myProps}>{children}</Input>
   );
 };
 

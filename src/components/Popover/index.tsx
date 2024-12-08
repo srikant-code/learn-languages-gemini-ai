@@ -1,19 +1,12 @@
-import { Popover, Progress } from "@nextui-org/react";
+import { Popover } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
+import { WordHeader } from "../../pages/Dictionary/wordHeader";
 import { SlideIDs, STRINGS } from "../../utilities/constants";
 import { Sleep } from "../../utilities/utilities";
 import CustomButton from "../Button";
-import { WordHeader } from "../../pages/Dictionary/wordHeader";
-
-interface CustomPopoverProps {}
-
-const CustomPopover: FunctionComponent<CustomPopoverProps> = () => {
-  return <div></div>;
-};
-
-export default CustomPopover;
+import { CustomProgress } from "../Progress";
 
 //I have this code now, I am wrapping the whole applicatiion(children) with popover. But still the popover is not working properly - it is not visible on screen and also the clicks are not logging the events.. Answer from the opened page documention -
 // https://nextui.org/docs/components/popover#popover-props
@@ -100,10 +93,9 @@ export const TextSelectionPopover = ({ children }) => {
                 <WordHeader data={{ word: text }} />
               </div>
               {/* <div className="text-tiny">This is the popover content</div> */}
-              <Progress
+              <CustomProgress
                 size="sm"
                 radius="sm"
-                aria-label="progress"
                 classNames={{
                   base: "absolute bottom-[-3px] w-[92%] left-[4%]",
                   track: "drop-shadow-md ",

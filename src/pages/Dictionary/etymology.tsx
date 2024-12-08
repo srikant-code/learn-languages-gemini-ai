@@ -1,10 +1,11 @@
 import React from "react";
+import ParaGraph from "../../components/Paragraph";
 
 const Etymology = ({ etymology }) => {
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-semibold">History</h2>
-      <p className="ml-3">{etymology}</p>
+      <ParaGraph className="text-xl font-semibold">History</ParaGraph>
+      <ParaGraph className="ml-3">{etymology}</ParaGraph>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { ScrollShadow, Spacer } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
 import CustomButton from "../../components/Button";
@@ -12,11 +12,36 @@ import { GetAllLanguages } from "../../utilities/countryIcons";
 import {
   RemoveNullValuesFromArray,
   SearchMatchHighlighter,
+  Sleep,
 } from "../../utilities/utilities";
+import { CreateCourse } from "../../store/reduxHelpers/courseChapterLessons";
+import { ChaptersData } from "../Courses/lesson/lessonsData";
+import { STRINGS } from "../../utilities/constants";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../../store/store";
+import { setSetting } from "../../store/reducer";
 
 interface LanguageFinderProps {}
 
 const allLangs = Object.values(GetAllLanguages);
+
+export const CreateCourseWrapper = ({ lang }) => {
+  console.log("Adding course", lang.languageCode);
+  const settings = store.getState().language;
+  if (!settings?.[STRINGS.STORAGE.COURSES_DATA]?.[lang.languageCode])
+    CreateCourse({
+      courseID: lang.languageCode,
+      courseDetails: {
+        courseName: `${GetAllLanguages[lang.languageCode].languageName}`,
+        courseDescription: `Learn about ${
+          GetAllLanguages[lang.languageCode].languageName
+        } language which is used mostly in ${
+          GetAllLanguages[lang.languageCode]?.usedIn?.[0].displayName
+        }`,
+        chaptersData: ChaptersData,
+      },
+    });
+};
 
 const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
   selectedLangs,
@@ -26,27 +51,68 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
   messageForConfirmation = "So you know these languages right?",
   messageForNoSuchLanguageExists = "Hey! We don't think any such language exists. Try something else.",
 }) => {
-  const [langInput, setlangInput] = useState("");
-  const filteredLangs = allLangs.filter((lang) => {
-    return JSON.stringify({
-      name: lang.languageName,
-      code: lang.languageCode,
-      country: lang?.usedIn[0]?.displayName,
-    })
-      ?.toLowerCase()
-      .includes(langInput?.toLowerCase());
+  const selectedLanguages = RemoveNullValuesFromArray(
+    Object.keys(selectedLangs),
+    (k) => selectedLangs[k]
+  );
+
+  const updatedSelectedLangsObj = selectedLanguages.map((lang) => {
+    return GetAllLanguages[lang];
   });
 
-  console.log({ selectedLangs });
+  const dispatch = useDispatch();
+
+  const [langInput, setlangInput] = useState("");
+  const filteredLangs = [
+    ...updatedSelectedLangsObj,
+    ...allLangs
+      .filter((lang) => {
+        return !updatedSelectedLangsObj.find(
+          (sLang) => sLang.languageCode === lang.languageCode
+        );
+      })
+      .filter((lang) => {
+        return JSON.stringify({
+          name: lang.languageName,
+          code: lang.languageCode,
+          country: lang?.usedIn[0]?.displayName,
+        })
+          ?.toLowerCase()
+          .includes(langInput?.toLowerCase());
+      }),
+  ];
+
+  useEffect(() => {
+    Sleep(200).then((_) =>
+      CreateCourseWrapper({ lang: GetAllLanguages["en"] })
+    );
+    dispatch(
+      setSetting({
+        key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+        value: "en",
+      })
+    );
+  }, []);
+
+  console.log({ selectedLangs, filteredLangs, selectedLanguages });
 
   const addOrDeleteLang = (lang) => {
     // console.log({ abc: lang });
+    const { [lang.languageCode]: langToRemove, ...otherLangs } = selectedLangs;
     if (selectedLangs[lang.languageCode]) {
+      console.log("Removing course", lang.languageCode);
       setSelectedLangs({
-        ...selectedLangs,
-        [lang.languageCode]: undefined,
+        ...(Object.keys(otherLangs)?.length >= 1
+          ? otherLangs
+          : {
+              en: {
+                read: true,
+                write: true,
+                speak: true,
+              },
+            }),
       });
-    } else
+    } else {
       setSelectedLangs({
         ...selectedLangs,
         [lang.languageCode]: {
@@ -55,12 +121,18 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
           speak: true,
         },
       });
+
+      dispatch(
+        setSetting({
+          key: STRINGS.STORAGE.CURRENT_LEARNING_LANGUAGE,
+          value: lang.languageCode,
+        })
+      );
+
+      Sleep(200).then((_) => CreateCourseWrapper({ lang }));
+    }
   };
 
-  const selectedLanguages = RemoveNullValuesFromArray(
-    Object.keys(selectedLangs),
-    (k) => selectedLangs[k]
-  );
   const [parent] = useAutoAnimate();
   const [parent2] = useAutoAnimate();
   const [parent3] = useAutoAnimate();
@@ -88,7 +160,7 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
                 <CustomCard
                   as={CustomButton}
                   key={index}
-                  className={`flex-1 bg-transparent min-w-[200px] max-w-[300px] h-fit p-0`}>
+                  className={`flex-1 bg-transparent min-w-[235px] max-w-[300px] h-fit p-0`}>
                   <div
                     className="flex flex-row gap-4 justify-start w-full items-center p-6"
                     onClick={() => addOrDeleteLang(lang)}>
@@ -97,11 +169,20 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
                       <ParaGraph className={"font-bold "}>
                         {SearchMatchHighlighter(lang?.languageName, langInput)}
                       </ParaGraph>
-                      <ParaGraph className={"text-small"}>
-                        Used in{" "}
-                        {SearchMatchHighlighter(
-                          lang?.usedIn[0].displayName,
-                          langInput
+                      <ParaGraph
+                        className={
+                          "text-small whitespace-break-spaces text-left"
+                        }>
+                        {lang?.languageCode === "en" ? (
+                          "Default"
+                        ) : (
+                          <>
+                            Used in{" "}
+                            {SearchMatchHighlighter(
+                              lang?.usedIn[0].displayName,
+                              langInput
+                            )}
+                          </>
                         )}
                       </ParaGraph>
                     </div>
@@ -146,8 +227,11 @@ const LanguageFinder: FunctionComponent<LanguageFinderProps> = ({
   );
 };
 
-export const CheckRightTop = () => (
-  <FaCheckCircle className="text-green-500 text-2xl absolute top-3 right-3" />
+export const CheckRightTop = ({ className, style = {} }) => (
+  <FaCheckCircle
+    style={style}
+    className={`text-green-500 text-2xl absolute top-3 right-3 ${className}`}
+  />
 );
 
 export default LanguageFinder;

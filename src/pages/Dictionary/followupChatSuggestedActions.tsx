@@ -1,15 +1,18 @@
 import React from "react";
 import CustomButton from "../../components/Button";
+import ParaGraph from "../../components/Paragraph";
 
 const FollowUpActions = ({ actions }) => {
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-semibold">
+      <ParaGraph className="text-xl font-semibold">
         Follow-Up Suggested Chat Actions
-      </h2>
+      </ParaGraph>
       <div className="flex gap-4 flex-wrap">
         {actions.map((action, index) => (
-          <CustomButton key={index} className="">
+          <CustomButton
+            key={index}
+            className="whitespace-break-spaces text-left p-4 h-fit">
             {action}
           </CustomButton>
         ))}
